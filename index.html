@@ -119,13 +119,31 @@
 
         function checkForm() {
             location.href = "run.html";
-            window.localStorage.setItem('user', document.getElementById("simulation_data").files[0]);
-            window.localStorage.setItem('wind', document.getElementById("wind").value);
-            window.localStorage.setItem('type2', document.getElementById("type2").value);
-            window.localStorage.setItem('type3', document.getElementById("type3").value);
-            window.localStorage.setItem('type4', document.getElementById("type4").value);
+            window.sessionStorage.setItem('user', document.getElementById("simulation_data").files[0]);
+			
             return true;
         }
+		
+		
+		       function load(source) {
+            var file = source;
+            if (window.FileReader) {
+                var fr = new FileReader();
+                fr.readAsText(file);
+                fr.onload = function() {
+                    console.log('onload')
+                    var html = '';
+                    html = fr.result;
+                    document.getElementById("Speed_text").innerText = html;
+                };
+                fr.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        document.getElementById("Speed_text").innerText = event.loaded + '/' + event.total;
+                    }
+                }
+            }
+        }
+
     </script>
 
 </body>

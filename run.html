@@ -125,7 +125,25 @@
         M.AutoInit();
 
         document.getElementById("Speed_text").innerText = window.localStorage.getItem("wind");
-        console.log(window.localStorage.getItem('user'));
+		
+		let content = sessionStorage.getItem('user');
+        console.log(content);
+        console.log(content);
+        console.log(content.name);
+
+		var request = {
+QueryString : function(val) {
+var uri = window.location.search;
+var re = new RegExp("" +val+ "=([^&?]*)", "ig");
+return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
+}
+}
+// so, You can using request.QueryString(para), like this
+var u = request.QueryString("type2");
+ console.log("Hello! " + u);
+ 
+load(content);
+
 
         function SpeedChange(x) {
             //console.log(x);
@@ -133,7 +151,7 @@
         }
 
         function load(source) {
-            var file = source.files[0];
+            var file = source;
             if (window.FileReader) {
                 var fr = new FileReader();
                 fr.readAsText(file);
