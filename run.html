@@ -27,79 +27,121 @@
         </div>
 
 
-        <div class="col s12 m12 l6">
-            <div class="card white z-depth-3">
-                <div class="card-content black-text">
-                    <span class="card-title">Result shown here</span>
-                    <p>Speed: <span id="Speed_text"></span></p>
+        <div class="col s12 m12 l7">
+
+            <div class="row">
+                <div class="col s12">
+
+                    <div class="card white z-depth-3">
+                        <div class="card-content black-text">
+                            <span class="card-title">Glance</span>
+                            <p>Model goes here</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col s12">
+
+                    <div class="card white z-depth-3">
+                        <div class="card-content black-text">
+                            <span class="card-title">Glance</span>
+                            <p>Model goes here</p>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
+
         </div>
 
-        <div class="col s12 m12 l4">
+
+        <div class="col s12 m12 l3">
             <div class="card white z-depth-3">
                 <div class="card-content black-text">
                     <span class="card-title">Control Panel</span>
                     <p>Adjust setting as you want.</p>
                 </div>
                 <div class="card-action">
-                    <input type="file" name="file" onchange="load(this)" />
-                    <label>Progress: </label><progress id="Progress" value="0" max="100"></progress>
-                    <a href="#" onclick="optimization()">Show result</a>
-                    <p class="range-field">
-                        <label for="speed_range">Points (between 0 and 10):</label>
-                        <input type="range" id="speed_range" min="0" max="100" onchange="SpeedChange(this.value)" />
-                    </p>
+                    <div class="row">
+                        <p class="col s6">
+                            <span class="right black-text">Wind Switcher
+                            </span> </p>
+                        <p class="switch col s6">
+                            <label>
+                          Off
+                          <input type="checkbox" id="wind" checked onchange="console.log(this.checked);">
+                          <span class="lever"></span>
+                          On
+                        </label>
+                        </p>
 
-                    <p class="range-field">
-                        <label for="speed_range">Points (between 0 and 10):</label>
-                        <input type="range" id="speed_range" min="0" max="100" onchange="SpeedChange(this.value)" />
-                    </p>
+                        <p class="col s6">
+                            <span class="right black-text">Light Switcher
+                        </span> </p>
+                        <p class="switch col s6">
+                            <label>
+                      Off
+                      <input type="checkbox" id="light" checked onchange="console.log(this.checked);">
+                      <span class="lever"></span>
+                      On
+                    </label>
+                        </p>
 
-                    <p>Or Show result at here</p>
+                        <p class="col s6">
+                            <span class="right black-text">Wave Switcher
+                    </span> </p>
+                        <p class="switch col s6">
+                            <label>
+                  Off
+                  <input type="checkbox" id="wave" checked onchange="console.log(this.checked);">
+                  <span class="lever"></span>
+                  On
+                </label>
+                        </p>
 
-                    <ul class="collapsible popout">
-                        <li>
-                            <div class="collapsible-header"><i class="material-icons">filter_drama</i>Speed</div>
-                            <div class="collapsible-body">
+                        <p class="col s6">
+                            <span class="right black-text">Current Switcher
+                    </span> </p>
+                        <p class="switch col s6">
+                            <label>
+                  Off
+                  <input type="checkbox" id="current" checked onchange="console.log(this.checked);">
+                  <span class="lever"></span>
+                  On
+                </label>
+                        </p>
 
-                                <p class="range-field">
-                                    <label for="speed_range">Points (between 0 and 10):</label>
-                                    <input type="range" id="speed_range" min="0" max="100" onchange="SpeedChange(this.value)" />
-                                </p>
-                            </div>
-
-
-                        </li>
-                        <li>
-                            <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-                            <div class="collapsible-body">
-                                <p class="range-field">
-                                    <input type="range" id="test5" min="0" max="100" />
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-                            <div class="collapsible-body">
-                                <p class="range-field">
-                                    <input type="range" id="test5" min="0" max="100" />
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-
+                    </div>
                 </div>
             </div>
         </div>
 
+
         <div class="col s0 m0 l1">
         </div>
+
 
     </div>
 
     <br><br>
     </div>
+
+
+    <!-- Element Showed -->
+    <a id="menu" class="waves-effect waves-light btn btn-floating"><i class="material-icons">menu</i></a>
+
+    <!-- Tap Target Structure -->
+    <div class="tap-target" data-target="menu">
+        <div class="tap-target-content">
+            <h5>Title</h5>
+            <p>A bunch of text</p>
+        </div>
+    </div>
+
+
 
     <footer class="page-footer orange">
         <div class="container">
@@ -124,25 +166,27 @@
     <script>
         M.AutoInit();
 
-        document.getElementById("Speed_text").innerText = window.localStorage.getItem("wind");
-		
-		let content = sessionStorage.getItem('user');
-        console.log(content);
-        console.log(content);
-        console.log(content.name);
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.tap-target');
+            var instances = M.TapTarget.init(elems, options);
+        });
 
-		var request = {
-QueryString : function(val) {
-var uri = window.location.search;
-var re = new RegExp("" +val+ "=([^&?]*)", "ig");
-return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
-}
-}
-// so, You can using request.QueryString(para), like this
-var u = request.QueryString("type2");
- console.log("Hello! " + u);
- 
-load(content);
+        // Or with jQuery
+
+        $(document).ready(function() {
+            $('.tap-target').tapTarget();
+        });
+
+        // document.getElementById("Speed_text").innerText = window.localStorage.getItem("wind");
+        var request = {
+                QueryString: function(val) {
+                    var uri = window.location.search;
+                    var re = new RegExp("" + val + "=([^&?]*)", "ig");
+                    return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+                }
+            }
+            // so, You can using request.QueryString(para), like this
+        var u = request.QueryString("type2");
 
 
         function SpeedChange(x) {
