@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>无标题文档</title>  
+<script language="javascript">      
+    var win;  
+    function test_open() {  
+        // 打开一个新窗口，返回一个新窗口的引用  
+        win = window.open("son.html", "win", "width:200, height:200");  
+    }  
+      
+    // 父窗口对子窗口赋值  
+    function test_set() {  
+        // 通过名字给表单元素赋值  
+        win.document.getElementsByName("age")[0].value = "20";  
+        var str = "给子窗口赋值成功，值为：";  
+        alert(str + win.document.getElementsByName("age")[0].value);  
+    }  
+</script>  
+</head>  
+  
+<body>  
+    用户名：<input type="text" name="username" /><br />  
+    <input type="button" onclick="test_open()" value="打开一个新窗口" /><br />  
+    <input type="button" onclick="test_set()" value="给子窗口赋值" /><br />  
+</body>  
+</html>  

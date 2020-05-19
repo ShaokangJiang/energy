@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>无标题文档</title>  
+<script language="javascript">      
+    // 子窗口给父窗口赋值          
+    function test_parent() {  
+        // 通过opener指向父窗口(可以访问父窗口的所有对象)  
+        window.opener.document.getElementsByName("username")[0].value = "keveon";  
+        var str = "给父窗口赋值成功，值为：";  
+        alert(str + window.opener.document.getElementsByName("username")[0].value);  
+    }  
+</script>  
+</head>  
+<body>  
+    年龄：<input type="text" name="age" /><br />      
+    <input type="button" value="给父窗口赋值" onclick="test_parent()" />      
+</body>  
+</html>  
