@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Starter Template - Materialize</title>
+
+    <!-- CSS  -->
+    <link href="css/icon.css" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <script src="https://unpkg.com/javascript-lp-solver/src/solver.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+</head>
+
+<body>
+    <nav class="Maroon" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+        </div>
+    </nav>
+
+    <br><br>
+
+
+    <div class="row">
+        <div class="col s0 m0 l1">
+        </div>
+
+
+        <div class="col s12 m12 l5">
+            <div class="card white z-depth-3">
+                <div class="card-content black-text">
+                    <span class="card-title">Simulation Data Import</span>
+                    <p>Could be changed to live stream in real case. </p>
+                    <p>We use an upload button to upload data files and simulatly run the system temporarily.<span id="Speed_text"></span></p>
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>File</span>
+                            <input id="simulation_data" name="simulation_data" type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12 m12 l5">
+            <div class="card white z-depth-3">
+                <div class="card-content black-text">
+                    <span class="card-title">Threshold Setting</span>
+                    <p>Adjust setting as you want.</p>
+                </div>
+                <div class="card-action">
+
+                    <form id="login" name="login" method="GET" action="run.html" onsubmit="return checkForm()">
+
+                        <div class="input-field col s6">
+                            <input placeholder="Placeholder" id="wind" name="wind" type="text" class="validate">
+                            <label for="first_name">First Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input placeholder="Placeholder" id="type2" name="type2" type="text" class="validate">
+                            <label for="first_name">First Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input placeholder="Placeholder" id="type3" name="type3" type="text" class="validate">
+                            <label for="first_name">First Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input placeholder="Placeholder" id="type4" name="type4" type="text" class="validate">
+                            <label for="first_name">First Name</label>
+                        </div>
+
+                        <input id="file_simulate" name="file_simulate" type="hidden" class="validate">
+
+
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                      <i class="material-icons right">send</i>
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s0 m0 l1">
+        </div>
+
+    </div>
+
+    <br><br>
+    </div>
+
+    <footer class="page-footer orange">
+        <div class="container">
+            <div class="row">
+                <h5 class="white-text">Info</h5>
+                <p class="grey-text text-lighten-4">efe</p>
+
+
+
+            </div>
+            <div class="footer-copyright">
+                <div class="container">
+                    Made by <a class="orange-text text-lighten-3" href="https://shaokang.ga">Shaokang Jiang</a> using <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+                </div>
+            </div>
+    </footer>
+
+
+    <!--  Scripts-->
+
+    <script src="js/materialize.js"></script>
+    <script>
+        M.AutoInit();
+
+        function checkForm() {
+            location.href = "run.html";
+            window.localStorage.setItem('user', document.getElementById("simulation_data").files[0]);
+            window.localStorage.setItem('wind', document.getElementById("wind").value);
+            window.localStorage.setItem('type2', document.getElementById("type2").value);
+            window.localStorage.setItem('type3', document.getElementById("type3").value);
+            window.localStorage.setItem('type4', document.getElementById("type4").value);
+            return true;
+        }
+    </script>
+
+</body>
+
+</html>

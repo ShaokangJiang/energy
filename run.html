@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Starter Template - Materialize</title>
+
+    <!-- CSS  -->
+    <link href="css/icon.css" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <script src="https://unpkg.com/javascript-lp-solver/src/solver.js"></script>
+</head>
+
+<body>
+    <nav class="Maroon" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+        </div>
+    </nav>
+
+    <br><br>
+
+
+    <div class="row">
+        <div class="col s0 m0 l1">
+        </div>
+
+
+        <div class="col s12 m12 l6">
+            <div class="card white z-depth-3">
+                <div class="card-content black-text">
+                    <span class="card-title">Result shown here</span>
+                    <p>Speed: <span id="Speed_text"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12 m12 l4">
+            <div class="card white z-depth-3">
+                <div class="card-content black-text">
+                    <span class="card-title">Control Panel</span>
+                    <p>Adjust setting as you want.</p>
+                </div>
+                <div class="card-action">
+                    <input type="file" name="file" onchange="load(this)" />
+                    <label>Progress: </label><progress id="Progress" value="0" max="100"></progress>
+                    <a href="#" onclick="optimization()">Show result</a>
+                    <p class="range-field">
+                        <label for="speed_range">Points (between 0 and 10):</label>
+                        <input type="range" id="speed_range" min="0" max="100" onchange="SpeedChange(this.value)" />
+                    </p>
+
+                    <p class="range-field">
+                        <label for="speed_range">Points (between 0 and 10):</label>
+                        <input type="range" id="speed_range" min="0" max="100" onchange="SpeedChange(this.value)" />
+                    </p>
+
+                    <p>Or Show result at here</p>
+
+                    <ul class="collapsible popout">
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">filter_drama</i>Speed</div>
+                            <div class="collapsible-body">
+
+                                <p class="range-field">
+                                    <label for="speed_range">Points (between 0 and 10):</label>
+                                    <input type="range" id="speed_range" min="0" max="100" onchange="SpeedChange(this.value)" />
+                                </p>
+                            </div>
+
+
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+                            <div class="collapsible-body">
+                                <p class="range-field">
+                                    <input type="range" id="test5" min="0" max="100" />
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+                            <div class="collapsible-body">
+                                <p class="range-field">
+                                    <input type="range" id="test5" min="0" max="100" />
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col s0 m0 l1">
+        </div>
+
+    </div>
+
+    <br><br>
+    </div>
+
+    <footer class="page-footer orange">
+        <div class="container">
+            <div class="row">
+                <h5 class="white-text">Info</h5>
+                <p class="grey-text text-lighten-4">efe</p>
+
+
+
+            </div>
+            <div class="footer-copyright">
+                <div class="container">
+                    Made by <a class="orange-text text-lighten-3" href="https://shaokang.ga">Shaokang Jiang</a> using <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+                </div>
+            </div>
+    </footer>
+
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script>
+        M.AutoInit();
+
+        document.getElementById("Speed_text").innerText = window.localStorage.getItem("wind");
+        console.log(window.localStorage.getItem('user'));
+
+        function SpeedChange(x) {
+            //console.log(x);
+            document.getElementById("Speed_text").innerText = x;
+        }
+
+        function load(source) {
+            var file = source.files[0];
+            if (window.FileReader) {
+                var fr = new FileReader();
+                fr.readAsText(file);
+                fr.onload = function() {
+                    console.log('onload')
+                    var html = '';
+                    html = fr.result;
+                    document.getElementById("Speed_text").innerText = html;
+                };
+                fr.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        document.getElementById("Speed_text").innerText = event.loaded + '/' + event.total;
+                    }
+                }
+            }
+        }
+
+        function optimization() {
+            var results,
+                model = {
+                    "optimize": "capacity",
+                    "opType": "max",
+                    "constraints": {
+                        "plane": {
+                            "max": 44
+                        },
+                        "person": {
+                            "max": 512
+                        },
+                        "cost": {
+                            "max": 300000
+                        },
+                        "brit": {
+                            "max": 5
+                        }
+                    },
+                    "variables": {
+                        "brit": {
+                            "capacity": 20000,
+                            "plane": 1,
+                            "person": 8,
+                            "cost": 5000
+                        },
+                        "yank": {
+                            "capacity": 30000,
+                            "plane": 1,
+                            "person": 16,
+                            "cost": 9000
+                        }
+                    },
+                };
+
+            results = solver.Solve(model);
+            console.log(results);
+            document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
+        }
+    </script>
+
+</body>
+
+</html>
