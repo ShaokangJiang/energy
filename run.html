@@ -46,13 +46,124 @@
 
                     <div class="card white z-depth-3">
                         <div class="card-content black-text">
-                            <span class="card-title">Glance</span>
-                            <p>Model goes here</p>
+                            <span class="card-title">Components</span>
+                            <div class="row">
+                                <div class="col s12 m6">
+                                    <div class="card-panel blue">
+                                        <span class="white-text">
+                                            <h6>Wind</h6>
+                                            <p>Status: <span id="wind_status">On</span>
+                                        </p>
+                                        <p>
+                                            Production: <span id="wind_production">239</span>
+                                        </p>
+                                        <p>
+                                            Current Wind: <span id="wind_Speed">66</span>
+                                        </p>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6">
+                                    <div class="card-panel blue">
+                                        <span class="white-text">
+                                            <h6>Wind</h6>
+                                            <p>Status: <span id="wind_status">On</span>
+                                        </p>
+                                        <p>
+                                            Production: <span id="wind_production">239</span>
+                                        </p>
+                                        <p>
+                                            Current Wind: <span id="wind_Speed">66</span>
+                                        </p>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6">
+                                    <div class="card-panel blue">
+                                        <span class="white-text">
+                                            <h6>Wind</h6>
+                                            <p>Status: <span id="wind_status">On</span>
+                                        </p>
+                                        <p>
+                                            Production: <span id="wind_production">239</span>
+                                        </p>
+                                        <p>
+                                            Current Wind: <span id="wind_Speed">66</span>
+                                        </p>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6">
+                                    <div class="card-panel blue">
+                                        <span class="white-text">
+                                            <h6>Wind</h6>
+                                            <p>Status: <span id="wind_status">On</span>
+                                        </p>
+                                        <p>
+                                            Production: <span id="wind_production">239</span>
+                                        </p>
+                                        <p>
+                                            Current Wind: <span id="wind_Speed">66</span>
+                                        </p>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6">
+                                    <div class="card-panel blue">
+                                        <span class="white-text">
+                                            <h6>Wind</h6>
+                                            <p>Status: <span id="wind_status">On</span>
+                                        </p>
+                                        <p>
+                                            Production: <span id="wind_production">239</span>
+                                        </p>
+                                        <p>
+                                            Current Wind: <span id="wind_Speed">66</span>
+                                        </p>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6">
+                                    <div class="card-panel blue">
+                                        <span class="white-text">
+                                            <h6>Wind</h6>
+                                            <p>Status: <span id="wind_status">On</span>
+                                        </p>
+                                        <p>
+                                            Production: <span id="wind_production">239</span>
+                                        </p>
+                                        <p>
+                                            Current Wind: <span id="wind_Speed">66</span>
+                                        </p>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
 
 
                 </div>
+
+                <div class="col s12">
+
+                    <div class="card white z-depth-3">
+                        <div class="card-content black-text">
+                            <span class="card-title">Export</span>
+                            <p>Export result to csv at here: </p>
+                            <div class="card-action">
+                                <a href="#">Export</a>
+                                <a href="#">This is a link</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
             </div>
 
         </div>
@@ -130,17 +241,27 @@
     </div>
 
 
-    <!-- Element Showed -->
-    <a id="menu" class="waves-effect waves-light btn btn-floating"><i class="material-icons">menu</i></a>
+    <div class="fixed-action-btn">
+        <a id="menu" class="btn-floating btn-large red">
+            <i class="large material-icons">menu</i>
+        </a>
+        <ul>
+            <li><a class="btn-floating yellow darken-1" onclick="change_status()" id="Global_switch"><i class="material-icons">play_arrow</i></a></li>
+
+            <!--change to pause-->
+            <li><a class="btn-floating blue"><i class="material-icons" onclick="add()">file_upload</i></a></li>
+        </ul>
+    </div>
+
 
     <!-- Tap Target Structure -->
     <div class="tap-target" data-target="menu">
         <div class="tap-target-content">
-            <h5>Title</h5>
-            <p>A bunch of text</p>
+            <h5>Basic Setup</h5>
+            <p>File button to choose simulation file(Stream from sensor in real case). Start or pause to do related work globally. </p>
         </div>
     </div>
-
+    <div id="UserEdit"></div>
 
 
     <footer class="page-footer orange">
@@ -166,15 +287,11 @@
     <script>
         M.AutoInit();
 
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.tap-target');
-            var instances = M.TapTarget.init(elems, options);
-        });
-
-        // Or with jQuery
+        var Model_Status = 0;
 
         $(document).ready(function() {
-            $('.tap-target').tapTarget();
+            $('.fixed-action-btn').floatingActionButton();
+            $('.tap-target').tapTarget('open');
         });
 
         // document.getElementById("Speed_text").innerText = window.localStorage.getItem("wind");
@@ -251,6 +368,73 @@
             results = solver.Solve(model);
             console.log(results);
             document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
+        }
+
+
+        function OpenDetial(id, width, height) {
+            debugger;
+            var _srcWidth = parseInt(screen.width);
+            var _srcHeight = parseInt(screen.height);
+            _width = parseInt(width) || _srcWidth;
+            _height = parseInt(height) || _srcHeight;
+
+            var cssWidth = width == undefined ? "100%" : _width;
+            var cssHeight = height == undefined ? "100%" : _height;
+
+            var left = (_srcWidth - _width) == 0 ? 0 : ((_srcWidth - _width) / 2);
+            var top = (_srcHeight - _height) == 0 ? 0 : ((_srcHeight - _height) / 2 - 100);
+
+
+            var _id = "#" + id;
+            var detial =
+                '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
+                '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s8" id="notice"><p><a class="waves-effect waves-light btn col s3" onclick="CloseDetail()">Use This</a>' +
+                '</div></div></div></div>';
+            $(_id).html(detial);
+            $(_id).css({
+                "display": "none",
+                "position": "absolute",
+                "bottom": "10px",
+                "width": "100%",
+                "top": "2px",
+                "height": "96%",
+                "background-color": "rgba(223, 236, 236, 0.36)"
+            });
+            $("#panel").css({
+                "width": cssWidth,
+                "height": cssHeight,
+                "left": left,
+                "top": top,
+                "position": "absolute"
+            });
+            $(_id).slideDown();
+        }
+
+        function CloseDetail() {
+            $("#UserEdit").slideUp();
+        }
+
+
+        function loadFile(file) {
+            console.log(file);
+            document.getElementById("notice").innerText = "Successfully loaded";
+        }
+
+        function add() {
+            var url = "index.html";
+            OpenDetial("UserEdit", 400, 200); //调用方法        
+        }
+
+        function change_status() {
+            if (Model_Status == 0) {
+                document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > play_arrow </i>';
+                Model_Status = 1;
+            } else if (Model_Status == 1) {
+                document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
+                Model_Status = 0;
+            } else {
+                document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > stop </i>';
+            }
         }
     </script>
 
