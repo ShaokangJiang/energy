@@ -144,9 +144,14 @@
                     <div class="card-content black-text">
                         <span class="card-title">Export</span>
                         <p>Export result to csv at here: </p>
-                        <div class="card-action">
-                            <a href="#">Export</a>
-                            <a href="#">This is a link</a>
+                        <div class="card-action row">
+                            <span class="col s4">Indexing: Time,type,status,speed,production</span>
+                            <span class="col s1">|</span>
+                            <span class="col s6">Indexing: Time,battery_usage,battery_flow,battery_status,battery_current</span>
+                            <p class="col s12"><br></p>
+                            <button class="waves-effect waves-light btn col s4" id="run_data">Download running data</button>
+                            <span class="col s4"></span>
+                            <button class="waves-effect waves-light btn col s4" id="battery_data"> Download battery data</button>
                         </div>
                     </div>
                 </div>
@@ -285,6 +290,9 @@
         M.AutoInit();
         var Model_Status = 0; //1:running 0:pause 2:terminate
         var file;
+        var runData = [];
+        var batteryData = [];
+        var exported = true;
 
         function onWindChange(use) {
             if (Model_Status == 1) {
@@ -360,7 +368,17 @@
         var User_Consumption = parseInt(request.QueryString("User")) || 2000;
         var battery_current = 0.7 * battery_capacity;
 
-
+        function switchExport(use) {
+            if (use.checked) {
+                exported = false;
+                document.getElementById("run_data").disabled = true;
+                document.getElementById("battery_data").disabled = true;
+            } else {
+                exported = true;
+                document.getElementById("run_data").disabled = false;
+                document.getElementById("battery_data").disabled = false;
+            }
+        }
 
         function OpenDetial(id, width, height) {
             var _srcWidth = parseInt(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
@@ -378,7 +396,7 @@
             var _id = "#" + id;
             var detial =
                 '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
-                '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
+                '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>I don\'t need to export usage data(Choose when source is intended to be large).</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
                 '</div></div></div></div>';
             $(_id).html(detial);
             $(_id).css({
@@ -417,9 +435,13 @@
                 document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
                 wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
                 document.getElementById("wind_production").innerText = wind_produced.toFixed(2);
+                if (exported)
+                    runData.push(time + ",wind,on," + data["Wind_Speed"] + "," + wind_produced + "\n");
             } else if (wind == 1) {
                 document.getElementById("wind").checked = false;
                 document.getElementById("wind_status").innerHTML = '<font color="green">Off </font>';
+                if (exported)
+                    runData.push(time + ",wind,off," + data["Wind_Speed"] + ",0" + "\n");
             }
 
             if (data["Light_H"] > light_limit && light == 1) {
@@ -428,9 +450,13 @@
                 document.getElementById("Light_Speed").innerText = data["Light_H"];
                 light_produced = 0.09 * data["Light_H"];
                 document.getElementById("Light_production").innerText = light_produced.toFixed(2);
+                if (exported)
+                    runData.push(time + ",light,on," + data["Light_H"] + "," + light_produced + "\n");
             } else if (light == 1) {
                 document.getElementById("light").checked = false;
                 document.getElementById("Light_status").innerHTML = '<font color="green">Off </font>';
+                if (exported)
+                    runData.push(time + ",light,off," + data["Light_H"] + ",0\n");
             }
 
             if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit && wave == 1) {
@@ -439,9 +465,13 @@
                 document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
                 wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
                 document.getElementById("wave_production").innerText = wave_produced.toFixed(2);
+                if (exported)
+                    runData.push(time + ",wave,on," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + "," + wave_produced + "\n");
             } else if (wave == 1) {
                 document.getElementById("wave").checked = false;
                 document.getElementById("wave_status").innerHTML = '<font color="green">Off </font>';
+                if (exported)
+                    runData.push(time + ",wave,off," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + ",0\n");
             }
 
             if (data["Current_Speed"] > current_limit && current == 1) {
@@ -450,15 +480,22 @@
                 document.getElementById("current_Speed").innerText = data["Current_Speed"];
                 current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
                 document.getElementById("current_production").innerText = current_produced.toFixed(2);
+                if (exported)
+                    runData.push(time + ",current,on," + data["Current_Speed"] + "," + current_produced + "\n");
+
             } else if (current == 1) {
                 document.getElementById("current").checked = false;
                 document.getElementById("current_status").innerHTML = '<font color="green">Off </font>';
+                if (exported)
+                    runData.push(time + ",current,off," + data["Current_Speed"] + ",0\n");
             }
 
+            //Time,type,status,speed,production
             document.getElementById("battery_usage").innerText = userConsumption;
             var pre_battery_current = battery_current;
             battery_current += (wind_produced + light_produced + wave_produced + current_produced) * (time - prevTime) / 3600 - userConsumption;
-            console.log((time - prevTime));
+            //console.log((time - prevTime));
+            var batteryStatus = 0;
             if (battery_current > battery_capacity) battery_current = battery_capacity;
             document.getElementById("battery_flow").innerText = (battery_current - pre_battery_current).toFixed(2);
             document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
@@ -467,10 +504,18 @@
                 battery_current = 0;
                 document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
                 document.getElementById("battery_status").innerText = 'Discharging, extra electricity required.';
+                batteryStatus = 2;
             } else {
                 document.getElementById("battery_status").innerText = 'Discharging';
+                batteryStatus = 1;
             }
+            //Time,battery_usage,battery_flow,battery_status,battery_current
+            if (exported)
+                batteryData.push(time + "," + userConsumption + "," + (battery_current - pre_battery_current) + "," +
+                    batteryStatus + "," + battery_current + "\n");
+            //batteryStatus: 0: normal 1:discharging 2:Discharging, extra electricity required
             //refresh locals
+            console.log(batteryData);
             prevTime = time;
         }
         /**
@@ -547,6 +592,41 @@
             } else {
                 document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > stop </i>';
             }
+        }
+
+        var funDownload = function(content, filename) {
+            var eleLink = document.createElement('a');
+            eleLink.download = filename;
+            eleLink.style.display = 'none';
+            var blob = new Blob([content]);
+            eleLink.href = URL.createObjectURL(blob);
+            document.body.appendChild(eleLink);
+            eleLink.click();
+            document.body.removeChild(eleLink);
+        };
+
+        if ('download' in document.createElement('a')) {
+            document.getElementById('run_data').addEventListener('click', function() {
+                var passValue = "Time,type,status,speed,production\n";
+                for (i = 0; i < runData.length; i++) {
+                    passValue += runData[i];
+                }
+                funDownload(passValue, 'run.csv');
+            });
+            document.getElementById('battery_data').addEventListener('click', function() {
+                var passValue = "Time,battery_usage,battery_flow,battery_status,battery_current\n";
+                for (i = 0; i < batteryData.length; i++) {
+                    passValue += batteryData[i];
+                }
+                funDownload(passValue, 'battery.csv');
+            });
+        } else {
+            document.getElementById('run_data').onclick = function() {
+                alert('Browser doesn\'t support!');
+            };
+            document.getElementById('battery_data').onclick = function() {
+                alert('Browser doesn\'t support!');
+            };
         }
     </script>
 
