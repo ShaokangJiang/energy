@@ -173,7 +173,7 @@
                 if (document.getElementById("wind").value == "" ||
                     document.getElementById("light").value == "" || document.getElementById("wave").value == "" ||
                     document.getElementById("current").value == "" || document.getElementById("battary").value == "" ||
-                    document.getElementById("freq").value == "") {
+                    document.getElementById("freq").value == "" || document.getElementById("User").value == "") {
                     document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
                     return true;
                 };
@@ -202,7 +202,6 @@
             document.getElementById("battary").disabled = true;
             document.getElementById("freq").disabled = true;
 
-            document.getElementById("User").disabled = false;
             document.getElementById("hist_data").disabled = false;
             document.getElementById("history_data").disabled = false;
 
@@ -215,8 +214,6 @@
             document.getElementById("current").disabled = false;
             document.getElementById("battary").disabled = false;
             document.getElementById("freq").disabled = false;
-
-            document.getElementById("User").disabled = true;
             document.getElementById("hist_data").disabled = true;
             document.getElementById("history_data").disabled = true;
         }
@@ -260,7 +257,6 @@
             console.log(results);
             document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
         }
-
     </script>
 
 </body>
