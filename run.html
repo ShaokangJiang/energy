@@ -368,9 +368,8 @@
 
 
         function OpenDetial(id, width, height) {
-            debugger;
-            var _srcWidth = parseInt(screen.width);
-            var _srcHeight = parseInt(screen.height);
+            var _srcWidth = parseInt(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+            var _srcHeight = parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
             _width = parseInt(width) || _srcWidth;
             _height = parseInt(height) || _srcHeight;
 
@@ -378,7 +377,7 @@
             var cssHeight = height == undefined ? "100%" : _height;
 
             var left = (_srcWidth - _width) == 0 ? 0 : ((_srcWidth - _width) / 2);
-            var top = (_srcHeight - _height) == 0 ? 0 : ((_srcHeight - _height) / 2 - 100);
+            var top = (_srcHeight - _height) == 0 ? 0 : ((_srcHeight - _height) / 2);
 
 
             var _id = "#" + id;
@@ -415,6 +414,20 @@
                 step: function(results, parser) {
                     console.log("Row data:", results.data);
                     console.log("Row errors:", results.errors);
+                    parser.pause();
+                    while (Model_Status == 0) {}
+                    setTimeout(function() {
+                        var delay = function() {
+                            if (Model_Status == 1) {
+                                parser.resume();
+                            } else {
+                                setTimeout(function() {
+                                    delay();
+                                }, 200)
+                            }
+                        }
+                        delay();
+                    }, 1000);
                 }
             });
 
