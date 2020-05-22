@@ -109,125 +109,127 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col s12 m6">
+                                <div class="col s12">
                                     <div class="card-panel blue">
                                         <span class="white-text">
                                             <h6>Battery</h6>
-                                            <p>Status: <span id="battery_status"></span>
+<div class="row">
+                                            <p class="col s6">Status: <span id="battery_status"></span>
                                         </p>
-                                        <p>
+                                        <p class="col s6">
                                             Remain: <span id="battery_remain"></span>%
                                         </p>
-                                        <p>
+                                        <p class="col s6">
                                             Current flow: <span id="battery_flow"></span> KWH
                                         </p>
-                                        <p>
+                                        <p class="col s6">
                                             Current Usage: <span id="battery_usage"></span>
                                         </p>
-                                        </span>
                                     </div>
+                                    </span>
                                 </div>
                             </div>
-
-
                         </div>
+
+
                     </div>
-
-
-                </div>
-
-                <div class="col s12">
-
-                    <div class="card white z-depth-3">
-                        <div class="card-content black-text">
-                            <span class="card-title">Export</span>
-                            <p>Export result to csv at here: </p>
-                            <div class="card-action">
-                                <a href="#">Export</a>
-                                <a href="#">This is a link</a>
-                            </div>
-                        </div>
-                    </div>
-
-
                 </div>
 
 
             </div>
 
-        </div>
-        <script>
-            //true:on false:off
-            var wind = true;
-            var light = true;
-            var wave = true;
-            var current = true;
-        </script>
+            <div class="col s12">
 
-        <div class="col s12 m12 l3">
-            <div class="card white z-depth-3">
-                <div class="card-content black-text">
-                    <span class="card-title">Control Panel</span>
-                    <p>Adjust setting as you want.</p>
+                <div class="card white z-depth-3">
+                    <div class="card-content black-text">
+                        <span class="card-title">Export</span>
+                        <p>Export result to csv at here: </p>
+                        <div class="card-action">
+                            <a href="#">Export</a>
+                            <a href="#">This is a link</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-action">
-                    <div class="row">
-                        <p class="col s6">
-                            <span class="right black-text">Wind Switcher
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+    <script>
+        //true:on false:off Mannual variable
+        var wind = true;
+        var light = true;
+        var wave = true;
+        var current = true;
+    </script>
+
+    <div class="col s12 m12 l3">
+        <div class="card white z-depth-3">
+            <div class="card-content black-text">
+                <span class="card-title">Control Panel</span>
+                <p>Adjust setting as you want.</p>
+            </div>
+            <div class="card-action">
+                <div class="row">
+                    <p class="col s6">
+                        <span class="right black-text">Wind Switcher
                             </span> </p>
-                        <p class="switch col s6">
-                            <label>
+                    <p class="switch col s6">
+                        <label>
                           Off
                           <input type="checkbox" id="wind" checked onchange="onWindChange(this);">
                           <span class="lever"></span>
                           On
                         </label>
-                        </p>
+                    </p>
 
-                        <p class="col s6">
-                            <span class="right black-text">Light Switcher
+                    <p class="col s6">
+                        <span class="right black-text">Light Switcher
                         </span> </p>
-                        <p class="switch col s6">
-                            <label>
+                    <p class="switch col s6">
+                        <label>
                       Off
                       <input type="checkbox" id="light" checked onchange="onLightChange(this);">
                       <span class="lever"></span>
                       On
                     </label>
-                        </p>
+                    </p>
 
-                        <p class="col s6">
-                            <span class="right black-text">Wave Switcher
+                    <p class="col s6">
+                        <span class="right black-text">Wave Switcher
                     </span> </p>
-                        <p class="switch col s6">
-                            <label>
+                    <p class="switch col s6">
+                        <label>
                   Off
                   <input type="checkbox" id="wave" checked onchange="onWaveChange(this);">
                   <span class="lever"></span>
                   On
                 </label>
-                        </p>
+                    </p>
 
-                        <p class="col s6">
-                            <span class="right black-text">Current Switcher
+                    <p class="col s6">
+                        <span class="right black-text">Current Switcher
                     </span> </p>
-                        <p class="switch col s6">
-                            <label>
+                    <p class="switch col s6">
+                        <label>
                   Off
                   <input type="checkbox" id="current" checked onchange="onCurrentChange(this);">
                   <span class="lever"></span>
                   On
                 </label>
-                        </p>
+                    </p>
 
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
-        <div class="col s0 m0 l1">
-        </div>
+    <div class="col s0 m0 l1">
+    </div>
 
 
     </div>
@@ -403,39 +405,60 @@
         function runStep(data) {
 
             var userConsumption = data["User_Usage"] || User_Consumption;
-            var time = results.data["Time"];
+            var time = data["Time"];
             var wind_produced = 0,
                 light_produced = 0,
                 wave_produced = 0,
                 current_produced = 0;
 
-            if (data["Wind_Speed"] > wind_limit) {
+            if (data["Wind_Speed"] > wind_limit && wind == 1) {
+                document.getElementById("wind").checked = true;
+                document.getElementById("wind_status").innerHTML = '<font color="green">On </font>';
                 document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
                 wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
-                document.getElementById("wind_production").innerText = wind_produced;
+                document.getElementById("wind_production").innerText = wind_produced.toFixed(2);
+            } else if (wind == 1) {
+                document.getElementById("wind").checked = false;
+                document.getElementById("wind_status").innerHTML = '<font color="green">Off </font>';
             }
 
-            if (data["Light_H"] > light_limit) {
+            if (data["Light_H"] > light_limit && light == 1) {
+                document.getElementById("light").checked = true;
+                document.getElementById("light_status").innerHTML = '<font color="green">On </font>';
                 document.getElementById("Light_Speed").innerText = data["Light_H"];
                 light_produced = 0.09 * data["Light_H"];
-                document.getElementById("Light_production").innerText = light_produced;
+                document.getElementById("Light_production").innerText = light_produced.toFixed(2);
+            } else if (light == 1) {
+                document.getElementById("light").checked = false;
+                document.getElementById("light_status").innerHTML = '<font color="green">Off </font>';
             }
 
-            if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit) {
+            if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit && wave == 1) {
+                document.getElementById("wave").checked = true;
+                document.getElementById("wave_status").innerHTML = '<font color="green">On </font>';
                 document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
                 wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
-                document.getElementById("wave_production").innerText = wave_produced;
+                document.getElementById("wave_production").innerText = wave_produced.toFixed(2);
+            } else if (wave == 1) {
+                document.getElementById("wave").checked = false;
+                document.getElementById("wave_status").innerHTML = '<font color="green">Off </font>';
             }
 
-            if (data["Current_Speed"] > current_limit) {
+            if (data["Current_Speed"] > current_limit && current == 1) {
+                document.getElementById("current").checked = true;
+                document.getElementById("current_status").innerHTML = '<font color="green">On </font>';
                 document.getElementById("current_Speed").innerText = data["Current_Speed"];
                 current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
-                document.getElementById("current_production").innerText = current_produced;
+                document.getElementById("current_production").innerText = current_produced.toFixed(2);
+            } else if (current == 1) {
+                document.getElementById("current").checked = false;
+                document.getElementById("current_status").innerHTML = '<font color="green">Off </font>';
             }
 
             document.getElementById("battery_usage").innerText = userConsumption;
             var pre_battery_current = battery_current;
             battery_current += (wind_produced + light_produced + wave_produced + current_produced) * (time - prevTime) / 3600 - userConsumption;
+            console.log((time - prevTime));
             if (battery_current > battery_capacity) battery_current = battery_capacity;
             document.getElementById("battery_flow").innerText = (battery_current - pre_battery_current).toFixed(2);
             document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
@@ -468,7 +491,7 @@
                 skipEmptyLines: true,
                 dynamicTyping: true,
                 step: function(results, parser) {
-                    console.log("Row data:", results.data["Time"]);
+                    //console.log("Row data:", results.data["Time"]);
                     if (firstLine) {
                         firstLine = false;
                         prevTime = results.data["Time"];
