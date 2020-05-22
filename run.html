@@ -116,7 +116,10 @@
                                             <p>Status: <span id="battery_status"></span>
                                         </p>
                                         <p>
-                                            Remain: <span id="battery_usage"></span>%
+                                            Remain: <span id="battery_remain"></span>%
+                                        </p>
+                                        <p>
+                                            Current flow: <span id="battery_flow"></span> KWH
                                         </p>
                                         <p>
                                             Current Usage: <span id="battery_usage"></span>
@@ -347,7 +350,8 @@
         var current_limit = parseInt(request.QueryString("current"));
         var battary_capacity = parseInt(request.QueryString("battary"));
         var freq = parseInt(request.QueryString("freq")) || 200;
-        var User_Consumption = parseInt(request.QueryString("User"));
+        var User_Consumption = parseInt(request.QueryString("User")) || 2000;
+        var battery_current = 0.7 * battery_capacity;
 
         function OpenDetial(id, width, height) {
             var _srcWidth = parseInt(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
@@ -387,16 +391,46 @@
             $(_id).slideDown();
         }
 
+        var prevTime = 0;
+
 
         function runStep(data) {
 
+            var userConsumption = data["User_Usage"] || User_Consumption;
+            var time = results.data["Time"];
+            document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
+            var wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
+            document.getElementById("wind_production").innerText = wind_produced;
 
+            document.getElementById("Light_Speed").innerText = data["Light_H"];
+            var light_produced = 0.09 * data["Light_H"];
+            document.getElementById("Light_production").innerText = light_produced;
 
+            document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
+            var wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+            document.getElementById("wave_production").innerText = wave_produced;
+
+            document.getElementById("current_Speed").innerText = data["Current_Speed"];
+            var current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
+            document.getElementById("current_production").innerText = current_produced;
+
+            document.getElementById("battery_usage").innerText = userConsumption;
+            var pre_battery_current = battery_current;
+            battery_current += (wind_produced + light_produced + wave_produced + current_produced) * (time - prevTime) / 3600 - userConsumption;
+            if (battery_current > battery_capacity) battery_current = battery_capacity;
+            document.getElementById("battery_flow").innerText = (battery_current - pre_battery_current).toFixed(2);
+            document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+            if (battery_current - pre_battery_current > 0) document.getElementById("battery_status").innerText = 'Charging';
+            else if (battery_current < 0) {
+                battery_current = 0;
+                document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+                document.getElementById("battery_status").innerText = 'Discharging, extra electricity required.';
+            } else {
+                document.getElementById("battery_status").innerText = 'Discharging';
+            }
             //refresh locals
-            prevTime = results.data["Time"];
+            prevTime = time;
         }
-
-        var prevTime = 0;
         /**
          * If user consumption data is empty, then it will use the
          * Data from the first line will be ignored. (No duration is impossible to calculate)
