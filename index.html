@@ -82,8 +82,8 @@
                             </div>
 
                             <div class="input-field col s6">
-                                <input disabled id="battary" name="battary" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="battary">Battery capacity(KWH)</label>
+                                <input disabled id="battery" name="battery" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+                                <label for="battery">Battery capacity(KWH)</label>
                             </div>
 
                             <div class="input-field col s6">
@@ -163,7 +163,6 @@
                 return false;
             } else {
                 location.href = "run.html";
-                window.sessionStorage.setItem('user', document.getElementById("simulation_data").files[0]);
             }
             return true;
         }
@@ -172,7 +171,7 @@
             if (document.getElementById("radio1").checked == true) {
                 if (document.getElementById("wind").value == "" ||
                     document.getElementById("light").value == "" || document.getElementById("wave").value == "" ||
-                    document.getElementById("current").value == "" || document.getElementById("battary").value == "" ||
+                    document.getElementById("current").value == "" || document.getElementById("battery").value == "" ||
                     document.getElementById("freq").value == "" || document.getElementById("User").value == "") {
                     document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
                     return true;
@@ -199,7 +198,7 @@
             document.getElementById("light").disabled = true;
             document.getElementById("wave").disabled = true;
             document.getElementById("current").disabled = true;
-            document.getElementById("battary").disabled = true;
+            document.getElementById("battery").disabled = true;
             document.getElementById("freq").disabled = true;
 
             document.getElementById("hist_data").disabled = false;
@@ -212,7 +211,7 @@
             document.getElementById("light").disabled = false;
             document.getElementById("wave").disabled = false;
             document.getElementById("current").disabled = false;
-            document.getElementById("battary").disabled = false;
+            document.getElementById("battery").disabled = false;
             document.getElementById("freq").disabled = false;
             document.getElementById("hist_data").disabled = true;
             document.getElementById("history_data").disabled = true;

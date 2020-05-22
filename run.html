@@ -345,7 +345,7 @@
             // file:///C:/Users/Shaokang%20Jiang/Desktop/Energy/energy/run.html?group1=1&wind=74&light=74&wave=74&current=74&battary=74&freq=741&User=44174&action=
 
         if (request.QueryString("wind") == null || request.QueryString("light") == null || request.QueryString("wave") == null || request.QueryString("current") == null ||
-            request.QueryString("battary") == null) {
+            request.QueryString("battery") == null) {
             alert("Invalid visit.");
             window.location.href = "index.html";
         }
@@ -353,7 +353,7 @@
         var light_limit = parseInt(request.QueryString("light"));
         var wave_limit = parseInt(request.QueryString("wave"));
         var current_limit = parseInt(request.QueryString("current"));
-        var battary_capacity = parseInt(request.QueryString("battary"));
+        var battery_capacity = parseInt(request.QueryString("battery"));
         var freq = parseInt(request.QueryString("freq")) || 200;
         var User_Consumption = parseInt(request.QueryString("User")) || 2000;
         var battery_current = 0.7 * battery_capacity;
