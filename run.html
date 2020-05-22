@@ -11,6 +11,7 @@
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <script src="https://unpkg.com/javascript-lp-solver/src/solver.js"></script>
+    <script src="./js/papaparse.min.js"></script>
 </head>
 
 <body>
@@ -287,7 +288,8 @@
     <script>
         M.AutoInit();
 
-        var Model_Status = 0;
+        var Model_Status = 0; //1:running 0:pause 2:terminate
+        var file;
 
         $(document).ready(function() {
             $('.fixed-action-btn').floatingActionButton();
@@ -304,12 +306,6 @@
             }
             // so, You can using request.QueryString(para), like this
         var u = request.QueryString("type2");
-
-
-        function SpeedChange(x) {
-            //console.log(x);
-            document.getElementById("Speed_text").innerText = x;
-        }
 
         function load(source) {
             var file = source;
@@ -388,7 +384,7 @@
             var _id = "#" + id;
             var detial =
                 '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
-                '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s8" id="notice"><p><a class="waves-effect waves-light btn col s3" onclick="CloseDetail()">Use This</a>' +
+                '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
                 '</div></div></div></div>';
             $(_id).html(detial);
             $(_id).css({
@@ -410,14 +406,27 @@
             $(_id).slideDown();
         }
 
-        function CloseDetail() {
+        function Start() {
             $("#UserEdit").slideUp();
+            document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
+            Model_Status = 1;
+
+            Papa.parse(file, {
+                step: function(results, parser) {
+                    console.log("Row data:", results.data);
+                    console.log("Row errors:", results.errors);
+                }
+            });
+
         }
 
 
-        function loadFile(file) {
-            console.log(file);
-            document.getElementById("notice").innerText = "Successfully loaded";
+        function loadFile(file1) {
+            file = file1.files[0];
+            if (file != null) {
+                document.getElementById("notice").innerText = "Successfully loaded";
+                document.getElementById("usethis").disabled = false;
+            }
         }
 
         function add() {
