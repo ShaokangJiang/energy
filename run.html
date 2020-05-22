@@ -344,6 +344,11 @@
             // so, You can using request.QueryString(para), like this
             // file:///C:/Users/Shaokang%20Jiang/Desktop/Energy/energy/run.html?group1=1&wind=74&light=74&wave=74&current=74&battary=74&freq=741&User=44174&action=
 
+        if (request.QueryString("wind") == null || request.QueryString("light") == null || request.QueryString("wave") == null || request.QueryString("current") == null ||
+            request.QueryString("battary") == null) {
+            alert("Invalid visit.");
+            window.location.href = "index.html";
+        }
         var wind_limit = parseInt(request.QueryString("wind"));
         var light_limit = parseInt(request.QueryString("light"));
         var wave_limit = parseInt(request.QueryString("wave"));
@@ -352,6 +357,8 @@
         var freq = parseInt(request.QueryString("freq")) || 200;
         var User_Consumption = parseInt(request.QueryString("User")) || 2000;
         var battery_current = 0.7 * battery_capacity;
+
+
 
         function OpenDetial(id, width, height) {
             var _srcWidth = parseInt(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
@@ -393,26 +400,38 @@
 
         var prevTime = 0;
 
-
         function runStep(data) {
 
             var userConsumption = data["User_Usage"] || User_Consumption;
             var time = results.data["Time"];
-            document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
-            var wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
-            document.getElementById("wind_production").innerText = wind_produced;
+            var wind_produced = 0,
+                light_produced = 0,
+                wave_produced = 0,
+                current_produced = 0;
 
-            document.getElementById("Light_Speed").innerText = data["Light_H"];
-            var light_produced = 0.09 * data["Light_H"];
-            document.getElementById("Light_production").innerText = light_produced;
+            if (data["Wind_Speed"] > wind_limit) {
+                document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
+                wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
+                document.getElementById("wind_production").innerText = wind_produced;
+            }
 
-            document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
-            var wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
-            document.getElementById("wave_production").innerText = wave_produced;
+            if (data["Light_H"] > light_limit) {
+                document.getElementById("Light_Speed").innerText = data["Light_H"];
+                light_produced = 0.09 * data["Light_H"];
+                document.getElementById("Light_production").innerText = light_produced;
+            }
 
-            document.getElementById("current_Speed").innerText = data["Current_Speed"];
-            var current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
-            document.getElementById("current_production").innerText = current_produced;
+            if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit) {
+                document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
+                wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+                document.getElementById("wave_production").innerText = wave_produced;
+            }
+
+            if (data["Current_Speed"] > current_limit) {
+                document.getElementById("current_Speed").innerText = data["Current_Speed"];
+                current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
+                document.getElementById("current_production").innerText = current_produced;
+            }
 
             document.getElementById("battery_usage").innerText = userConsumption;
             var pre_battery_current = battery_current;
@@ -441,6 +460,8 @@
             $("#UserEdit").slideUp();
             document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
             Model_Status = 1;
+            document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+
 
             Papa.parse(file, {
                 header: true,
