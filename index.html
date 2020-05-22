@@ -87,8 +87,8 @@
                             </div>
 
                             <div class="input-field col s6">
-                                <input disabled id="freq" name="freq" type="text" class="validate" onkeyup="onlyNumber(this) " onafterpaste="onlyNumber(this) ">
-                                <label for="freq">Refresh Frequency</label>
+                                <input disabled id="freq" name="freq" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+                                <label for="freq">Refresh Frequency(ms)</label>
                             </div>
 
                             <p class="col s12">
@@ -221,41 +221,46 @@
             document.getElementById("history_data").disabled = true;
         }
 
-        function load(source) {
-            var file = source;
-            if (window.FileReader) {
-                var fr = new FileReader();
-                fr.readAsText(file);
-                fr.onload = function() {
-                    console.log('onload')
-                    var html = '';
-                    html = fr.result;
-                    document.getElementById("Speed_text").innerText = html;
+        function optimization() {
+            var results,
+                model = {
+                    "optimize": "capacity",
+                    "opType": "max",
+                    "constraints": {
+                        "plane": {
+                            "max": 44
+                        },
+                        "person": {
+                            "max": 512
+                        },
+                        "cost": {
+                            "max": 300000
+                        },
+                        "brit": {
+                            "max": 5
+                        }
+                    },
+                    "variables": {
+                        "brit": {
+                            "capacity": 20000,
+                            "plane": 1,
+                            "person": 8,
+                            "cost": 5000
+                        },
+                        "yank": {
+                            "capacity": 30000,
+                            "plane": 1,
+                            "person": 16,
+                            "cost": 9000
+                        }
+                    },
                 };
-                fr.onprogress = function(event) {
-                    if (event.lengthComputable) {
-                        document.getElementById("Speed_text").innerText = event.loaded + '/' + event.total;
-                    }
-                }
-            }
+
+            results = solver.Solve(model);
+            console.log(results);
+            document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
         }
 
-        function onlyNumber(obj) {
-            //得到第一个字符是否为负号
-            var t = obj.value.charAt(0);
-            //先把非数字的都替换掉，除了数字和. 
-            obj.value = obj.value.replace(/[^\d\.]/g, '');
-            //必须保证第一个为数字而不是. 
-            obj.value = obj.value.replace(/^\./g, '');
-            //保证只有出现一个.而没有多个. 
-            obj.value = obj.value.replace(/\.{2,}/g, '.');
-            //保证.只出现一次，而不能出现两次以上 
-            obj.value = obj.value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.');
-            //如果第一位是负号，则允许添加
-            if (t == '-') {
-                obj.value = '-' + obj.value;
-            }
-        }
     </script>
 
 </body>
