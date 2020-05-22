@@ -90,15 +90,18 @@
                                 <input disabled id="freq" name="freq" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
                                 <label for="freq">Refresh Frequency(ms)</label>
                             </div>
-
-                            <p class="col s12">
-                                <label>
-                              <input class="with-gap" id="radio2" name="group1" type="radio" checked value="2" onclick="select2()"/>
-                              <span>Use History Data</span>
-                            </label>
+                            <p class="col s6"><label>
+                                <input class="with-gap" id="radio2" name="group1" type="radio" checked value="2" onclick="select2()"/>
+                                <span>Use History Data</span>
+                              </label>
                             </p>
+                            <div class="input-field col s6">
+                                <input id="User" name="User" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+                                <label for="User">User Usage(kwh/day)</label>
+                            </div>
 
                             <div class="file-field input-field col s6">
+
                                 <div class="btn">
                                     <span>File</span>
                                     <input id="history_data" name="history_data" type="file">
@@ -108,27 +111,32 @@
                                 </div>
                             </div>
 
-                            <div class="input-field col s6">
-                                <input id="User" name="User" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="User">User Usage(kwh/day)</label>
-                            </div>
+
+                            <p class="col s6"><label>
+                                    <input type="checkbox" onchange="userUsageSwitch(this);" />
+                                    <span>I will provide user data in input file in the next page</span>
+                                  </label></p>
 
 
-                            <p class="col s9"></p>
-                            <button class="btn waves-effect waves-light col s3" type="submit" name="action">Submit
+
+
+
+
+                        <p class="col s9"></p>
+                        <button class="btn waves-effect waves-light col s3" type="submit" name="action">Submit
                       
                       
                             <i class="material-icons right">send</i>
                     </button>
 
-                        </div>
-                    </form>
                 </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="col s0 m0 l1">
-        </div>
+    <div class="col s0 m0 l1">
+    </div>
 
     </div>
 
@@ -158,6 +166,15 @@
     <script>
         M.AutoInit();
 
+        function userUsageSwitch(use) {
+            if (use.checked) {
+                document.getElementById("User").disabled = true;
+            } else {
+
+                document.getElementById("User").disabled = false;
+            }
+        }
+
         function checkForm() {
             if (checkFormValid()) {
                 return false;
@@ -172,14 +189,14 @@
                 if (document.getElementById("wind").value == "" ||
                     document.getElementById("light").value == "" || document.getElementById("wave").value == "" ||
                     document.getElementById("current").value == "" || document.getElementById("battery").value == "" ||
-                    document.getElementById("freq").value == "" || document.getElementById("User").value == "") {
+                    document.getElementById("freq").value == "" || (document.getElementById("User").disabled == false && document.getElementById("User").value == "")) {
                     document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
                     return true;
                 };
                 return false;
             }
             if (document.getElementById("radio2").checked == true) {
-                if (document.getElementById("User").value == "" ||
+                if ((document.getElementById("User").disabled == false && document.getElementById("User").value == "") ||
                     document.getElementById("hist_data").value == "" || document.getElementById("history_data").value == "") {
                     document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
                     return true;
