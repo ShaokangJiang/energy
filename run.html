@@ -424,13 +424,13 @@
 
             if (data["Light_H"] > light_limit && light == 1) {
                 document.getElementById("light").checked = true;
-                document.getElementById("light_status").innerHTML = '<font color="green">On </font>';
+                document.getElementById("Light_status").innerHTML = '<font color="green">On </font>';
                 document.getElementById("Light_Speed").innerText = data["Light_H"];
                 light_produced = 0.09 * data["Light_H"];
                 document.getElementById("Light_production").innerText = light_produced.toFixed(2);
             } else if (light == 1) {
                 document.getElementById("light").checked = false;
-                document.getElementById("light_status").innerHTML = '<font color="green">Off </font>';
+                document.getElementById("Light_status").innerHTML = '<font color="green">Off </font>';
             }
 
             if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit && wave == 1) {
