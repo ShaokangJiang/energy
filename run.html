@@ -463,7 +463,7 @@
             function runStep(data) {
 
                 var userConsumption = data["User_Usage"] || User_Consumption;
-                var time = data["Time"];
+                var time = (prevTime + freq) / 1000;
                 var wind_produced = 0,
                     light_produced = 0,
                     wave_produced = 0,
@@ -536,7 +536,7 @@
                 //Time,type,status,speed,production
                 document.getElementById("battery_usage").innerText = userConsumption;
                 var pre_battery_current = battery_current;
-                battery_current += (wind_produced + light_produced + wave_produced + current_produced) * (time - prevTime) / 3600 - userConsumption;
+                battery_current += (wind_produced + light_produced + wave_produced + current_produced) * (freq / 1000) / 3600 - userConsumption;
                 //console.log((time - prevTime));
                 var batteryStatus = 0;
                 if (battery_current > battery_capacity) battery_current = battery_capacity;
@@ -560,7 +560,7 @@
                 //batteryStatus: 0: normal 1:discharging 2:Discharging, extra electricity required
                 //refresh locals
                 //console.log(batteryData);
-                prevTime = time;
+                prevTime += freq;
             }
             /**
              * If user consumption data is empty, then it will use the
@@ -568,12 +568,26 @@
              * Simple model, assume related daata could be provided 
              **/
             function Start() {
-                var firstLine = true;
                 $("#UserEdit").slideUp();
                 document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
                 Model_Status = 1;
+                document.getElementById("wind_status").innerHTML = '<font color="green">Initialize </font>';
+                document.getElementById("Light_status").innerHTML = '<font color="green">Initialize </font>';
+                document.getElementById("wave_status").innerHTML = '<font color="green">Initialize </font>';
+                document.getElementById("current_status").innerHTML = '<font color="green">Initialize </font>';
+                wind = true;
+                light = true;
+                wave = true;
+                current = true;
+
+                document.getElementById("wind").checked = true;
+                document.getElementById("light").checked = true;
+                document.getElementById("wave").checked = true;
+                document.getElementById("current").checked = true;
+
                 document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
 
+                prevTime = 0;
 
                 Papa.parse(file, {
                     header: true,
@@ -581,10 +595,6 @@
                     dynamicTyping: true,
                     step: function(results, parser) {
                         //console.log("Row data:", results.data["Time"]);
-                        if (firstLine) {
-                            firstLine = false;
-                            prevTime = results.data["Time"];
-                        } else {
                             //analyze data at here
                             parser.pause();
                             runStep(results.data);
@@ -602,12 +612,24 @@
                                 }
                                 delay();
                             }, freq);
-                        }
                     },
                     complete: function(results, parser) {
                         console.log("done");
                         Model_Status = 2;
                         change_status();
+                        document.getElementById("wind_status").innerHTML = '<font color="green">Done </font>';
+                        document.getElementById("Light_status").innerHTML = '<font color="green">Done </font>';
+                        document.getElementById("wave_status").innerHTML = '<font color="green">Done </font>';
+                        document.getElementById("current_status").innerHTML = '<font color="green">Done </font>';
+                        wind = false;
+                        light = false;
+                        wave = false;
+                        current = false;
+
+                        document.getElementById("wind").checked = false;
+                        document.getElementById("light").checked = false;
+                        document.getElementById("wave").checked = false;
+                        document.getElementById("current").checked = false;
                     }
                 });
             }
@@ -706,101 +728,108 @@
             }
 
             function showInform(event, history, title_word) {
-                var posX = 0,
-                    posY = 0;
-                var event = event || window.event;
-                if (event.pageX || event.pageY) {
-                    posX = event.pageX;
-                    posY = event.pageY;
-                } else if (event.clientX || event.clientY) {
-                    posX = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
-                    posY = event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
-                }
+                var myChart;
 
-                //console.log(posX);
-                //console.log(posY);
-                $("#inform").css({
-                    "width": 500,
-                    "height": 300,
-                    "left": posX,
-                    "top": posY,
-                    "position": "absolute"
-                });
+                var data;
 
-                var myChart = echarts.init(document.getElementById('main'));
+                if (Model_Status != 0) {
+                    myChart = echarts.init(document.getElementById('main'));
+                    data = [];
+                    var posX = 0,
+                        posY = 0;
+                    var event = event || window.event;
+                    if (event.pageX || event.pageY) {
+                        posX = event.pageX;
+                        posY = event.pageY;
+                    } else if (event.clientX || event.clientY) {
+                        posX = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+                        posY = event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
+                    }
 
-                var data = [];
-                var toInter = history.toArray();
-                for (var i = 0; i < toInter.length; i++) {
-                    data.push({
-                        name: toInter[i].getKey(),
-                        value: [
-                            toInter[i].getKey(),
-                            toInter[i].getValue()
-                        ]
+                    //console.log(posX);
+                    //console.log(posY);
+                    $("#inform").css({
+                        "width": 500,
+                        "height": 300,
+                        "left": posX,
+                        "top": posY,
+                        "position": "absolute"
                     });
-                }
 
-                option = {
-                    title: {
-                        text: title_word
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        formatter: function(params) {
-                            params = params[0];
-                            return params.name + ' : ' + params.value[1];
+
+                    var toInter = history.toArray();
+                    for (var i = 0; i < toInter.length; i++) {
+                        data.push({
+                            name: toInter[i].getKey(),
+                            value: [
+                                toInter[i].getKey(),
+                                toInter[i].getValue()
+                            ]
+                        });
+                    }
+
+                    option = {
+                        title: {
+                            text: title_word
                         },
-                        axisPointer: {
-                            animation: false
-                        }
-                    },
-                    xAxis: {
-                        type: 'value',
-                        scale: true,
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                        scale: true,
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    series: [{
-                        name: title_word,
-                        type: 'line',
-                        showSymbol: false,
-                        hoverAnimation: false,
-                        data: data
-                    }]
-                };
-
-                hoverId = setInterval(function() {
-
-                    //data.shift(); //getLast()
-                    data.push({
-                        name: history.getLast().getKey(),
-                        value: [
-                            history.getLast().getKey(),
-                            history.getLast().getValue()
-                        ]
-                    });
-
-                    myChart.setOption({
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: function(params) {
+                                params = params[0];
+                                return params.name + ' : ' + params.value[1];
+                            },
+                            axisPointer: {
+                                animation: false
+                            }
+                        },
+                        xAxis: {
+                            type: 'value',
+                            scale: true,
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            scale: true,
+                            splitLine: {
+                                show: false
+                            }
+                        },
                         series: [{
+                            name: title_word,
+                            type: 'line',
+                            showSymbol: false,
+                            hoverAnimation: false,
                             data: data
                         }]
-                    });
-                }, freq);
+                    };
+                    myChart.setOption(option);
+                    document.getElementById("inform").style.display = 'block';
+                    // document.getElementById("inform").css("display","block");
+                }
+
+                if (Model_Status == 1) {
+                    hoverId = setInterval(function() {
+
+                        //data.shift(); //getLast()
+                        data.push({
+                            name: history.getLast().getKey(),
+                            value: [
+                                history.getLast().getKey(),
+                                history.getLast().getValue()
+                            ]
+                        });
+
+                        myChart.setOption({
+                            series: [{
+                                data: data
+                            }]
+                        });
+                    }, freq);
+                }
 
                 // 使用刚指定的配置项和数据显示图表。
-                myChart.setOption(option);
-
-                document.getElementById("inform").style.display = 'block';
-                // document.getElementById("inform").css("display","block");
             }
         </script>
 
