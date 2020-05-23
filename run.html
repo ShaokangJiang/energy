@@ -595,23 +595,23 @@
                     dynamicTyping: true,
                     step: function(results, parser) {
                         //console.log("Row data:", results.data["Time"]);
-                            //analyze data at here
-                            parser.pause();
-                            runStep(results.data);
-                            while (Model_Status == 0) {}
-                            setTimeout(function() {
-                                var delay = function() {
-                                    if (Model_Status == 1) {
-                                        //do some things at here
-                                        parser.resume();
-                                    } else {
-                                        setTimeout(function() {
-                                            delay();
-                                        }, 200)
-                                    }
+                        //analyze data at here
+                        parser.pause();
+                        runStep(results.data);
+                        while (Model_Status == 0) {}
+                        setTimeout(function() {
+                            var delay = function() {
+                                if (Model_Status == 1) {
+                                    //do some things at here
+                                    parser.resume();
+                                } else {
+                                    setTimeout(function() {
+                                        delay();
+                                    }, 200)
                                 }
-                                delay();
-                            }, freq);
+                            }
+                            delay();
+                        }, freq);
                     },
                     complete: function(results, parser) {
                         console.log("done");
