@@ -333,9 +333,9 @@
                 if (Model_Status == 1) {
                     wind = use.checked;
                     if (wind) {
-                        document.getElementById("wind_status").innerHTML = '<font color="green">On </font>';
+                        document.getElementById("wind_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     } else {
-                        document.getElementById("wind_status").innerHTML = '<font color="red">Off </font>';
+                        document.getElementById("wind_status").innerHTML = '<font color="red"><b>Off</b></font>';
                     }
                 }
             }
@@ -344,9 +344,9 @@
                 if (Model_Status == 1) {
                     light = use.checked;
                     if (light) {
-                        document.getElementById("Light_status").innerHTML = '<font color="green">On </font>';
+                        document.getElementById("Light_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     } else {
-                        document.getElementById("Light_status").innerHTML = '<font color="red">Off </font>';
+                        document.getElementById("Light_status").innerHTML = '<font color="red"><b>Off</b></font>';
                     }
                 }
             }
@@ -355,9 +355,9 @@
                 if (Model_Status == 1) {
                     wave = use.checked;
                     if (wave) {
-                        document.getElementById("wave_status").innerHTML = '<font color="green">On </font>';
+                        document.getElementById("wave_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     } else {
-                        document.getElementById("wave_status").innerHTML = '<font color="red">Off </font>';
+                        document.getElementById("wave_status").innerHTML = '<font color="red"><b>Off</b></font>';
                     }
                 }
             }
@@ -366,9 +366,9 @@
                 if (Model_Status == 1) {
                     current = use.checked;
                     if (current) {
-                        document.getElementById("current_status").innerHTML = '<font color="green">On </font>';
+                        document.getElementById("current_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     } else {
-                        document.getElementById("current_status").innerHTML = '<font color="red">Off </font>';
+                        document.getElementById("current_status").innerHTML = '<font color="red"><b>Off</b></font>';
                     }
                 }
             }
@@ -471,7 +471,7 @@
 
                 if (data["Wind_Speed"] > wind_limit && wind == 1) {
                     document.getElementById("wind").checked = true;
-                    document.getElementById("wind_status").innerHTML = '<font color="green">On </font>';
+                    document.getElementById("wind_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
                     wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
                     document.getElementById("wind_production").innerText = wind_produced.toFixed(2);
@@ -479,7 +479,7 @@
                         runData.push(time + ",wind,on," + data["Wind_Speed"] + "," + wind_produced + "\n");
                 } else if (wind == 1) {
                     document.getElementById("wind").checked = false;
-                    document.getElementById("wind_status").innerHTML = '<font color="green">Off </font>';
+                    document.getElementById("wind_status").innerHTML = '<font color="green"><b>Off</b></font>';
                     if (exported)
                         runData.push(time + ",wind,off," + data["Wind_Speed"] + ",0" + "\n");
                 }
@@ -487,7 +487,7 @@
 
                 if (data["Light_H"] > light_limit && light == 1) {
                     document.getElementById("light").checked = true;
-                    document.getElementById("Light_status").innerHTML = '<font color="green">On </font>';
+                    document.getElementById("Light_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     document.getElementById("Light_Speed").innerText = data["Light_H"];
                     light_produced = 0.09 * data["Light_H"];
                     document.getElementById("Light_production").innerText = light_produced.toFixed(2);
@@ -495,7 +495,7 @@
                         runData.push(time + ",light,on," + data["Light_H"] + "," + light_produced + "\n");
                 } else if (light == 1) {
                     document.getElementById("light").checked = false;
-                    document.getElementById("Light_status").innerHTML = '<font color="green">Off </font>';
+                    document.getElementById("Light_status").innerHTML = '<font color="red"><b>Off</b></font>';
                     if (exported)
                         runData.push(time + ",light,off," + data["Light_H"] + ",0\n");
                 }
@@ -503,7 +503,7 @@
 
                 if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit && wave == 1) {
                     document.getElementById("wave").checked = true;
-                    document.getElementById("wave_status").innerHTML = '<font color="green">On </font>';
+                    document.getElementById("wave_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
                     wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
                     document.getElementById("wave_production").innerText = wave_produced.toFixed(2);
@@ -511,7 +511,7 @@
                         runData.push(time + ",wave,on," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + "," + wave_produced + "\n");
                 } else if (wave == 1) {
                     document.getElementById("wave").checked = false;
-                    document.getElementById("wave_status").innerHTML = '<font color="green">Off </font>';
+                    document.getElementById("wave_status").innerHTML = '<font color="red"><b>Off</b></font>';
                     if (exported)
                         runData.push(time + ",wave,off," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + ",0\n");
                 }
@@ -519,7 +519,7 @@
 
                 if (data["Current_Speed"] > current_limit && current == 1) {
                     document.getElementById("current").checked = true;
-                    document.getElementById("current_status").innerHTML = '<font color="green">On </font>';
+                    document.getElementById("current_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     document.getElementById("current_Speed").innerText = data["Current_Speed"];
                     current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
                     document.getElementById("current_production").innerText = current_produced.toFixed(2);
@@ -527,7 +527,7 @@
                         runData.push(time + ",current,on," + data["Current_Speed"] + "," + current_produced + "\n");
                 } else if (current == 1) {
                     document.getElementById("current").checked = false;
-                    document.getElementById("current_status").innerHTML = '<font color="green">Off </font>';
+                    document.getElementById("current_status").innerHTML = '<font color="red"><b>Off</b> </font>';
                     if (exported)
                         runData.push(time + ",current,off," + data["Current_Speed"] + ",0\n");
                 }
@@ -571,10 +571,10 @@
                 $("#UserEdit").slideUp();
                 document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
                 Model_Status = 1;
-                document.getElementById("wind_status").innerHTML = '<font color="green">Initialize </font>';
-                document.getElementById("Light_status").innerHTML = '<font color="green">Initialize </font>';
-                document.getElementById("wave_status").innerHTML = '<font color="green">Initialize </font>';
-                document.getElementById("current_status").innerHTML = '<font color="green">Initialize </font>';
+                document.getElementById("wind_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
+                document.getElementById("Light_status").innerHTML = '<font color="green"><b>Initialize</b></font>';
+                document.getElementById("wave_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
+                document.getElementById("current_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
                 wind = true;
                 light = true;
                 wave = true;
