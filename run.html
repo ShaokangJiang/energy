@@ -308,7 +308,7 @@
         <script src="js/materialize.js"></script>
         <script>
             M.AutoInit();
-            var Model_Status = 0; //1:running 0:pause 2:terminate
+            var Model_Status = -1; //1:running 0:pause 2:terminate
             var file;
             var runData = [];
             var batteryData = [];
@@ -732,82 +732,80 @@
 
                 var data;
 
-                if (Model_Status != 0) {
-                    myChart = echarts.init(document.getElementById('main'));
-                    data = [];
-                    var posX = 0,
-                        posY = 0;
-                    var event = event || window.event;
-                    if (event.pageX || event.pageY) {
-                        posX = event.pageX;
-                        posY = event.pageY;
-                    } else if (event.clientX || event.clientY) {
-                        posX = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
-                        posY = event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
-                    }
-
-                    //console.log(posX);
-                    //console.log(posY);
-                    $("#inform").css({
-                        "width": 500,
-                        "height": 300,
-                        "left": posX,
-                        "top": posY,
-                        "position": "absolute"
-                    });
-
-
-                    var toInter = history.toArray();
-                    for (var i = 0; i < toInter.length; i++) {
-                        data.push({
-                            name: toInter[i].getKey(),
-                            value: [
-                                toInter[i].getKey(),
-                                toInter[i].getValue()
-                            ]
-                        });
-                    }
-
-                    option = {
-                        title: {
-                            text: title_word
-                        },
-                        tooltip: {
-                            trigger: 'axis',
-                            formatter: function(params) {
-                                params = params[0];
-                                return params.name + ' : ' + params.value[1];
-                            },
-                            axisPointer: {
-                                animation: false
-                            }
-                        },
-                        xAxis: {
-                            type: 'value',
-                            scale: true,
-                            splitLine: {
-                                show: false
-                            }
-                        },
-                        yAxis: {
-                            type: 'value',
-                            scale: true,
-                            splitLine: {
-                                show: false
-                            }
-                        },
-                        series: [{
-                            name: title_word,
-                            type: 'line',
-                            showSymbol: false,
-                            hoverAnimation: false,
-                            data: data
-                        }]
-                    };
-                    myChart.setOption(option);
-                    document.getElementById("inform").style.display = 'block';
-                    // document.getElementById("inform").css("display","block");
+                myChart = echarts.init(document.getElementById('main'));
+                data = [];
+                var posX = 0,
+                    posY = 0;
+                var event = event || window.event;
+                if (event.pageX || event.pageY) {
+                    posX = event.pageX;
+                    posY = event.pageY;
+                } else if (event.clientX || event.clientY) {
+                    posX = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+                    posY = event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
                 }
+
+                //console.log(posX);
+                //console.log(posY);
+                $("#inform").css({
+                    "width": 500,
+                    "height": 300,
+                    "left": posX,
+                    "top": posY,
+                    "position": "absolute"
+                });
+
+
+                var toInter = history.toArray();
+                for (var i = 0; i < toInter.length; i++) {
+                    data.push({
+                        name: toInter[i].getKey(),
+                        value: [
+                            toInter[i].getKey(),
+                            toInter[i].getValue()
+                        ]
+                    });
+                }
+
+                option = {
+                    title: {
+                        text: title_word
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: function(params) {
+                            params = params[0];
+                            return params.name + ' : ' + params.value[1];
+                        },
+                        axisPointer: {
+                            animation: false
+                        }
+                    },
+                    xAxis: {
+                        type: 'value',
+                        scale: true,
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        scale: true,
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    series: [{
+                        name: title_word,
+                        type: 'line',
+                        showSymbol: false,
+                        hoverAnimation: false,
+                        data: data
+                    }]
+                };
+                myChart.setOption(option);
+                document.getElementById("inform").style.display = 'block';
+                // document.getElementById("inform").css("display","block");
 
                 if (Model_Status == 1) {
                     hoverId = setInterval(function() {
