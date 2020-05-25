@@ -104,7 +104,7 @@
 
                                 <div class="btn">
                                     <span>File</span>
-                                    <input id="history_data" name="history_data" type="file">
+                                    <input id="history_data" name="history_data" type="file" accept=".csv,text/csv" onchange="loadFile(this)">
                                 </div>
                                 <div class="file-path-wrapper">
                                     <input placeholder="History data" id="hist_data" class="file-path validate" type="text">
@@ -165,6 +165,16 @@
     <script src="js/materialize.js"></script>
     <script>
         M.AutoInit();
+        var file;
+
+        function loadFile(use) {
+            if (use.files[0] != null && use.files[0].type == 'text/csv')
+                file = use.files[0];
+            else {
+                use.value = '';
+                document.getElementById("notification").innerHTML = '<font color="red">Please select a csv file. </font>';
+            }
+        }
 
         function userUsageSwitch(use) {
             if (use.checked) {

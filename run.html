@@ -436,7 +436,7 @@
                 var _id = "#" + id;
                 var detial =
                     '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
-                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>I don\'t need to export usage data(Choose when source is intended to be large).</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
+                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)" accept=".csv,text/csv"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>I don\'t need to export usage data(Choose when source is intended to be large).</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
                     '</div></div></div></div>';
                 $(_id).html(detial);
                 $(_id).css({
@@ -637,9 +637,12 @@
 
             function loadFile(file1) {
                 file = file1.files[0];
-                if (file != null) {
+                if (file != null && file.type == 'text/csv') {
                     document.getElementById("notice").innerText = "Successfully loaded";
                     document.getElementById("usethis").disabled = false;
+                } else {
+                    document.getElementById("notice").innerText = "Please select a valid csv file";
+                    document.getElementById("usethis").disabled = true;
                 }
             }
 
