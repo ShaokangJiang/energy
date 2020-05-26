@@ -141,7 +141,7 @@
                                     <div class="col s12">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6  onMouseOver="showInform(event, battery_history, 'Battery data');" onMouseOut="hiddenInform(event);">Battery<!--{cn}电池--></h6>
+                                            <h6  onMouseOver="if (tran.getLang() == 'cn') showInform(event, battery_history, '电池数据'); else showInform(event, battery_history, 'Battery data');" onMouseOut="hiddenInform(event);">Battery<!--{cn}电池--></h6>
 <div class="row">
                                             <p class="col s6">Status: <!--{cn}现况:--><span id="battery_status"></span>
                                             </p>
@@ -486,7 +486,7 @@
                 if (tran.getLang() == 'cn')
                     detial =
                     '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
-                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)" accept=".csv"></div><div class="file-path-wrapper"><input placeholder="Input Stream" placeholder-cn="输入流" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>我不需要导出使用数据(源文件较大时选择)。</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">使用这个</button>' +
+                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)" accept=".csv"></div><div class="file-path-wrapper"><input placeholder="输入流" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>我不需要导出使用数据(源文件较大时选择)。</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">使用这个</button>' +
                     '</div></div></div></div>';
                 else
                     detial =
