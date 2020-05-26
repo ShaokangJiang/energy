@@ -24,8 +24,8 @@
         <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
 
             <ul class="right hide-on-med-and-down">
-                <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');lang='cn';document.getElementById('nav-en').className = '';document.getElementById('nav-cn').className = 'active';">中文</a></li>
-                <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');lang='en';document.getElementById('nav-en').className = 'active';document.getElementById('nav-cn').className = '';">EN</a></li>
+                <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-cn').className = '';">EN</a></li>
             </ul>
         </div>
     </nav>
@@ -198,7 +198,10 @@
                 file = use.files[0];
             else {
                 use.value = '';
-                document.getElementById("notification").innerHTML = '<font color="red">Please select a csv file. <!--{cn}欢迎使用这个组合能量工具。--> </font>';
+                if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">请选择一个csv文件</font>';
+
+                else document.getElementById("notification").innerHTML = '<font color="red">Please select a csv file. </font>';
+
             }
         }
 
@@ -226,7 +229,11 @@
                     document.getElementById("light").value == "" || document.getElementById("wave").value == "" ||
                     document.getElementById("current").value == "" || document.getElementById("battery").value == "" ||
                     document.getElementById("freq").value == "" || (document.getElementById("User").disabled == false && document.getElementById("User").value == "")) {
-                    document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
+                    if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">您需要填写所有空字段。</font>';
+
+                    else
+                        document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
+
                     return true;
                 };
                 return false;
@@ -234,7 +241,10 @@
             if (document.getElementById("radio2").checked == true) {
                 if ((document.getElementById("User").disabled == false && document.getElementById("User").value == "") ||
                     document.getElementById("hist_data").value == "" || document.getElementById("history_data").value == "") {
-                    document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
+                    if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">您需要填写所有空字段。</font>';
+
+                    else
+                        document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
                     return true;
                 };
                 //solve some optimization problem at here
@@ -315,12 +325,10 @@
         var lang = navigator.language || navigator.browserLanguage;
         if (/^zh/.test(lang)) {
             //alert('中文');
-            lang = 'cn';
             tran = new Translater({
                 lang: "cn"
             });
         } else {
-            lang = 'en';
             //alert('不是中文');
             tran = new Translater({
                 lang: "en"
