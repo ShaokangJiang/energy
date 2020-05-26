@@ -4,7 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-    <title>Starter Template - Materialize</title>
+    <title>Energy -- running
+        <!--{cn}能量 -- 运行-->
+    </title>
 
     <!-- CSS  -->
     <link href="css/icon.css" rel="stylesheet">
@@ -14,11 +16,17 @@
     <script src="./js/papaparse.min.js"></script>
     <script src="./js/LinkedList.js"></script>
     <script src="./js/echarts.min.js"></script>
+    <script src="./js/translater.min.js"></script>
 
     <body>
         <nav class="Maroon" role="navigation">
             <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+                <ul class="right hide-on-med-and-down">
+                    <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');lang='cn';document.getElementById('nav-en').className = '';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                    <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');lang='en';document.getElementById('nav-en').className = 'active';document.getElementById('nav-cn').className = '';">EN</a></li>
+                </ul>
             </div>
+
         </nav>
 
         <br><br>
@@ -36,8 +44,10 @@
 
                         <div class="card white z-depth-3">
                             <div class="card-content black-text">
-                                <span class="card-title">Glance</span>
-                                <p>Model goes here</p>
+                                <span class="card-title">Glance<!--{cn}一瞥--></span>
+                                <p>Model goes here
+                                    <!--{cn}模型放在这里-->
+                                </p>
                             </div>
                         </div>
 
@@ -54,19 +64,22 @@
 
                         <div class="card white z-depth-3">
                             <div class="card-content black-text">
-                                <span class="card-title">Components</span>
+                                <span class="card-title">Components<!--{cn}组件--></span>
                                 <div class="row">
                                     <div class="col s12 m6">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6 onMouseOver="showInform(event, wind_history, 'wind data');" onMouseOut="hiddenInform(event);">Wind</h6>
-                                            <p>Status: <span id="wind_status"></span>
+                                            <h6 onMouseOver="showInform(event, wind_history, 'wind data');" onMouseOut="hiddenInform(event);">Wind<!--{cn}风--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="wind_status"></span>
                                             </p>
                                             <p>
-                                                Production: <span id="wind_production"></span> KW
+                                                Production:
+                                                <!--{cn}产出：--><span id="wind_production"></span> KW
+                                                <!--{cn}千瓦-->
                                             </p>
                                             <p>
-                                                Current Wind: <span id="wind_Speed"></span>
+                                                Current Wind:
+                                                <!--{cn}当前风速：--><span id="wind_Speed"></span>
                                             </p>
                                             </span>
                                         </div>
@@ -74,14 +87,17 @@
                                     <div class="col s12 m6">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6 onMouseOver="showInform(event, light_history, 'light data');" onMouseOut="hiddenInform(event);">Light</h6>
-                                            <p>Status: <span id="Light_status"></span>
+                                            <h6 onMouseOver="showInform(event, light_history, 'light data');" onMouseOut="hiddenInform(event);">Light<!--{cn}光--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="Light_status"></span>
                                             </p>
                                             <p>
-                                                Production: <span id="Light_production"></span> KW
+                                                Production:
+                                                <!--{cn}产出：--><span id="Light_production"></span> KW
+                                                <!--{cn}千瓦-->
                                             </p>
                                             <p>
-                                                Current Light: <span id="Light_Speed"></span>
+                                                Current Light:
+                                                <!--{cn}当前光强：--><span id="Light_Speed"></span>
                                             </p>
                                             </span>
                                         </div>
@@ -90,13 +106,16 @@
                                         <div class="card-panel blue">
                                             <span class="white-text">
                                             <h6 onMouseOver="showInform(event, wave_history, 'Wave data');" onMouseOut="hiddenInform(event);">Wave</h6>
-                                            <p>Status: <span id="wave_status"></span>
+                                            <p>Status: <!--{cn}现况:--><span id="wave_status"></span>
                                             </p>
                                             <p>
-                                                Production: <span id="wave_production"></span> KW
+                                                Production:
+                                                <!--{cn}产出：--><span id="wave_production"></span> KW
+                                                <!--{cn}千瓦-->
                                             </p>
                                             <p>
-                                                Current wave: <span id="wave_Speed"></span>
+                                                Current wave:
+                                                <!--{cn}当前波浪：--><span id="wave_Speed"></span>
                                             </p>
                                             </span>
                                         </div>
@@ -105,13 +124,16 @@
                                         <div class="card-panel blue">
                                             <span class="white-text">
                                             <h6 onMouseOver="showInform(event, current_history, 'Current data');" onMouseOut="hiddenInform(event);">Current</h6>
-                                            <p>Status: <span id="current_status"></span>
+                                            <p>Status: <!--{cn}现况:--><span id="current_status"></span>
                                             </p>
                                             <p>
-                                                Production: <span id="current_production"></span> KW
+                                                Production:
+                                                <!--{cn}产出：--><span id="current_production"></span> KW
+                                                <!--{cn}千瓦-->
                                             </p>
                                             <p>
-                                                Current current: <span id="current_Speed"></span>
+                                                Current current:
+                                                <!--{cn}当前流速：--><span id="current_Speed"></span>
                                             </p>
                                             </span>
                                         </div>
@@ -119,18 +141,22 @@
                                     <div class="col s12">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6  onMouseOver="showInform(event, battery_history, 'Battery data');" onMouseOut="hiddenInform(event);">Battery</h6>
+                                            <h6  onMouseOver="showInform(event, battery_history, 'Battery data');" onMouseOut="hiddenInform(event);">Battery<!--{cn}电池--></h6>
 <div class="row">
-                                            <p class="col s6">Status: <span id="battery_status"></span>
+                                            <p class="col s6">Status: <!--{cn}现况:--><span id="battery_status"></span>
                                             </p>
                                             <p class="col s6">
-                                                Remain: <span id="battery_remain"></span>%
+                                                Remain:
+                                                <!--{cn}剩余：--><span id="battery_remain"></span>%
                                             </p>
                                             <p class="col s6">
-                                                Current flow: <span id="battery_flow"></span> KWH
+                                                Current flow:
+                                                <!--{cn}能量流动：--><span id="battery_flow"></span> KWH
+                                                <!--{cn}千瓦时-->
                                             </p>
                                             <p class="col s6">
-                                                Current Usage: <span id="battery_usage"></span>
+                                                Current Usage:
+                                                <!--{cn}当前使用：--><span id="battery_usage"></span>
                                             </p>
                                         </div>
                                         </span>
@@ -149,16 +175,18 @@
 
                     <div class="card white z-depth-3">
                         <div class="card-content black-text">
-                            <span class="card-title">Export</span>
-                            <p>Export result to csv at here: </p>
+                            <span class="card-title">Export<!--{cn}导出--></span>
+                            <p>Export result to csv at here:
+                                <!--{cn}导出结果到 csv -->
+                            </p>
                             <div class="card-action row">
-                                <span class="col s4">Indexing: Time,type,status,speed,production</span>
+                                <span class="col s4">Indexing: Time,type,status,speed,production<!--{cn}索引: Time,type,status,speed,production--></span>
                                 <span class="col s1">|</span>
-                                <span class="col s6">Indexing: Time,battery_usage,battery_flow,battery_status,battery_current</span>
+                                <span class="col s6">Indexing: Time,battery_usage,battery_flow,battery_status,battery_current<!--{cn}索引: Time,battery_usage,battery_flow,battery_status,battery_current--></span>
                                 <p class="col s12"><br></p>
-                                <button class="waves-effect waves-light btn col s4" id="run_data">Download running data</button>
+                                <button class="waves-effect waves-light btn col s4" id="run_data">Download running data<!--{cn}下载运行数据--></button>
                                 <span class="col s4"></span>
-                                <button class="waves-effect waves-light btn col s4" id="battery_data"> Download battery data</button>
+                                <button class="waves-effect waves-light btn col s4" id="battery_data"> Download battery data<!--{cn}下载电池数据--></button>
                             </div>
                         </div>
                     </div>
@@ -181,56 +209,58 @@
         <div class="col s12 m12 l3">
             <div class="card white z-depth-3">
                 <div class="card-content black-text">
-                    <span class="card-title">Control Panel</span>
-                    <p>Adjust setting as you want.</p>
+                    <span class="card-title">Control Panel<!--{cn}控制面板--></span>
+                    <p>Adjust setting as you want.
+                        <!--{cn}根据需要调整设置。-->
+                    </p>
                 </div>
                 <div class="card-action">
                     <div class="row">
                         <p class="col s6">
                             <span class="right black-text">Wind Switcher
-                            </span> </p>
+                         <!--{cn}风力切换器-->   </span> </p>
                         <p class="switch col s6">
                             <label>
-                          Off
+                          Off<!--{cn}关-->
                           <input type="checkbox" id="wind" checked onchange="onWindChange(this);">
                           <span class="lever"></span>
-                          On
+                          On<!--{cn}开-->
                         </label>
                         </p>
 
                         <p class="col s6">
                             <span class="right black-text">Light Switcher
-                        </span> </p>
+                       <!--{cn}灯光切换器--> </span> </p>
                         <p class="switch col s6">
                             <label>
-                      Off
+                      Off<!--{cn}关-->
                       <input type="checkbox" id="light" checked onchange="onLightChange(this);">
                       <span class="lever"></span>
-                      On
+                      On<!--{cn}开-->
                     </label>
                         </p>
 
                         <p class="col s6">
                             <span class="right black-text">Wave Switcher
-                    </span> </p>
+                    <!--{cn}波形切换器--></span> </p>
                         <p class="switch col s6">
                             <label>
-                  Off
+                  Off<!--{cn}关-->
                   <input type="checkbox" id="wave" checked onchange="onWaveChange(this);">
                   <span class="lever"></span>
-                  On
+                  On<!--{cn}开-->
                 </label>
                         </p>
 
                         <p class="col s6">
-                            <span class="right black-text">Current Switcher
+                            <span class="right black-text">Current Switcher<!--{cn}海流切换器-->
                     </span> </p>
                         <p class="switch col s6">
                             <label>
-                  Off
+                  Off<!--{cn}关-->
                   <input type="checkbox" id="current" checked onchange="onCurrentChange(this);">
                   <span class="lever"></span>
-                  On
+                  On<!--{cn}开-->
                 </label>
                         </p>
 
@@ -279,8 +309,12 @@
         <!-- Tap Target Structure -->
         <div class="tap-target" data-target="menu">
             <div class="tap-target-content">
-                <h5>Basic Setup</h5>
-                <p>File button to choose simulation file(Stream from sensor in real case). Start or pause to do related work globally. </p>
+                <h5>Basic Setup
+                    <!--{cn}基本设置-->
+                </h5>
+                <p>File button to choose simulation file(Stream from sensor in real case). Start or pause to do related work globally.
+                    <!--{cn}文件按钮选择模拟文件(流传感器在真实情况下)。开始或暂停做相关的工作全球。-->
+                </p>
             </div>
         </div>
         <div id="UserEdit"></div>
@@ -289,7 +323,9 @@
         <footer class="page-footer orange">
             <div class="container">
                 <div class="row">
-                    <h5 class="white-text">Info</h5>
+                    <h5 class="white-text">Info
+                        <!--{cn}信息-->
+                    </h5>
                     <p class="grey-text text-lighten-4">efe</p>
 
 
@@ -297,7 +333,9 @@
                 </div>
                 <div class="footer-copyright">
                     <div class="container">
-                        Made by <a class="orange-text text-lighten-3" href="https://shaokang.ga">Shaokang Jiang</a> using <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+                        Made by
+                        <!--{cn}由--><a class="orange-text text-lighten-3" href="https://shaokang.ga">Shaokang Jiang</a> using
+                        <!--{cn}使用--><a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize<!--{cn}Materialize 主题制作--></a>
                     </div>
                 </div>
         </footer>
@@ -436,7 +474,7 @@
                 var _id = "#" + id;
                 var detial =
                     '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
-                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)" accept=".csv,text/csv"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>I don\'t need to export usage data(Choose when source is intended to be large).</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
+                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)" accept=".csv"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>I don\'t need to export usage data(Choose when source is intended to be large).</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
                     '</div></div></div></div>';
                 $(_id).html(detial);
                 $(_id).css({
@@ -637,7 +675,7 @@
 
             function loadFile(file1) {
                 file = file1.files[0];
-                if (file != null && file.type == 'text/csv') {
+                if (file != null && file.name.indexOf(".csv") != -1) {
                     document.getElementById("notice").innerText = "Successfully loaded";
                     document.getElementById("usethis").disabled = false;
                 } else {
@@ -833,6 +871,25 @@
                 }
 
                 // 使用刚指定的配置项和数据显示图表。
+            }
+
+
+
+            var tran;
+
+            var lang = navigator.language || navigator.browserLanguage;
+            if (/^zh/.test(lang)) {
+                //alert('中文');
+                lang = 'cn';
+                tran = new Translater({
+                    lang: "cn"
+                });
+            } else {
+                lang = 'en';
+                //alert('不是中文');
+                tran = new Translater({
+                    lang: "en"
+                });
             }
         </script>
 

@@ -4,7 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-    <title>Starter Template - Materialize</title>
+    <title>Energy -- setting
+        <!--{cn}能量 -- 设置-->
+    </title>
 
     <!-- CSS  -->
     <link href="css/icon.css" rel="stylesheet">
@@ -12,15 +14,18 @@
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <script src="https://unpkg.com/javascript-lp-solver/src/solver.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="./js/translater.min.js"></script>
+
 </head>
 
 <body>
+
     <nav class="Maroon" role="navigation">
         <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
 
             <ul class="right hide-on-med-and-down">
-                <li><a href="#">CH</a></li>
-                <li class="active"><a href="#">EN</a></li>
+                <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');lang='cn';document.getElementById('nav-en').className = '';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');lang='en';document.getElementById('nav-en').className = 'active';document.getElementById('nav-cn').className = '';">EN</a></li>
             </ul>
         </div>
     </nav>
@@ -36,16 +41,25 @@
         <div class="col s12 m12 l5">
             <div class="card white z-depth-3">
                 <div class="card-content black-text">
-                    <span class="card-title">General Introduction</span>
-                    <p>Welcome to this combination energy tool. </p>
-                    <p>Data file input will be shown once you set up threshold setting. <span id="Speed_text"></span></p>
+                    <span class="card-title">General Introduction<!--{cn}总体介绍--></span>
+                    <p>Welcome to this combination energy tool.
+                        <!--{cn}欢迎使用这个组合能量工具。-->
+                    </p>
+                    <p>Data file input will be shown once you set up threshold setting.
+                        <!--{cn}一旦设置了阈值设置，将显示数据文件输入。--><span id="Speed_text"></span></p>
                     <!--General inro, including equation, description, usage -->
 
-                    <h5>Usage</h5>
+                    <h5>Usage
+                        <!--{cn}用法-->
+                    </h5>
 
-                    <h5>Method</h5>
+                    <h5>Method
+                        <!--{cn}方法-->
+                    </h5>
 
-                    <h5>Intro</h5>
+                    <h5>Intro
+                        <!--{cn}介绍-->
+                    </h5>
                 </div>
             </div>
         </div>
@@ -53,8 +67,10 @@
         <div class="col s12 m12 l5">
             <div class="card white z-depth-3">
                 <div class="card-content black-text">
-                    <span class="card-title">Threshold Setting</span>
-                    <p>Adjust setting as you want. Two types are provided. </p>
+                    <span class="card-title">Threshold Setting<!--{cn}阈值调整--></span>
+                    <p>Adjust setting as you want. Two types are provided.
+                        <!--{cn}根据需要调整设置。提供两种类型。-->
+                    </p>
                     <span id="notification"></span>
                 </div>
                 <div class="card-action">
@@ -64,45 +80,45 @@
                             <p>
                                 <label>
                               <input class="with-gap" id="radio1" name="group1" type="radio" value="1" onclick="select1()"/>
-                              <span>Manual Set Threshold</span>
+                              <span>Manual Set Threshold<!--{cn}手动设定阈值--></span>
                             </label>
                             </p>
 
 
                             <div class="input-field col s6">
                                 <input disabled id="wind" name="wind" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="wind">Wind(mph)</label>
+                                <label for="wind">Wind(mph)<!--{cn}风速(每小时英里)--></label>
                             </div>
                             <div class="input-field col s6">
                                 <input disabled id="light" name="light" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="light">Light(LUX)</label>
+                                <label for="light">Light(LUX)<!--{cn}光(流明)--></label>
                             </div>
                             <div class="input-field col s6">
                                 <input disabled id="wave" name="wave" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="wave">Wave</label>
+                                <label for="wave">Wave<!--{cn}波浪--></label>
                             </div>
                             <div class="input-field col s6">
                                 <input disabled id="current" name="current" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="current">Ocean Current</label>
+                                <label for="current">Ocean Current<!--{cn}洋流--></label>
                             </div>
 
                             <div class="input-field col s6">
                                 <input disabled id="battery" name="battery" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="battery">Battery capacity(KWH)</label>
+                                <label for="battery">Battery capacity(KWH)<!--{cn}电池容量(千瓦时)--></label>
                             </div>
 
                             <div class="input-field col s6">
                                 <input disabled id="freq" name="freq" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="freq">Refresh Frequency(ms)</label>
+                                <label for="freq">Refresh Frequency(ms)<!--{cn}刷新频率(毫秒)--></label>
                             </div>
                             <p class="col s6"><label>
                                 <input class="with-gap" id="radio2" name="group1" type="radio" checked value="2" onclick="select2()"/>
-                                <span>Use History Data</span>
+                                <span>Use History Data<!--{cn}使用历史数据--></span>
                               </label>
                             </p>
                             <div class="input-field col s6">
                                 <input id="User" name="User" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="User">User Usage(kwh/day)</label>
+                                <label for="User">User Usage(kwh/day)<!--{cn}使用量(千瓦时/天)--></label>
                             </div>
 
                             <div class="file-field input-field col s6">
@@ -112,14 +128,14 @@
                                     <input id="history_data" name="history_data" type="file" accept=".csv,text/csv" onchange="loadFile(this)">
                                 </div>
                                 <div class="file-path-wrapper">
-                                    <input placeholder="History data" id="hist_data" class="file-path validate" type="text">
+                                    <input placeholder="History data" placeholder-cn="历史数据" id="hist_data" class="file-path validate" type="text">
                                 </div>
                             </div>
 
 
                             <p class="col s6"><label>
                                     <input type="checkbox" onchange="userUsageSwitch(this);" />
-                                    <span>I will provide user data in input file in the next page</span>
+                                    <span>I will provide user data in input file in the next page<!--{cn}我将在下一页的输入文件中提供用户数据--></span>
                                   </label></p>
 
 
@@ -128,7 +144,7 @@
 
 
                             <p class="col s9"></p>
-                            <button class="btn waves-effect waves-light col s3" type="submit" name="action">Submit
+                            <button class="btn waves-effect waves-light col s3" type="submit" name="action">Submit<!--{cn}提交-->
                       
                       
                             <i class="material-icons right">send</i>
@@ -151,7 +167,9 @@
     <footer class="page-footer orange">
         <div class="container">
             <div class="row">
-                <h5 class="white-text">Info</h5>
+                <h5 class="white-text">Info
+                    <!--{cn}信息-->
+                </h5>
                 <p class="grey-text text-lighten-4">efe</p>
 
 
@@ -159,7 +177,9 @@
             </div>
             <div class="footer-copyright">
                 <div class="container">
-                    Made by <a class="orange-text text-lighten-3" href="https://shaokang.ga">Shaokang Jiang</a> using <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+                    Made by
+                    <!--{cn}由--><a class="orange-text text-lighten-3" href="https://shaokang.ga">Shaokang Jiang</a> using
+                    <!--{cn}使用--><a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize<!--{cn}Materialize 主题制作--></a>
                 </div>
             </div>
     </footer>
@@ -170,14 +190,15 @@
     <script src="js/materialize.js"></script>
     <script>
         M.AutoInit();
+
         var file;
 
         function loadFile(use) {
-            if (use.files[0] != null && use.files[0].type == 'text/csv')
+            if (use.files[0] != null && use.files[0].name.indexOf(".csv") != -1)
                 file = use.files[0];
             else {
                 use.value = '';
-                document.getElementById("notification").innerHTML = '<font color="red">Please select a csv file. </font>';
+                document.getElementById("notification").innerHTML = '<font color="red">Please select a csv file. <!--{cn}欢迎使用这个组合能量工具。--> </font>';
             }
         }
 
@@ -287,6 +308,23 @@
             results = solver.Solve(model);
             console.log(results);
             document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
+        }
+
+        var tran;
+
+        var lang = navigator.language || navigator.browserLanguage;
+        if (/^zh/.test(lang)) {
+            //alert('中文');
+            lang = 'cn';
+            tran = new Translater({
+                lang: "cn"
+            });
+        } else {
+            lang = 'en';
+            //alert('不是中文');
+            tran = new Translater({
+                lang: "en"
+            });
         }
     </script>
 
