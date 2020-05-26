@@ -1004,6 +1004,9 @@
             var lang = navigator.language || navigator.browserLanguage;
             if (/^zh/.test(lang)) {
                 //alert('中文');
+
+                document.getElementById('nav-en').className = '';
+                document.getElementById('nav-cn').className = 'active';
                 tran = new Translater({
                     lang: "cn"
                 });
