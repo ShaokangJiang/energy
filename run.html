@@ -69,7 +69,7 @@
                                     <div class="col s12 m6">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6 onMouseOver="showInform(event, wind_history, 'wind data');" onMouseOut="hiddenInform(event);">Wind<!--{cn}风--></h6>
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wind_history, '风能数据'); else showInform(event, wind_history, 'wind data');" onMouseOut="hiddenInform(event);">Wind<!--{cn}风--></h6>
                                             <p>Status: <!--{cn}现况:--><span id="wind_status"></span>
                                             </p>
                                             <p>
@@ -87,7 +87,7 @@
                                     <div class="col s12 m6">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6 onMouseOver="showInform(event, light_history, 'light data');" onMouseOut="hiddenInform(event);">Light<!--{cn}光--></h6>
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, light_history, '光能数据'); else showInform(event, light_history, 'light data');" onMouseOut="hiddenInform(event);">Light<!--{cn}光--></h6>
                                             <p>Status: <!--{cn}现况:--><span id="Light_status"></span>
                                             </p>
                                             <p>
@@ -105,7 +105,7 @@
                                     <div class="col s12 m6">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6 onMouseOver="showInform(event, wave_history, 'Wave data');" onMouseOut="hiddenInform(event);">Wave</h6>
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wave_history, '波浪能数据'); else showInform(event, wave_history, 'Wave data');" onMouseOut="hiddenInform(event);">Wave<!--{cn}波浪--></h6>
                                             <p>Status: <!--{cn}现况:--><span id="wave_status"></span>
                                             </p>
                                             <p>
@@ -123,7 +123,7 @@
                                     <div class="col s12 m6">
                                         <div class="card-panel blue">
                                             <span class="white-text">
-                                            <h6 onMouseOver="showInform(event, current_history, 'Current data');" onMouseOut="hiddenInform(event);">Current</h6>
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, current_history, '海流能数据'); else showInform(event, current_history, 'Current data');" onMouseOut="hiddenInform(event);">Current<!--{cn}海流--></h6>
                                             <p>Status: <!--{cn}现况:--><span id="current_status"></span>
                                             </p>
                                             <p>
@@ -768,10 +768,17 @@
                         console.log("done");
                         Model_Status = 2;
                         change_status();
-                        document.getElementById("wind_status").innerHTML = '<font color="green">Done </font>';
-                        document.getElementById("Light_status").innerHTML = '<font color="green">Done </font>';
-                        document.getElementById("wave_status").innerHTML = '<font color="green">Done </font>';
-                        document.getElementById("current_status").innerHTML = '<font color="green">Done </font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wind_status").innerHTML = '<font color="green">完成 </font>';
+                            document.getElementById("Light_status").innerHTML = '<font color="green">完成 </font>';
+                            document.getElementById("wave_status").innerHTML = '<font color="green">完成</font>';
+                            document.getElementById("current_status").innerHTML = '<font color="green">完成 </font>';
+                        } else {
+                            document.getElementById("wind_status").innerHTML = '<font color="green">Done </font>';
+                            document.getElementById("Light_status").innerHTML = '<font color="green">Done </font>';
+                            document.getElementById("wave_status").innerHTML = '<font color="green">Done </font>';
+                            document.getElementById("current_status").innerHTML = '<font color="green">Done </font>';
+                        }
                         wind = false;
                         light = false;
                         wave = false;
@@ -789,10 +796,12 @@
             function loadFile(file1) {
                 file = file1.files[0];
                 if (file != null && file.name.indexOf(".csv") != -1) {
-                    document.getElementById("notice").innerText = "Successfully loaded";
+                    if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "成功载入";
+                    else document.getElementById("notice").innerText = "Successfully loaded";
                     document.getElementById("usethis").disabled = false;
                 } else {
-                    document.getElementById("notice").innerText = "Please select a valid csv file";
+                    if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "请选择一个有效csv文件";
+                    else document.getElementById("notice").innerText = "Please select a valid csv file";
                     document.getElementById("usethis").disabled = true;
                 }
             }
