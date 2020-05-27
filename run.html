@@ -375,7 +375,7 @@
                         else document.getElementById("wind_status").innerHTML = '<font color="green"><b>On</b> </font>';
                     } else {
 
-                        if (tran.getLang() == 'cn') document.getElementById("wind_status").innerHTML = '<font color="green"><b>关</b> </font>';
+                        if (tran.getLang() == 'cn') document.getElementById("wind_status").innerHTML = '<font color="red"><b>关</b> </font>';
                         else document.getElementById("wind_status").innerHTML = '<font color="red"><b>Off</b></font>';
                     }
                 }
@@ -563,7 +563,7 @@
                     if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit && wave == 1) {
                         document.getElementById("wave").checked = true;
                         document.getElementById("wave_status").innerHTML = '<font color="green"><b>开</b> </font>';
-                        document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
+                        document.getElementById("wave_Speed").innerText = "高度: " + data["Wave_Hight"] + "周期: " + data["Wave_Period"];
                         wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
                         document.getElementById("wave_production").innerText = wave_produced.toFixed(2);
                         if (exported)
