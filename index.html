@@ -24,9 +24,15 @@
         <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
 
             <ul class="right hide-on-med-and-down">
-                <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-cn').className = 'active';">中文</a></li>
-                <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-cn').className = '';">EN</a></li>
+                <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
             </ul>
+			
+			<ul id="nav-mobile" class="sidenav">
+        <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                <li id="nav-en-m" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
+      </ul>
+	  
         </div>
     </nav>
 
@@ -329,6 +335,7 @@
                 lang: "cn"
             });
             document.getElementById('nav-en').className = '';document.getElementById('nav-cn').className = 'active';
+			document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';
         } else {
             //alert('不是中文');
             tran = new Translater({
