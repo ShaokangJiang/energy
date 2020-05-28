@@ -46,10 +46,10 @@ Use java code below to generate fake simulation data(to be used in run page).
 
 - idx is not required but recommended
 
-- This generation might be good enough as this is not the real case
+- This generation code might be good enough as this is not the real case
 - header: idx,wind_value,wind_count,light_value,light_count,wave_value,wave_count,current_value,current_count
 
-Use java code below to generate fake optimization data:
+Use java code below to generate fake optimization data(to be used in start page):
 
 ```java
   public static void main(String[] args) throws IOException {

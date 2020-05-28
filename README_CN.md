@@ -1,14 +1,12 @@
-# energy
+# 能量
 
-[中文](https://github.com/ShaokangJiang/energy/blob/master/README_CN.md).
+## 生成虚假仿真和优化数据
 
-## Generate Fake Simulation and optimization data 
-
-#### Fake simulation data
+#### 伪造的模拟数据
 
 <!--Analyze data format at here-->
 
-Use java code below to generate fake simulation data(to be used in run page). 
+使用下面的 java 代码生成虚假的模拟数据(在运行页面中使用)。
 
 ```java
   static Random r = new Random();
@@ -40,16 +38,16 @@ Use java code below to generate fake simulation data(to be used in run page).
   }
 ```
 
-#### Fake optimization data
+#### 虚假的优化数据
 
-- To make the input source be easy to manage, represent and maintain. We could save them in the same file, if no enough data for a cell, leave it empty would be fine and recommended. 
+- 使输入源易于管理、表示和维护。 我们可以将它们保存在同一个文件中，如果一个单元格没有足够的数据，则将其保留为空将是可行的，并建议使用这种方法。
 
-- idx is not required but recommended
+- Idx 不是必需的，但是推荐使用
 
-- This generation might be good enough as this is not the real case
+- 这一生成代码可能已经足够好了，因为这并不是真实的情况
 - header: idx,wind_value,wind_count,light_value,light_count,wave_value,wave_count,current_value,current_count
 
-Use java code below to generate fake optimization data:
+使用下面的 java 代码生成虚假的优化数据(在开始页面中使用):
 
 ```java
   public static void main(String[] args) throws IOException {
