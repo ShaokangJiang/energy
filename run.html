@@ -12,7 +12,7 @@
     <link href="css/icon.css" rel="stylesheet">
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
-    <script src="https://unpkg.com/javascript-lp-solver/src/solver.js"></script>
+    <script src="./js/solver.js"></script>
     <script src="./js/papaparse.min.js"></script>
     <script src="./js/LinkedList.js"></script>
     <script src="./js/echarts.min.js"></script>
@@ -21,17 +21,17 @@
     <body>
         <nav class="Maroon" role="navigation">
             <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
-                
-            <ul class="right hide-on-med-and-down">
-                <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
-                <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
-            </ul>
-			
-			<ul id="nav-mobile" class="sidenav">
-        <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
-                <li id="nav-en-m" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
-      </ul>
-	   <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">translate</i></a>
+
+                <ul class="right hide-on-med-and-down">
+                    <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                    <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
+                </ul>
+
+                <ul id="nav-mobile" class="sidenav">
+                    <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                    <li id="nav-en-m" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
+                </ul>
+                <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">translate</i></a>
 
             </div>
 
@@ -350,8 +350,8 @@
 
 
         <!--  Scripts-->
-        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="js/materialize.js"></script>
+        <script src="./js/jquery-2.1.1.min.js"></script>
+        <script src="./js/materialize.js"></script>
         <script>
             M.AutoInit();
             var Model_Status = -1; //1:running 0:pause 2:terminate
@@ -757,7 +757,6 @@
                         //analyze data at here
                         parser.pause();
                         runStep(results.data);
-                        while (Model_Status == 0) {}
                         setTimeout(function() {
                             var delay = function() {
                                 if (Model_Status == 1) {
@@ -1015,8 +1014,9 @@
 
                 document.getElementById('nav-en').className = '';
                 document.getElementById('nav-cn').className = 'active';
-				
-			document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';
+
+                document.getElementById('nav-en-m').className = '';
+                document.getElementById('nav-cn-m').className = 'active';
                 tran = new Translater({
                     lang: "cn"
                 });

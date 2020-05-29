@@ -12,10 +12,10 @@
     <link href="css/icon.css" rel="stylesheet">
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
-    <script src="https://unpkg.com/javascript-lp-solver/src/solver.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="./js/solver.js"></script>
+    <script src="./js/jquery-2.1.1.min.js"></script>
     <script src="./js/translater.min.js"></script>
-
+    <script src="./js/papaparse.min.js"></script>
 </head>
 
 <body>
@@ -27,12 +27,12 @@
                 <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
                 <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
             </ul>
-			
-			<ul id="nav-mobile" class="sidenav">
-        <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+
+            <ul id="nav-mobile" class="sidenav">
+                <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
                 <li id="nav-en-m" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
-      </ul>
-	   <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">translate</i></a>
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">translate</i></a>
 
         </div>
     </nav>
@@ -66,9 +66,27 @@
                     <h5>Intro
                         <!--{cn}介绍-->
                     </h5>
-					<p>Check README on <!--{cn}查看--><a href="https://github.com/ShaokangJiang/energy">Github</a> about fake data file generation and other detailed perspective.
+                    <p>Check README on
+                        <!--{cn}查看--><a href="https://github.com/ShaokangJiang/energy">Github</a> about fake data file generation and other detailed perspective.
                         <!--{cn}上的自述文件，了解假数据文件生成和其他详细的透视图。-->
                     </p>
+                    <h5>ChangeLog
+                        <!--{cn}变更日志-->
+                    </h5>
+                    <ol>
+                        <li>5/25/2020 Core running function finished & Time field in input simulation file is not required
+                            <!--{cn}2020.5.25 核心运行功能完成，输入模拟文件中不需要时间字段-->
+                        </li>
+                        <li>5/26/2020 Multi-language added
+                            <!--{cn}2020.5.26 新增多语言-->
+                        </li>
+                        <li>5/27/2020 Optimize font and icon loading
+                            <!--{cn}2020.5.27 优化字体和图标加载-->
+                        </li>
+                        <li>5/29/2020 Optimization to find best history result function added
+                            <!--{cn}2020.5.29 添加最佳历史结果函数的优化-->
+                        </li>
+                    </ol>
                 </div>
             </div>
         </div>
@@ -256,12 +274,74 @@
                         document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
                     return true;
                 };
+                /** TODO
                 //solve some optimization problem at here
-                return false;
+                var days = 0;
+                var model = {};
+                model["optimize"] = "days";
+                model["opType"] = "min";
+                model["constraints"] = {};
+                model["variables"] = {};
+                Papa.parse(file, {
+                    header: true,
+                    skipEmptyLines: true,
+                    dynamicTyping: true,
+                    step: function(results, parser) {
+                        console.log("Row data:", results.data);
+                        //analyze data at here
+                        //use == " " || == null to check empty
+                        days += results.data["wind_count"]
+                    },
+                    complete: function(results, parser) {
+
+                    }
+                });
+                model["constraints"] = {};
+                */
+                return true;
             }
 
             return true;
         }
+
+        /**
+        *sample model
+                optimization({
+                    "optimize": "count",
+                    "opType": "min",
+                    "constraints": {
+                        "value": {
+                            "min": 300
+                        },
+                        "labor": {
+                            "max": 110
+                        },
+                        "storage": {
+                            "max": 400
+                        },
+                        "table": {
+                            "min": 10
+                        }
+                    },
+                    "variables": {
+                        "a01": {
+                            "value": 30,
+                            "count": 5,
+                            "a01": 1
+                        },
+                        "dresser": {
+                            "wood": 20,
+                            "labor": 10,
+                            "profit": 1600,
+                            "dresser": 1,
+                            "storage": 50
+                        }
+                    },
+                    "ints": {
+                        "a01": 1,
+                        "dresser": 1
+                    }
+                });*/
 
 
         function select2() {
@@ -289,44 +369,13 @@
             document.getElementById("history_data").disabled = true;
         }
 
-        function optimization() {
-            var results,
-                model = {
-                    "optimize": "capacity",
-                    "opType": "max",
-                    "constraints": {
-                        "plane": {
-                            "max": 44
-                        },
-                        "person": {
-                            "max": 512
-                        },
-                        "cost": {
-                            "max": 300000
-                        },
-                        "brit": {
-                            "max": 5
-                        }
-                    },
-                    "variables": {
-                        "brit": {
-                            "capacity": 20000,
-                            "plane": 1,
-                            "person": 8,
-                            "cost": 5000
-                        },
-                        "yank": {
-                            "capacity": 30000,
-                            "plane": 1,
-                            "person": 16,
-                            "cost": 9000
-                        }
-                    },
-                };
+        //1-wind 2-light 3-wave 4-current
+        function optimization(model) {
+            var results;
 
             results = solver.Solve(model);
             console.log(results);
-            document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
+            //document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
         }
 
         var tran;
@@ -337,8 +386,10 @@
             tran = new Translater({
                 lang: "cn"
             });
-            document.getElementById('nav-en').className = '';document.getElementById('nav-cn').className = 'active';
-			document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';
+            document.getElementById('nav-en').className = '';
+            document.getElementById('nav-cn').className = 'active';
+            document.getElementById('nav-en-m').className = '';
+            document.getElementById('nav-cn-m').className = 'active';
         } else {
             //alert('不是中文');
             tran = new Translater({
