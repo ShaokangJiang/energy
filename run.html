@@ -163,8 +163,12 @@
                                                 <!--{cn}千瓦时-->
                                             </p>
                                             <p class="col s6">
+                                                Current inflow:
+                                                <!--{cn}电能输入：--><span id="battery_inflow"></span>
+                                            </p>
+                                            <p class="col s6">
                                                 Current Usage:
-                                                <!--{cn}当前使用：--><span id="battery_usage"></span>
+                                                <!--{cn}电能输出：--><span id="battery_usage"></span>
                                             </p>
                                         </div>
                                         </span>
@@ -603,10 +607,12 @@
                     //Time,type,status,speed,production
                     document.getElementById("battery_usage").innerText = userConsumption;
                     var pre_battery_current = battery_current;
-                    battery_current += (wind_produced + light_produced + wave_produced + current_produced) * (freq / 1000) / 3600 - userConsumption;
+                    var inflowing = (wind_produced + light_produced + wave_produced + current_produced) * (freq / 1000) / 3600;
+                    battery_current += inflowing - userConsumption;
                     //console.log((time - prevTime));
                     var batteryStatus = 0;
                     if (battery_current > battery_capacity) battery_current = battery_capacity;
+                    document.getElementById("battery_inflow").innerText = inflowing.toFixed(2);
                     document.getElementById("battery_flow").innerText = (battery_current - pre_battery_current).toFixed(2);
                     document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
                     if (battery_current - pre_battery_current > 0) document.getElementById("battery_status").innerText = '充电中...';
