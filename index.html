@@ -83,7 +83,7 @@
                         <li>5/27/2020 Optimize font and icon loading
                             <!--{cn}2020.5.27 优化字体和图标加载-->
                         </li>
-                        <li>5/29/2020 Optimization to find best history result function added
+                        <li>5/29/2020 Optimization to find best history result function added & multi-file reading is not allowed in run page now
                             <!--{cn}2020.5.29 添加最佳历史结果函数的优化-->
                         </li>
                     </ol>
@@ -93,6 +93,10 @@
 
         <div class="col s12 m12 l5">
             <div class="card white z-depth-3">
+
+                <div id="handling-progress" class="">
+                    <div id="handling" class=""></div>
+                </div>
                 <div class="card-content black-text">
                     <span class="card-title">Threshold Setting<!--{cn}阈值调整--></span>
                     <p>Adjust setting as you want. Two types are provided.
@@ -100,6 +104,7 @@
                     </p>
                     <span id="notification"></span>
                 </div>
+
                 <div class="card-action">
 
                     <form id="login" name="login" method="GET" action="run.html" onsubmit="return checkForm()">
@@ -128,6 +133,11 @@
                                 <input disabled id="current" name="current" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
                                 <label for="current">Ocean Current<!--{cn}洋流--></label>
                             </div>
+
+                            <p class="col s12"><label>
+                                <input id="futureOptimize" type="checkbox" disabled/>
+                                <span>Using the first 30 input data to optimize and get the best possible threshold. <!--{cn}利用前30个输入数据进行优化，得到最佳阈值。--></span>
+                              </label></p>
 
                             <p class="col s6"><label>
                                 <input class="with-gap" id="radio2" name="group1" type="radio" checked value="2" onclick="select2()"/>
@@ -173,7 +183,7 @@
 
 
                             <p class="col s9"></p>
-                            <button class="btn waves-effect waves-light col s3" type="submit" name="action">Submit<!--{cn}提交-->
+                            <button id="submission" class="btn waves-effect waves-light col s3" type="submit" name="action">Submit<!--{cn}提交-->
                       
                       
                             <i class="material-icons right">send</i>
@@ -252,16 +262,39 @@
         }
 
         function checkFormValid() {
+
+            document.getElementById('handling').className = 'indeterminate';
+            document.getElementById('submission').disabled = true;
+            document.getElementById('handling-progress').className = 'progress';
             if (document.getElementById("radio1").checked == true) {
                 if (document.getElementById("wind").value == "" ||
                     document.getElementById("light").value == "" || document.getElementById("wave").value == "" ||
                     document.getElementById("current").value == "" || document.getElementById("battery").value == "" ||
                     document.getElementById("freq").value == "" || (document.getElementById("User").disabled == false && document.getElementById("User").value == "")) {
+
+
                     if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">您需要填写所有空字段。</font>';
 
                     else
                         document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
 
+                    if (document.getElementById("wind").value == "") document.getElementById("wind").className = 'invalid';
+                    else document.getElementById("wind").className = '';
+                    if (document.getElementById("light").value == "") document.getElementById("light").className = 'invalid';
+                    else document.getElementById("light").className = '';
+                    if (document.getElementById("wave").value == "") document.getElementById("wave").className = 'invalid';
+                    else document.getElementById("wave").className = '';
+                    if (document.getElementById("current").value == "") document.getElementById("current").className = 'invalid';
+                    else document.getElementById("current").className = '';
+                    if (document.getElementById("battery").value == "") document.getElementById("battery").className = 'invalid';
+                    else document.getElementById("battery").className = '';
+                    if (document.getElementById("freq").value == "") document.getElementById("freq").className = 'invalid';
+                    else document.getElementById("freq").className = '';
+                    if (document.getElementById("User").disabled == false && document.getElementById("User").value == "") document.getElementById("User").className = 'invalid';
+                    else document.getElementById("User").className = '';
+                    document.getElementById('handling').className = '';
+                    document.getElementById('handling-progress').className = '';
+                    document.getElementById('submission').disabled = false;
                     return true;
                 };
                 return false;
@@ -273,9 +306,22 @@
 
                     else
                         document.getElementById("notification").innerHTML = '<font color="red">You need to fill all empty fields. </font>';
+
+                    if (document.getElementById("battery").value == "") document.getElementById("battery").className = 'invalid';
+                    else document.getElementById("battery").className = '';
+                    if (document.getElementById("freq").value == "") document.getElementById("freq").className = 'invalid';
+                    else document.getElementById("freq").className = '';
+                    if (document.getElementById("User").disabled == false && document.getElementById("User").value == "") document.getElementById("User").className = 'invalid';
+                    else document.getElementById("User").className = '';
+                    if (document.getElementById("hist_data").value == "") document.getElementById("hist_data").className = 'file-path validate invalid';
+                    else document.getElementById("hist_data").className = 'file-path validate';
+                    document.getElementById('handling').className = '';
+                    document.getElementById('handling-progress').className = '';
+                    document.getElementById('submission').disabled = false;
                     return true;
                 };
                 //solve some optimization problem at here
+
                 var days = 0;
                 var model = {};
                 var idx = 0;
@@ -409,15 +455,30 @@
                         document.getElementById("current").value = (current_limit == -1) ? 2 : (Math.pow((current_limit / 1254), (1 / 3))).toFixed(2);
                         console.log("wind:" + wind_limit + "light" + light_limit + "wave:" + wave_limit + "current" + current_limit);
                         if (!result.feasible) {
-                            document.getElementById("notification").innerHTML = '<font color="red">Infeasible solution found. Please recheck each value before submit.</font>';
+                            if (tran.getLang() == 'cn')
+                                document.getElementById("notification").innerHTML = '<font color="red">发现不可行的解决方案。请在提交前重新检查每个值。</font>';
+                            else
+                                document.getElementById("notification").innerHTML = '<font color="red">Infeasible solution found. Please recheck each value before submit.</font>';
                             select1();
                             document.getElementById("radio2").checked = false;
                             document.getElementById("radio1").checked = true;
+                            document.getElementById("wind").placeholder = ""; //pre defined min value : actual optimal 
+                            document.getElementById("wind").focus();
+                            document.getElementById("light").placeholder = "";
+                            document.getElementById("light").focus();
+                            document.getElementById("wave").placeholder = "";
+                            document.getElementById("wave").focus();
+                            document.getElementById("current").placeholder = "";
+                            document.getElementById("current").focus();
+                            document.getElementById("current").blur();
+                            document.getElementById('handling').className = '';
+                            document.getElementById('handling-progress').className = '';
+                            document.getElementById('submission').disabled = false;
+
                         } else {
                             select1();
                             document.getElementById("radio2").checked = false;
                             document.getElementById("radio1").checked = true;
-                            document.getElementById("notification").innerHTML = '<font color="red">Feasible solution found.</font>';
                             document.getElementById("login").submit();
                         }
                     }
