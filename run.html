@@ -309,7 +309,7 @@
                 <li><a class="btn-floating yellow darken-1" onclick="change_status()" id="Global_switch"><i class="material-icons">play_arrow</i></a></li>
 
                 <!--change to pause-->
-                <li><a class="btn-floating blue"><i class="material-icons" onclick="add()">file_upload</i></a></li>
+                <li><a id="file_upload" class="btn-floating blue"  onclick="add()"><i class="material-icons">file_upload</i></a></li>
             </ul>
         </div>
 
@@ -449,18 +449,18 @@
                 alert("Invalid visit.");
                 window.location.href = "index.html";
             }
-            var wind_limit = parseInt(request.QueryString("wind"));
+            var wind_limit = parseFloat(request.QueryString("wind"));
 
-            var light_limit = parseInt(request.QueryString("light"));
+            var light_limit = parseFloat(request.QueryString("light"));
 
-            var wave_limit = parseInt(request.QueryString("wave"));
+            var wave_limit = parseFloat(request.QueryString("wave"));
 
-            var current_limit = parseInt(request.QueryString("current"));
+            var current_limit = parseFloat(request.QueryString("current"));
 
-            var battery_capacity = parseInt(request.QueryString("battery"));
+            var battery_capacity = parseFloat(request.QueryString("battery"));
 
-            var freq = parseInt(request.QueryString("freq")) || 200;
-            var User_Consumption = parseInt(request.QueryString("User")) || 2000;
+            var freq = parseFloat(request.QueryString("freq")) || 200;
+            var User_Consumption = parseFloat(request.QueryString("User")) || 2000;
             var battery_current = 0.7 * battery_capacity;
 
             function switchExport(use) {
@@ -727,7 +727,9 @@
              * Simple model, assume related daata could be provided 
              **/
             function Start() {
+
                 $("#UserEdit").slideUp();
+                document.getElementById("file_upload").onclick = "";
                 document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
                 Model_Status = 1;
                 document.getElementById("wind_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
@@ -747,6 +749,7 @@
                 document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
 
                 prevTime = 0;
+                
 
                 Papa.parse(file, {
                     header: true,
@@ -795,6 +798,8 @@
                         document.getElementById("light").checked = false;
                         document.getElementById("wave").checked = false;
                         document.getElementById("current").checked = false;
+                        
+                document.getElementById("file_upload").onclick = "add()";
                     }
                 });
             }
@@ -814,7 +819,6 @@
             }
 
             function add() {
-                var url = "index.html";
                 OpenDetial("UserEdit", 400, 200); //调用方法        
             }
 

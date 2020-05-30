@@ -129,23 +129,25 @@
                                 <label for="current">Ocean Current<!--{cn}洋流--></label>
                             </div>
 
-                            <div class="input-field col s6">
-                                <input disabled id="battery" name="battery" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="battery">Battery capacity(KWH)<!--{cn}电池容量(千瓦时)--></label>
-                            </div>
-
-                            <div class="input-field col s6">
-                                <input disabled id="freq" name="freq" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="freq">Refresh Frequency(ms)<!--{cn}刷新频率(毫秒)--></label>
-                            </div>
                             <p class="col s6"><label>
                                 <input class="with-gap" id="radio2" name="group1" type="radio" checked value="2" onclick="select2()"/>
                                 <span>Use History Data<!--{cn}使用历史数据--></span>
                               </label>
                             </p>
+
+                            <div class="input-field col s6">
+                                <input id="battery" name="battery" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+                                <label for="battery">Battery capacity(KWH)<!--{cn}电池容量(千瓦时)--></label>
+                            </div>
+
+                            <div class="input-field col s6">
+                                <input id="freq" name="freq" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+                                <label for="freq">Refresh Frequency(ms)<!--{cn}刷新频率(毫秒)--></label>
+                            </div>
+
                             <div class="input-field col s6">
                                 <input id="User" name="User" type="text" class="validate" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
-                                <label for="User">User Usage(kwh/day)<!--{cn}使用量(千瓦时/天)--></label>
+                                <label for="User">User Usage(kwh/unit time(hrs/freq))<!--{cn}使用量(千瓦时/单位时间(小时/频率))--></label>
                             </div>
 
                             <div class="file-field input-field col s6">
@@ -161,7 +163,7 @@
 
 
                             <p class="col s6"><label>
-                                    <input type="checkbox" onchange="userUsageSwitch(this);" />
+                                    <input id="userUsage" type="checkbox" onchange="userUsageSwitch(this);" disabled/>
                                     <span>I will provide user data in input file in the next page<!--{cn}我将在下一页的输入文件中提供用户数据--></span>
                                   </label></p>
 
@@ -236,7 +238,6 @@
             if (use.checked) {
                 document.getElementById("User").disabled = true;
             } else {
-
                 document.getElementById("User").disabled = false;
             }
         }
@@ -266,8 +267,8 @@
                 return false;
             }
             if (document.getElementById("radio2").checked == true) {
-                if ((document.getElementById("User").disabled == false && document.getElementById("User").value == "") ||
-                    document.getElementById("hist_data").value == "" || document.getElementById("history_data").value == "") {
+                if (document.getElementById("User").value == "" || document.getElementById("freq").value == "" ||
+                    document.getElementById("hist_data").value == "" || document.getElementById("history_data").value == "" || document.getElementById("battery").value == "") {
                     if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">您需要填写所有空字段。</font>';
 
                     else
@@ -275,31 +276,153 @@
                     return true;
                 };
                 //solve some optimization problem at here
-                /**
                 var days = 0;
                 var model = {};
-                model["optimize"] = "days";
+                var idx = 0;
+                var result;
+                model["optimize"] = "count";
                 model["opType"] = "min";
                 model["constraints"] = {};
                 model["variables"] = {};
                 model["ints"] = {};
+                var data_input = {};
                 Papa.parse(file, {
                     header: true,
                     skipEmptyLines: true,
                     dynamicTyping: true,
                     step: function(results, parser) {
-                        console.log("Row data:", results.data);
+                        //console.log("Row data:", results.data);
                         //analyze data at here
                         //use == " " || == null to check empty
-                        days += results.data["wind_count"]
+                        if (!(results.data["wind_value"] == " " || results.data["wind_value"] == null)) {
+                            var variable_wind = "v" + idx + "0";
+                            data_input[variable_wind] = results.data["wind_value"];
+                            model.ints[variable_wind] = 1;
+                            model.variables[variable_wind] = {
+                                "value": results.data["wind_value"] * results.data["wind_count"],
+                                "count": results.data["wind_count"]
+                            };
+                            model.variables[variable_wind][variable_wind] = 1;
+                            model.constraints[variable_wind] = {
+                                "min": 0,
+                                "max": 1
+                            };
+                            days += results.data["wind_count"];
+                        }
+
+                        if (!(results.data["light_value"] == " " || results.data["light_value"] == null)) {
+                            var variable_light = "v" + idx + "1";
+                            data_input[variable_light] = results.data["light_value"];
+                            model.ints[variable_light] = 1;
+                            model.variables[variable_light] = {
+                                "value": results.data["light_value"] * results.data["light_count"],
+                                "count": results.data["light_count"]
+                            };
+                            model.variables[variable_light][variable_light] = 1;
+                            model.constraints[variable_light] = {
+                                "min": 0,
+                                "max": 1
+                            };
+                        }
+
+                        if (!(results.data["wave_value"] == " " || results.data["wave_value"] == null)) {
+                            var variable_wave = "v" + idx + "2";
+                            data_input[variable_wave] = results.data["wave_value"];
+                            model.ints[variable_wave] = 1;
+                            model.variables[variable_wave] = {
+                                "value": results.data["wave_value"] * results.data["wave_count"],
+                                "count": results.data["wave_count"]
+                            };
+                            model.variables[variable_wave][variable_wave] = 1;
+                            model.constraints[variable_wave] = {
+                                "min": 0,
+                                "max": 1
+                            };
+                        }
+
+                        if (!(results.data["current_value"] == " " || results.data["current_value"] == null)) {
+                            var variable_current = "v" + idx + "3";
+                            data_input[variable_current] = results.data["current_value"];
+                            model.ints[variable_current] = 1;
+                            model.variables[variable_current] = {
+                                "value": results.data["current_value"] * results.data["current_count"],
+                                "count": results.data["current_count"]
+                            };
+                            model.variables[variable_current][variable_current] = 1;
+                            model.constraints[variable_current] = {
+                                "min": 0,
+                                "max": 1
+                            };
+                        }
+                        idx++;
                     },
                     complete: function(results, parser) {
+                        console.log(parseFloat(document.getElementById("User").value));
+                        console.log(parseInt(document.getElementById("battery").value));
+                        var limits = days * parseFloat(document.getElementById("User").value) + parseInt(document.getElementById("battery").value);
+                        model.constraints["value"] = {
+                            "min": limits
+                        };
+                        console.log(model);
+                        result = optimization(model);
 
+                        console.log(result);
+
+                        var wind_limit = -1;
+                        var light_limit = -1;
+                        var wave_limit = -1;
+                        var current_limit = -1;
+
+                        for (var key in result) {
+                            if (data_input.hasOwnProperty(key)) {
+                                console.log(key + " -> " + data_input[key]);
+                                switch (parseInt(key.slice(-1))) {
+                                    case 0:
+                                        if (wind_limit == -1) wind_limit = data_input[key];
+                                        if (data_input[key] <= wind_limit) wind_limit = data_input[key];
+                                        break;
+                                    case 1: //light
+                                        if (light_limit == -1) light_limit = data_input[key];
+                                        if (data_input[key] <= light_limit) light_limit = data_input[key];
+                                        // code block
+                                        break;
+                                    case 2: //wave
+                                        if (wave_limit == -1) wave_limit = data_input[key];
+                                        if (data_input[key] <= wave_limit) wave_limit = data_input[key];
+                                        // code block
+                                        break;
+                                    case 3: //current
+                                        if (current_limit == -1) current_limit = data_input[key];
+                                        if (data_input[key] <= current_limit) current_limit = data_input[key];
+                                        // code block
+                                        break;
+
+                                    default:
+                                        // code block
+                                }
+                            }
+                        }
+
+                        document.getElementById("wind").value = (wind_limit == -1) ? 6 : (Math.pow((wind_limit / 2866), (1 / 3))).toFixed(2); //pre defined min value : actual optimal 
+                        document.getElementById("light").value = (light_limit == -1) ? 1100 : (light_limit / 0.09).toFixed(2);
+                        document.getElementById("wave").value = (wave_limit == -1) ? 2 : (wave_limit / 6.6).toFixed(2);
+                        document.getElementById("current").value = (current_limit == -1) ? 2 : (Math.pow((current_limit / 1254), (1 / 3))).toFixed(2);
+                        console.log("wind:" + wind_limit + "light" + light_limit + "wave:" + wave_limit + "current" + current_limit);
+                        if (!result.feasible) {
+                            document.getElementById("notification").innerHTML = '<font color="red">Infeasible solution found. Please recheck each value before submit.</font>';
+                            select1();
+                            document.getElementById("radio2").checked = false;
+                            document.getElementById("radio1").checked = true;
+                        } else {
+                            select1();
+                            document.getElementById("radio2").checked = false;
+                            document.getElementById("radio1").checked = true;
+                            document.getElementById("notification").innerHTML = '<font color="red">Feasible solution found.</font>';
+                            document.getElementById("login").submit();
+                        }
                     }
-                });*/
-                return true;
+                });
             }
-
             return true;
         }
 
@@ -349,11 +472,13 @@
             document.getElementById("light").disabled = true;
             document.getElementById("wave").disabled = true;
             document.getElementById("current").disabled = true;
-            document.getElementById("battery").disabled = true;
-            document.getElementById("freq").disabled = true;
+            document.getElementById("battery").disabled = false;
+            document.getElementById("freq").disabled = false;
 
             document.getElementById("hist_data").disabled = false;
             document.getElementById("history_data").disabled = false;
+            document.getElementById("userUsage").disabled = true;
+            document.getElementById("User").disabled = false;
 
         }
 
@@ -366,14 +491,13 @@
             document.getElementById("freq").disabled = false;
             document.getElementById("hist_data").disabled = true;
             document.getElementById("history_data").disabled = true;
+            document.getElementById("userUsage").disabled = false;
+            userUsageSwitch(document.getElementById("userUsage"));
         }
 
         //1-wind 2-light 3-wave 4-current
         function optimization(model) {
-            var results;
-
-            results = solver.Solve(model);
-            console.log(results);
+            return solver.Solve(model);
             //document.getElementById("Speed_text").innerText = "feasible:" + results.feasible + ", result: " + results.result + ", bounded: " + results.bounded + ", brit: " + results.brit + ", yank: " + results.yank;
         }
 
@@ -398,5 +522,7 @@
     </script>
 
 </body>
+
+</html>
 
 </html>
