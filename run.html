@@ -309,7 +309,7 @@
                 <li><a class="btn-floating yellow darken-1" onclick="change_status()" id="Global_switch"><i class="material-icons">play_arrow</i></a></li>
 
                 <!--change to pause-->
-                <li><a id="file_upload" class="btn-floating blue"  onclick="add()"><i class="material-icons">file_upload</i></a></li>
+                <li><a id="file_upload" class="btn-floating blue" onclick="add()"><i class="material-icons">file_upload</i></a></li>
             </ul>
         </div>
 
@@ -729,7 +729,6 @@
             function Start() {
 
                 $("#UserEdit").slideUp();
-                document.getElementById("file_upload").onclick = "";
                 document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
                 Model_Status = 1;
                 document.getElementById("wind_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
@@ -749,7 +748,7 @@
                 document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
 
                 prevTime = 0;
-                
+
 
                 Papa.parse(file, {
                     header: true,
@@ -798,8 +797,6 @@
                         document.getElementById("light").checked = false;
                         document.getElementById("wave").checked = false;
                         document.getElementById("current").checked = false;
-                        
-                document.getElementById("file_upload").onclick = "add()";
                     }
                 });
             }
@@ -819,7 +816,8 @@
             }
 
             function add() {
-                OpenDetial("UserEdit", 400, 200); //调用方法        
+                if (!(Model_Status == 0 || Model_Status == 1))
+                    OpenDetial("UserEdit", 400, 200); //调用方法        
             }
 
             function change_status() {
