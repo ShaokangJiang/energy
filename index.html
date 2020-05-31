@@ -186,7 +186,7 @@
 
 
                             <p class="col s9"></p>
-                            <button id="submission" class="btn waves-effect waves-light col s3" type="submit" name="action">Submit<!--{cn}提交-->
+                            <button id="submission" class="btn waves-effect waves-light col s3" type="submit" name="action" disabled>Submit<!--{cn}提交-->
                       
                       
                             <i class="material-icons right">send</i>
@@ -236,9 +236,32 @@
         var file;
 
         function loadFile(use) {
-            if (use.files[0] != null && use.files[0].name.indexOf(".csv") != -1)
+            if (use.files[0] != null && use.files[0].name.indexOf(".csv") != -1) {
                 file = use.files[0];
-            else {
+                var successfully = false;
+                Papa.parse(file, {
+                    header: true,
+                    skipEmptyLines: true,
+                    dynamicTyping: true,
+                    preview: 1,
+                    step: function(results, parser) {
+                        if (results.data.hasOwnProperty("wind_value") && results.data.hasOwnProperty("wind_count") && results.data.hasOwnProperty("light_value") && results.data.hasOwnProperty("light_count") && results.data.hasOwnProperty("wave_value") && results.data.hasOwnProperty("wave_count") && results.data.hasOwnProperty("current_value") && results.data.hasOwnProperty("current_count")) {
+                            successfully |= true;
+                        }
+                    },
+                    complete: function(results, parser) {
+                        if (successfully == 1) {
+                            if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">成功载入</font>';
+                            else document.getElementById("notification").innerHTML = '<font color="red">Successfully loaded</font>';
+                            document.getElementById("submission").disabled = false;
+                        } else {
+                            if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">无效的文件内容。</font>';
+                            else document.getElementById("notification").innerHTML = '<font color="red">Invalid file content.</font>';
+                            document.getElementById("submission").disabled = true;
+                        }
+                    }
+                });
+            } else {
                 use.value = '';
                 if (tran.getLang() == 'cn') document.getElementById("notification").innerHTML = '<font color="red">请选择一个csv文件</font>';
 
@@ -503,8 +526,11 @@
             document.getElementById("freq").disabled = false;
             document.getElementById("future").disabled = true;
 
+            document.getElementById('submission').disabled = true; //false when valid file selected
             document.getElementById("hist_data").disabled = false;
+            document.getElementById("hist_data").value = '';
             document.getElementById("history_data").disabled = false;
+            document.getElementById("history_data").value = '';
             document.getElementById("userUsage").disabled = true;
             document.getElementById("User").disabled = false;
 
@@ -514,6 +540,8 @@
             document.getElementById("wind").disabled = false;
             document.getElementById("light").disabled = false;
             document.getElementById("wave").disabled = false;
+
+            document.getElementById('submission').disabled = false; //false when valid file selected
             document.getElementById("current").disabled = false;
             document.getElementById("battery").disabled = false;
             document.getElementById("freq").disabled = false;
