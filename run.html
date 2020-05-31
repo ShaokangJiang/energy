@@ -464,6 +464,7 @@
             var battery_capacity = parseFloat(request.QueryString("battery"));
 
             var freq = parseFloat(request.QueryString("freq")) || 200;
+            var future = (request.QueryString("future") == 'on') ? true : false;
             var User_Consumption = parseFloat(request.QueryString("User")) || 2000;
             var battery_current = 0.7 * battery_capacity;
 
@@ -528,6 +529,43 @@
 
             var prevTime = 0;
 
+            var model;
+            if (future) {
+                model = {};
+                model["optimize"] = "count";
+                model["opType"] = "min";
+                model["constraints"] = {};
+                model["variables"] = {};
+                model["ints"] = {};
+                model.constraints["value"] = {
+                    "min": battery_capacity
+                };
+            }
+            var modelCount = 0;
+            var data_input = {};
+
+            var preWind;
+            var preLight;
+            var preCurrent;
+            var preWave;
+
+            function toast_Undo() {
+                wind_limit = preWind;
+                light_limit = preLight;
+                current_limit = preCurrent;
+                wave_limit = preWave;
+                if (tran.getLang() == 'cn')
+                    M.toast({
+                        html: "<p>限制已经恢复到 <br>风速: " + wind_limit + "<br>光: " + light_limit + "<br>波浪: " + wave_limit + "<br>海流: " + current_limit + "</p>",
+                        displayLength: 8000
+                    });
+                else
+                    M.toast({
+                        html: "<p>Limitation has been recovered to <br>wind: " + wind_limit + "<br>light: " + light_limit + "<br>wave: " + wave_limit + "<br>current: " + current_limit + "</p>",
+                        displayLength: 8000
+                    });
+            }
+
             function runStep(data) {
 
                 var userConsumption = data["User_Usage"] || User_Consumption;
@@ -537,6 +575,135 @@
                     wave_produced = 0,
                     current_produced = 0;
 
+                if (future) {
+                    //append to model
+                    wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
+                    light_produced = 0.09 * data["Light_H"];
+                    wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+                    current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
+                    var variable_wind = "v" + modelCount + "0";
+                    var variable_light = "v" + modelCount + "1";
+                    var variable_wave = "v" + modelCount + "2";
+                    var variable_current = "v" + modelCount + "3";
+                    data_input[variable_wind] = data["Wind_Speed"];
+                    data_input[variable_light] = data["Light_H"];
+                    data_input[variable_wave] = data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+                    data_input[variable_current] = data["Current_Speed"];
+
+
+                    model.ints[variable_wind] = 1;
+                    model.variables[variable_wind] = {
+                        "value": wind_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_wind][variable_wind] = 1;
+                    model.constraints[variable_wind] = {
+                        "min": 0,
+                        "max": 1
+                    };
+                    model.ints[variable_light] = 1;
+                    model.variables[variable_light] = {
+                        "value": light_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_light][variable_light] = 1;
+                    model.constraints[variable_light] = {
+                        "min": 0,
+                        "max": 1
+                    };
+                    model.ints[variable_wave] = 1;
+                    model.variables[variable_wave] = {
+                        "value": wave_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_wave][variable_wave] = 1;
+                    model.constraints[variable_wave] = {
+                        "min": 0,
+                        "max": 1
+                    };
+                    model.ints[variable_current] = 1;
+                    model.variables[variable_current] = {
+                        "value": current_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_current][variable_current] = 1;
+                    model.constraints[variable_current] = {
+                        "min": 0,
+                        "max": 1
+                    };
+
+                    model.constraints.value["min"] += userConsumption;
+
+                    modelCount++;
+                    //clearning step
+                    wind_produced = 0;
+                    light_produced = 0;
+                    wave_produced = 0;
+                    current_produced = 0;
+
+                    if (modelCount > 30) {
+                        future = false;
+                        console.log(model);
+                        result = solver.Solve(model);
+                        console.log(result);
+                        var wind_limit1 = -1;
+                        var light_limit1 = -1;
+                        var wave_limit1 = -1;
+                        var current_limit1 = -1;
+
+                        for (var key in result) {
+                            if (data_input.hasOwnProperty(key)) {
+                                console.log(key + " -> " + data_input[key]);
+                                switch (parseInt(key.slice(-1))) {
+                                    case 0:
+                                        if (wind_limit1 == -1) wind_limit1 = data_input[key];
+                                        if (data_input[key] <= wind_limit1) wind_limit1 = data_input[key];
+                                        break;
+                                    case 1: //light
+                                        if (light_limit1 == -1) light_limit1 = data_input[key];
+                                        if (data_input[key] <= light_limit1) light_limit1 = data_input[key];
+                                        // code block
+                                        break;
+                                    case 2: //wave
+                                        if (wave_limit1 == -1) wave_limit1 = data_input[key];
+                                        if (data_input[key] <= wave_limit1) wave_limit1 = data_input[key];
+                                        // code block
+                                        break;
+                                    case 3: //current
+                                        if (current_limit1 == -1) current_limit1 = data_input[key];
+                                        if (data_input[key] <= current_limit1) current_limit1 = data_input[key];
+                                        // code block
+                                        break;
+
+                                    default:
+                                        // code block
+                                }
+                            }
+                        }
+
+                        preWind = wind_limit;
+                        preLight = light_limit;
+                        preCurrent = current_limit;
+                        preWave = wave_limit;
+
+                        wind_limit = (wind_limit1 == -1) ? wind_limit : wind_limit1.toFixed(2); //pre defined min value : actual optimal 
+                        light_limit = (light_limit1 == -1) ? light_limit : light_limit1.toFixed(2);
+                        wave_limit = (wave_limit1 == -1) ? wave_limit : wave_limit1.toFixed(2);
+                        current_limit = (current_limit1 == -1) ? current_limit : current_limit1.toFixed(2);
+                        console.log("wind:" + wind_limit + "light" + light_limit + "wave:" + wave_limit + "current" + current_limit);
+
+                        if (tran.getLang() == 'cn')
+                            M.toast({
+                                html: "<p>限制已经修改到  <br>风: " + wind_limit + "<br>光: " + light_limit + "<br>波浪: " + wave_limit + "<br>海流: " + current_limit + "<br>基于优化结果。</p><button class='btn-flat toast-action' onclick='toast_Undo()'>撤销</button>",
+                                displayLength: 8000
+                            });
+                        else
+                            M.toast({
+                                html: "<p>Limitation has been changed to <br>wind: " + wind_limit + "<br>light: " + light_limit + "<br>wave: " + wave_limit + "<br>current: " + current_limit + "<br>based on optimization result.</p><button class='btn-flat toast-action' onclick='toast_Undo()'>Undo</button>",
+                                displayLength: 8000
+                            });
+                    }
+                }
 
                 if (tran.getLang() == 'cn') {
 
@@ -727,6 +894,9 @@
                 //console.log(batteryData);
                 prevTime += freq;
             }
+
+
+
             /**
              * If user consumption data is empty, then it will use the
              * Data from the first line will be ignored. (No duration is impossible to calculate)
@@ -1037,5 +1207,9 @@
         </script>
 
     </body>
+
+</html>
+
+</html>
 
 </html>
