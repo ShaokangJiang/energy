@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+</head>
+
+<body>
+    <script>
+        //x = rsin(theta) y = rcos(theta)
+        var r = 1;
+        var theta = 0;
+        setInterval(function() {
+            document.getElementById('rig').setAttribute('position', (3 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (3 * r * Math.cos(theta) - 4));
+            theta += 0.03;
+            if (theta > 2 * Math.PI) theta -= 2 * Math.PI;
+            //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
+            document.getElementById('rig').setAttribute('rotation', '-30 ' + (theta * 180 / Math.PI) + ' 0');
+            //console.log();
+        }, 200);
+        //x = rsin(theta) y = rcos(theta)
+    </script>
+    <a-scene background="color: #808080">
+        <a-entity id="rig" position="0 0 0" rotation="-30 0 0">
+            <a-camera id="camera"></a-camera>
+        </a-entity>
+        <a-assets>
+            <a-asset-item id="tree" src="./components/rst_basic_sample_project.gltf"></a-asset-item>
+        </a-assets>
+
+        <a-entity gltf-model="#tree" scale="0.1 0.1 0.1" position="-1 0 -5"></a-entity>
+    </a-scene>
+</body>
+
+</html>
