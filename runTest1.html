@@ -18,19 +18,22 @@
     <script src="./js/echarts.min.js"></script>
     <script src="./js/translater.min.js"></script>
     <script src="./js/aframe-v1.0.4.min.js"></script>
-    <style>
 
-    </style>
+    <script>
+        document.write("<style>.parallax-container {height: " + parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) + "px;}</style>");
+    </script>
 
     <body>
+        <script>
+            //   console.log(parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) + "px");
+
+            //true:on false:off Mannual variable
+            var wind = true;
+            var light = true;
+            var wave = true;
+            var current = true;
+        </script>
         <div class="parallax-container">
-            <script>
-                //true:on false:off Mannual variable
-                var wind = true;
-                var light = true;
-                var wave = true;
-                var current = true;
-            </script>
 
             <nav class="transparent" role="navigation">
                 <div class="nav-wrapper container">
@@ -127,6 +130,7 @@
                     if (theta > 2 * Math.PI) theta -= 2 * Math.PI;
                     //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
                     document.getElementById('rig').setAttribute('rotation', '0 ' + (theta * 180 / Math.PI) + ' 0');
+                    //console.log();
                 }, 200);
                 //x = rsin(theta) y = rcos(theta)
             </script>
@@ -387,6 +391,7 @@
         <script src="./js/jquery-2.1.1.min.js"></script>
         <script src="./js/materialize.min.js"></script>
         <script>
+            //  document.getElementById("parall").style.color = "blue";
             M.AutoInit();
             var Model_Status = -1; //1:running 0:pause 2:terminate
             var file;
@@ -413,13 +418,33 @@
                 if (Model_Status == 1) {
                     wind = use.checked;
                     if (wind) {
-                        if (tran.getLang() == 'cn') document.getElementById("wind_status").innerHTML = '<font color="green"><b>开</b> </font>';
-                        else document.getElementById("wind_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wind_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '风力&nbsp; <font color="green"><b> 开</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("wind_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Wind&nbsp; <font color="green"><b> On</b> </font>'
+                            });
+                        }
                     } else {
 
-                        if (tran.getLang() == 'cn') document.getElementById("wind_status").innerHTML = '<font color="red"><b>关</b> </font>';
-                        else document.getElementById("wind_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wind_status").innerHTML = '<font color="red"><b>关</b> </font>';
+                            M.toast({
+                                html: '风力&nbsp; <font color="red"><b> 关</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("wind_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Wind&nbsp; <font color="red"><b> Off</b></font>'
+                            });
+                        }
                     }
+                } else {
+                    use.checked = !use.checked;
                 }
             }
 
@@ -427,12 +452,32 @@
                 if (Model_Status == 1) {
                     light = use.checked;
                     if (light) {
-                        if (tran.getLang() == 'cn') document.getElementById("Light_status").innerHTML = '<font color="green"><b>开</b> </font>';
-                        else document.getElementById("Light_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("Light_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '光&nbsp;<font color="green"><b>开</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("Light_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Light&nbsp;<font color="green"><b>On</b> </font>'
+                            });
+                        }
                     } else {
-                        if (tran.getLang() == 'cn') document.getElementById("Light_status").innerHTML = '<font color="red"><b>关</b></font>';
-                        else document.getElementById("Light_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("Light_status").innerHTML = '<font color="red"><b>关</b></font>';
+                            M.toast({
+                                html: '光&nbsp;<font color="red"><b>关</b></font>'
+                            });
+                        } else {
+                            document.getElementById("Light_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Light&nbsp;<font color="red"><b>Off</b></font>'
+                            });
+                        }
                     }
+                } else {
+                    use.checked = !use.checked;
                 }
             }
 
@@ -440,12 +485,33 @@
                 if (Model_Status == 1) {
                     wave = use.checked;
                     if (wave) {
-                        if (tran.getLang() == 'cn') document.getElementById("wave_status").innerHTML = '<font color="green"><b>开</b> </font>';
-                        else document.getElementById("wave_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wave_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '波浪&nbsp;<font color="green"><b>开</b> </font>'
+                            });
+                        } else {
+
+                            document.getElementById("wave_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Wave&nbsp;<font color="green"><b>On</b> </font>'
+                            });
+                        }
                     } else {
-                        if (tran.getLang() == 'cn') document.getElementById("wave_status").innerHTML = '<font color="red"><b>关</b></font>';
-                        else document.getElementById("wave_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wave_status").innerHTML = '<font color="red"><b>关</b></font>';
+                            M.toast({
+                                html: '波浪&nbsp;<font color="red"><b>Off</b></font>'
+                            });
+                        } else {
+                            document.getElementById("wave_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Wave&nbsp;<font color="red"><b>关</b></font>'
+                            });
+                        }
                     }
+                } else {
+                    use.checked = !use.checked;
                 }
             }
 
@@ -453,12 +519,32 @@
                 if (Model_Status == 1) {
                     current = use.checked;
                     if (current) {
-                        if (tran.getLang() == 'cn') document.getElementById("current_status").innerHTML = '<font color="green"><b>开</b> </font>';
-                        else document.getElementById("current_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("current_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '海流&nbsp;<font color="green"><b>开</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("current_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Current&nbsp;<font color="green"><b>On</b> </font>'
+                            });
+                        }
                     } else {
-                        if (tran.getLang() == 'cn') document.getElementById("current_status").innerHTML = '<font color="red"><b>关</b></font>';
-                        else document.getElementById("current_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("current_status").innerHTML = '<font color="red"><b>关</b></font>';
+                            M.toast({
+                                html: '海流&nbsp;<font color="red"><b>关</b></font>'
+                            });
+                        } else {
+                            document.getElementById("current_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Current&nbsp;<font color="red"><b>Off</b></font>'
+                            });
+                        }
                     }
+                } else {
+                    use.checked = !use.checked;
                 }
             }
 
@@ -1012,9 +1098,29 @@
             function loadFile(file1) {
                 file = file1.files[0];
                 if (file != null && file.name.indexOf(".csv") != -1) {
-                    if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "成功载入";
-                    else document.getElementById("notice").innerText = "Successfully loaded";
-                    document.getElementById("usethis").disabled = false;
+                    var successfully = false;
+                    Papa.parse(file, {
+                        header: true,
+                        skipEmptyLines: true,
+                        dynamicTyping: true,
+                        preview: 1,
+                        step: function(results, parser) {
+                            if (results.data.hasOwnProperty("Current_Speed") && results.data.hasOwnProperty("Light_H") && results.data.hasOwnProperty("Wave_Hight") && results.data.hasOwnProperty("Wave_Period") && results.data.hasOwnProperty("Wind_Speed")) {
+                                successfully |= true;
+                            }
+                        },
+                        complete: function(results, parser) {
+                            if (successfully == 1) {
+                                if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "成功载入";
+                                else document.getElementById("notice").innerText = "Successfully loaded";
+                                document.getElementById("usethis").disabled = false;
+                            } else {
+                                if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "无效的文件内容。";
+                                else document.getElementById("notice").innerText = "Invalid file content.";
+                                document.getElementById("usethis").disabled = true;
+                            }
+                        }
+                    });
                 } else {
                     if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "请选择一个有效csv文件";
                     else document.getElementById("notice").innerText = "Please select a valid csv file";
@@ -1238,6 +1344,8 @@
         </script>
 
     </body>
+
+</html>
 
 </html>
 

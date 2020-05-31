@@ -192,11 +192,11 @@
                                 <!--{cn}导出结果到 csv -->
                             </p>
                             <div class="card-action row">
-                                
-                                    <span class="col s4">Indexing: Time, type, status, speed, production<!--{cn}索引: Time, type, status, speed, production--></span>
-                                    <span class="col s1">|</span>
-                                    <span class="col s6">Indexing: Time, battery_usage, battery_flow, battery_status, battery_current<!--{cn}索引: Time, battery_usage, battery_flow, battery_status, battery_current--></span>
-									<p class="col s12"><br></p>
+
+                                <span class="col s4">Indexing: Time, type, status, speed, production<!--{cn}索引: Time, type, status, speed, production--></span>
+                                <span class="col s1">|</span>
+                                <span class="col s6">Indexing: Time, battery_usage, battery_flow, battery_status, battery_current<!--{cn}索引: Time, battery_usage, battery_flow, battery_status, battery_current--></span>
+                                <p class="col s12"><br></p>
                                 <button class="waves-effect waves-light btn col s4" id="run_data">Download running data<!--{cn}下载运行数据--></button>
                                 <span class="col s4"></span>
                                 <button class="waves-effect waves-light btn col s4" id="battery_data"> Download battery data<!--{cn}下载电池数据--></button>
@@ -982,9 +982,31 @@
             function loadFile(file1) {
                 file = file1.files[0];
                 if (file != null && file.name.indexOf(".csv") != -1) {
-                    if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "成功载入";
-                    else document.getElementById("notice").innerText = "Successfully loaded";
-                    document.getElementById("usethis").disabled = false;
+                    var successfully = false;
+                    Papa.parse(file, {
+                        header: true,
+                        skipEmptyLines: true,
+                        dynamicTyping: true,
+                        preview: 1,
+                        step: function(results, parser) {
+                            if (results.data.hasOwnProperty("Current_Speed") && results.data.hasOwnProperty("Light_H") && results.data.hasOwnProperty("Wave_Hight") && results.data.hasOwnProperty("Wave_Period") && results.data.hasOwnProperty("Wind_Speed")) {
+                                successfully |= true;
+                            }
+                        },
+                        complete: function(results, parser) {
+                            if (successfully == 1) {
+                                if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "成功载入";
+                                else document.getElementById("notice").innerText = "Successfully loaded";
+                                document.getElementById("usethis").disabled = false;
+                            } else {
+                                if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "无效的文件内容。";
+                                else document.getElementById("notice").innerText = "Invalid file content.";
+                                document.getElementById("usethis").disabled = true;
+                            }
+                        }
+                    });
+
+
                 } else {
                     if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "请选择一个有效csv文件";
                     else document.getElementById("notice").innerText = "Please select a valid csv file";
