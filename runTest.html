@@ -64,7 +64,7 @@
                 setInterval(function() {
                     document.getElementById('rig').setAttribute('position', (4 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (4 * r * Math.cos(theta) - 4));
                     theta += 0.03;
-                    if(theta > Math.PI) theta -= Math.PI;
+                    if (theta > 2 * Math.PI) theta -= 2 * Math.PI;
                     //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
                     document.getElementById('rig').setAttribute('rotation', '0 ' + (theta * 180 / Math.PI) + ' 0');
                 }, 200);
