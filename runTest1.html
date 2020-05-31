@@ -17,278 +17,320 @@
     <script src="./js/LinkedList.js"></script>
     <script src="./js/echarts.min.js"></script>
     <script src="./js/translater.min.js"></script>
+    <script src="./js/aframe-v1.0.4.min.js"></script>
+    <style>
+
+    </style>
 
     <body>
-        <nav class="Maroon" role="navigation">
-            <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+        <div class="parallax-container">
+            <script>
+                //true:on false:off Mannual variable
+                var wind = true;
+                var light = true;
+                var wave = true;
+                var current = true;
+            </script>
 
-                <ul class="right hide-on-med-and-down">
-                    <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
-                    <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
-                </ul>
+            <nav class="transparent" role="navigation">
+                <div class="nav-wrapper container">
 
-                <ul id="nav-mobile" class="sidenav">
-                    <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
-                    <li id="nav-en-m" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
-                </ul>
-                <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">translate</i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                        <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
+                    </ul>
 
-            </div>
+                    <ul id="nav-mobile" class="sidenav">
+                        <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                        <li id="nav-en-m" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
+                    </ul>
+                    <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">translate</i></a>
 
-        </nav>
+                </div>
 
-        <br><br>
-
-
-        <div class="row">
-            <div class="col s0 m0 l1">
-            </div>
-
-
-            <div class="col s12 m12 l7">
-
-                <div class="row">
-                    <div class="col s12">
-
-                        <div class="card white z-depth-3">
-                            <div class="card-content black-text">
-                                <span class="card-title">Glance<!--{cn}一瞥--></span>
-                                <p>Model goes here
-                                    <!--{cn}模型放在这里-->
-                                </p>
-                            </div>
-                        </div>
-
-
+            </nav>
+            <div class="section no-pad-bot">
+                <div class="">
+                    <br>
+                    <h1 class="header center teal-text text-lighten-2">Control Panel
+                        <!--{cn}控制面板-->
+                    </h1>
+                    <div class="row center">
+                        <h5 class="header col s12 light white-text">Adjust setting as you want.
+                            <!--{cn}根据需要调整设置。-->
+                        </h5>
                     </div>
-                    <script>
-                        var wind_history = new LinkedList(10);
-                        var light_history = new LinkedList(10);
-                        var wave_history = new LinkedList(10);
-                        var current_history = new LinkedList(10);
-                        var battery_history = new LinkedList(10);
-                    </script>
-                    <div class="col s12">
+                    <div class="row center">
 
-                        <div class="card white z-depth-3">
-                            <div class="card-content black-text">
-                                <span class="card-title">Components<!--{cn}组件--></span>
-                                <div class="row">
-                                    <div class="col s12 m6">
-                                        <div class="card-panel blue">
-                                            <span class="white-text">
-                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wind_history, '风能数据'); else showInform(event, wind_history, 'wind data');" onMouseOut="hiddenInform(event);">Wind<!--{cn}风--></h6>
-                                            <p>Status: <!--{cn}现况:--><span id="wind_status"></span>
-                                            </p>
-                                            <p>
-                                                Production:
-                                                <!--{cn}产出：--><span id="wind_production"></span> KW
-                                                <!--{cn}千瓦-->
-                                            </p>
-                                            <p>
-                                                Current Wind:
-                                                <!--{cn}当前风速：--><span id="wind_Speed"></span>
-                                            </p>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col s12 m6">
-                                        <div class="card-panel blue">
-                                            <span class="white-text">
-                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, light_history, '光能数据'); else showInform(event, light_history, 'light data');" onMouseOut="hiddenInform(event);">Light<!--{cn}光--></h6>
-                                            <p>Status: <!--{cn}现况:--><span id="Light_status"></span>
-                                            </p>
-                                            <p>
-                                                Production:
-                                                <!--{cn}产出：--><span id="Light_production"></span> KW
-                                                <!--{cn}千瓦-->
-                                            </p>
-                                            <p>
-                                                Current Light:
-                                                <!--{cn}当前光强：--><span id="Light_Speed"></span>
-                                            </p>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col s12 m6">
-                                        <div class="card-panel blue">
-                                            <span class="white-text">
-                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wave_history, '波浪能数据'); else showInform(event, wave_history, 'Wave data');" onMouseOut="hiddenInform(event);">Wave<!--{cn}波浪--></h6>
-                                            <p>Status: <!--{cn}现况:--><span id="wave_status"></span>
-                                            </p>
-                                            <p>
-                                                Production:
-                                                <!--{cn}产出：--><span id="wave_production"></span> KW
-                                                <!--{cn}千瓦-->
-                                            </p>
-                                            <p>
-                                                Current wave:
-                                                <!--{cn}当前波浪：--><span id="wave_Speed"></span>
-                                            </p>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col s12 m6">
-                                        <div class="card-panel blue">
-                                            <span class="white-text">
-                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, current_history, '海流能数据'); else showInform(event, current_history, 'Current data');" onMouseOut="hiddenInform(event);">Current<!--{cn}海流--></h6>
-                                            <p>Status: <!--{cn}现况:--><span id="current_status"></span>
-                                            </p>
-                                            <p>
-                                                Production:
-                                                <!--{cn}产出：--><span id="current_production"></span> KW
-                                                <!--{cn}千瓦-->
-                                            </p>
-                                            <p>
-                                                Current current:
-                                                <!--{cn}当前流速：--><span id="current_Speed"></span>
-                                            </p>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col s12">
-                                        <div class="card-panel blue">
-                                            <span class="white-text">
-                                            <h6  onMouseOver="if (tran.getLang() == 'cn') showInform(event, battery_history, '电池数据'); else showInform(event, battery_history, 'Battery data');" onMouseOut="hiddenInform(event);">Battery<!--{cn}电池--></h6>
-<div class="row">
-                                            <p class="col s6">Status: <!--{cn}现况:--><span id="battery_status"></span>
-                                            </p>
-                                            <p class="col s6">
-                                                Remain:
-                                                <!--{cn}剩余：--><span id="battery_remain"></span>%
-                                            </p>
-                                            <p class="col s6">
-                                                Current flow:
-                                                <!--{cn}能量流动：--><span id="battery_flow"></span> KWH
-                                                <!--{cn}千瓦时-->
-                                            </p>
-                                            <p class="col s6">
-                                                Current inflow:
-                                                <!--{cn}电能输入：--><span id="battery_inflow"></span>
-                                            </p>
-                                            <p class="col s6">
-                                                Current Usage:
-                                                <!--{cn}电能输出：--><span id="battery_usage"></span>
-                                            </p>
-                                        </div>
-                                        </span>
-                                    </div>
+                        <p class="col s2">
+                            <span class="right white-text">Wind Switcher
+                     <!--{cn}风力切换器-->   </span> </p>
+                        <p class="switch col s2">
+                            <label>
+                      Off<!--{cn}关-->
+                      <input type="checkbox" id="wind" checked onchange="onWindChange(this);">
+                      <span class="lever"></span>
+                      On<!--{cn}开-->
+                    </label>
+                        </p>
+                        <p class="col s4"></p>
+                        <p class="col s2">
+                            <span class="right white-text">Light Switcher
+                   <!--{cn}灯光切换器--> </span> </p>
+                        <p class="switch col s2">
+                            <label>
+                  Off<!--{cn}关-->
+                  <input type="checkbox" id="light" checked onchange="onLightChange(this);">
+                  <span class="lever"></span>
+                  On<!--{cn}开-->
+                </label>
+                        </p>
+
+                        <p class="col s2">
+                            <span class="right white-text">Wave Switcher
+                <!--{cn}波形切换器--></span> </p>
+                        <p class="switch col s2">
+                            <label>
+              Off<!--{cn}关-->
+              <input type="checkbox" id="wave" checked onchange="onWaveChange(this);">
+              <span class="lever"></span>
+              On<!--{cn}开-->
+            </label>
+                        </p>
+                        <p class="col s4"></p>
+                        <p class="col s2">
+                            <span class="right white-text">Current Switcher<!--{cn}海流切换器-->
+                </span> </p>
+                        <p class="switch col s2">
+                            <label>
+              Off<!--{cn}关-->
+              <input type="checkbox" id="current" checked onchange="onCurrentChange(this);">
+              <span class="lever"></span>
+              On<!--{cn}开-->
+            </label>
+                        </p>
+                    </div>
+                    <br>
+
+
+
+
+                </div>
+            </div>
+
+            <script>
+                //x = rsin(theta) y = rcos(theta)
+                var r = 1;
+                var theta = 0;
+                setInterval(function() {
+                    document.getElementById('rig').setAttribute('position', (4 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (4 * r * Math.cos(theta) - 4));
+                    theta += 0.03;
+                    //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
+                    document.getElementById('rig').setAttribute('rotation', '0 ' + (theta * 180 / Math.PI) + ' 0');
+                }, 200);
+                //x = rsin(theta) y = rcos(theta)
+            </script>
+            <div class="parallax">
+                <img src="1.jpg">
+
+                <a-scene background="color: #808080" embedded>
+                    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box>
+                    <a-sphere position="-1 1 -5" radius="1" color="#EF2D5E" shadow></a-sphere>
+                    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
+                    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
+                    <a-entity id="rig" position="0 0 0" rotation="0 0 0">
+                        <a-camera id="camera"></a-camera>
+                    </a-entity>
+                    <a-assets>
+                        <a-asset-item id="tree-obj" src="./components/RicePlant.obj"></a-asset-item>
+                        <a-asset-item id="tree-mtl" src="./components/RicePlant.mtl"></a-asset-item>
+                    </a-assets>
+
+                    <a-entity obj-model="obj: #tree-obj; mtl: #tree-mtl;" scale="0.05 0.05 0.05" position="1 0 -5"></a-entity>
+                </a-scene>
+            </div>
+        </div>
+
+        <div class="section white">
+            <div class="row">
+                <div class="col s0 m0 l2">
+                </div>
+
+
+                <div class="col s12 m12 l8">
+
+                    <div class="row">
+                        <div class="col s12">
+
+                            <div class="card white z-depth-3">
+                                <div class="card-content black-text">
+                                    <span class="card-title">Glance<!--{cn}一瞥--></span>
+                                    <p>Model goes here
+                                        <!--{cn}模型放在这里-->
+                                    </p>
                                 </div>
                             </div>
 
 
                         </div>
+                        <script>
+                            var wind_history = new LinkedList(10);
+                            var light_history = new LinkedList(10);
+                            var wave_history = new LinkedList(10);
+                            var current_history = new LinkedList(10);
+                            var battery_history = new LinkedList(10);
+                        </script>
+                        <div class="col s12">
+
+                            <div class="card white z-depth-3">
+                                <div class="card-content black-text">
+                                    <span class="card-title">Components<!--{cn}组件--></span>
+                                    <div class="row">
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wind_history, '风能数据'); else showInform(event, wind_history, 'wind data');" onMouseOut="hiddenInform(event);">Wind<!--{cn}风--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="wind_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="wind_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current Wind:
+                                                    <!--{cn}当前风速：--><span id="wind_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, light_history, '光能数据'); else showInform(event, light_history, 'light data');" onMouseOut="hiddenInform(event);">Light<!--{cn}光--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="Light_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="Light_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current Light:
+                                                    <!--{cn}当前光强：--><span id="Light_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wave_history, '波浪能数据'); else showInform(event, wave_history, 'Wave data');" onMouseOut="hiddenInform(event);">Wave<!--{cn}波浪--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="wave_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="wave_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current wave:
+                                                    <!--{cn}当前波浪：--><span id="wave_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, current_history, '海流能数据'); else showInform(event, current_history, 'Current data');" onMouseOut="hiddenInform(event);">Current<!--{cn}海流--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="current_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="current_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current current:
+                                                    <!--{cn}当前流速：--><span id="current_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6  onMouseOver="if (tran.getLang() == 'cn') showInform(event, battery_history, '电池数据'); else showInform(event, battery_history, 'Battery data');" onMouseOut="hiddenInform(event);">Battery<!--{cn}电池--></h6>
+<div class="row">
+                                            <p class="col s6">Status: <!--{cn}现况:--><span id="battery_status"></span>
+                                                </p>
+                                                <p class="col s6">
+                                                    Remain:
+                                                    <!--{cn}剩余：--><span id="battery_remain"></span>%
+                                                </p>
+                                                <p class="col s6">
+                                                    Current flow:
+                                                    <!--{cn}能量流动：--><span id="battery_flow"></span> KWH
+                                                    <!--{cn}千瓦时-->
+                                                </p>
+                                                <p class="col s6">
+                                                    Current inflow:
+                                                    <!--{cn}电能输入：--><span id="battery_inflow"></span>
+                                                </p>
+                                                <p class="col s6">
+                                                    Current Usage:
+                                                    <!--{cn}电能输出：--><span id="battery_usage"></span>
+                                                </p>
+                                            </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
                     </div>
 
+                    <div class="col s12">
 
-                </div>
-
-                <div class="col s12">
-
-                    <div class="card white z-depth-3">
-                        <div class="card-content black-text">
-                            <span class="card-title">Export<!--{cn}导出--></span>
-                            <p>Export result to csv at here:
-                                <!--{cn}导出结果到 csv -->
-                            </p>
-                            <div class="card-action row">
-                                
+                        <div class="card white z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Export<!--{cn}导出--></span>
+                                <p>Export result to csv at here:
+                                    <!--{cn}导出结果到 csv -->
+                                </p>
+                                <div class="card-action row">
                                     <span class="col s4">Indexing: Time, type, status, speed, production<!--{cn}索引: Time, type, status, speed, production--></span>
                                     <span class="col s1">|</span>
                                     <span class="col s6">Indexing: Time, battery_usage, battery_flow, battery_status, battery_current<!--{cn}索引: Time, battery_usage, battery_flow, battery_status, battery_current--></span>
-									<p class="col s12"><br></p>
-                                <button class="waves-effect waves-light btn col s4" id="run_data">Download running data<!--{cn}下载运行数据--></button>
-                                <span class="col s4"></span>
-                                <button class="waves-effect waves-light btn col s4" id="battery_data"> Download battery data<!--{cn}下载电池数据--></button>
+                                    <p class="col s12"><br></p>
+                                    <button class="waves-effect waves-light btn col s4" id="run_data">Download running data<!--{cn}下载运行数据--></button>
+                                    <span class="col s4"></span>
+                                    <button class="waves-effect waves-light btn col s4" id="battery_data"> Download battery data<!--{cn}下载电池数据--></button>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
 
 
                 </div>
 
-
             </div>
 
-        </div>
-        <script>
-            //true:on false:off Mannual variable
-            var wind = true;
-            var light = true;
-            var wave = true;
-            var current = true;
-        </script>
 
-        <div class="col s12 m12 l3">
-            <div class="card white z-depth-3">
-                <div class="card-content black-text">
-                    <span class="card-title">Control Panel<!--{cn}控制面板--></span>
-                    <p>Adjust setting as you want.
-                        <!--{cn}根据需要调整设置。-->
-                    </p>
-                </div>
-                <div class="card-action">
-                    <div class="row">
-                        <p class="col s6">
-                            <span class="right black-text">Wind Switcher
-                         <!--{cn}风力切换器-->   </span> </p>
-                        <p class="switch col s6">
-                            <label>
-                          Off<!--{cn}关-->
-                          <input type="checkbox" id="wind" checked onchange="onWindChange(this);">
-                          <span class="lever"></span>
-                          On<!--{cn}开-->
-                        </label>
-                        </p>
-
-                        <p class="col s6">
-                            <span class="right black-text">Light Switcher
-                       <!--{cn}灯光切换器--> </span> </p>
-                        <p class="switch col s6">
-                            <label>
-                      Off<!--{cn}关-->
-                      <input type="checkbox" id="light" checked onchange="onLightChange(this);">
-                      <span class="lever"></span>
-                      On<!--{cn}开-->
-                    </label>
-                        </p>
-
-                        <p class="col s6">
-                            <span class="right black-text">Wave Switcher
-                    <!--{cn}波形切换器--></span> </p>
-                        <p class="switch col s6">
-                            <label>
-                  Off<!--{cn}关-->
-                  <input type="checkbox" id="wave" checked onchange="onWaveChange(this);">
-                  <span class="lever"></span>
-                  On<!--{cn}开-->
-                </label>
-                        </p>
-
-                        <p class="col s6">
-                            <span class="right black-text">Current Switcher<!--{cn}海流切换器-->
-                    </span> </p>
-                        <p class="switch col s6">
-                            <label>
-                  Off<!--{cn}关-->
-                  <input type="checkbox" id="current" checked onchange="onCurrentChange(this);">
-                  <span class="lever"></span>
-                  On<!--{cn}开-->
-                </label>
-                        </p>
-
-                    </div>
-                </div>
+            <div class="col s0 m0 l2">
             </div>
-        </div>
-
-
-        <div class="col s0 m0 l1">
-        </div>
 
 
         </div>
-
+        </div>
+        <!-- near footer-->
         <br><br>
         </div>
 
@@ -451,8 +493,9 @@
 
             if (request.QueryString("wind") == null || request.QueryString("light") == null || request.QueryString("wave") == null || request.QueryString("current") == null ||
                 request.QueryString("battery") == null) {
-                alert("Invalid visit.");
-                window.location.href = "index.html";
+                //UNCOMMENT THIS FIELD BEFORE FORMAL PUBLISH
+                //alert("Invalid visit.");
+                //window.location.href = "index.html";
             }
             var wind_limit = parseFloat(request.QueryString("wind"));
 
