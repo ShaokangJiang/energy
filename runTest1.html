@@ -20,7 +20,7 @@
     <script src="./js/aframe-v1.0.4.min.js"></script>
 
     <script>
-        document.write("<style>.parallax-container {height: " + parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) + "px;}</style>");
+        document.write("<style>.parallax-container {height: " + parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.97 + "px;}</style>");
     </script>
 
     <body>
@@ -151,7 +151,7 @@
         </div>
 
         <div class="section white">
-            <div class="row">
+            <div id="mainWindow" class="row">
                 <div class="col s0 m0 l2">
                 </div>
 
@@ -387,6 +387,7 @@
         <script src="./js/materialize.min.js"></script>
         <script>
             //  document.getElementById("parall").style.color = "blue";
+            document.getElementById("mainWindow").style = "position:relative;top:" + (-parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;margin-bottom: " + (20 - parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;";
             M.AutoInit();
             var Model_Status = -1; //1:running 0:pause 2:terminate
             var file;
