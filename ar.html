@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,7 +10,6 @@
 </head>
 
 <body style='margin : 0px; overflow: hidden;'>
-    <!--
     <a-scene embedded arjs>
         <a-assets>
             <a-asset-item id="tree" src="./components/rst_basic_sample_project.gltf"></a-asset-item>
@@ -19,96 +18,32 @@
         <a-entity gltf-model="#tree" scale="0.1 0.1 0.1" position="-1 0 -5"></a-entity>
 
         <a-marker-camera preset='hiro'></a-marker-camera>
-    </a-scene>-->
+    </a-scene>
     <a-scene embedded arjs>
-        <!-- create your content here. just a box for now -->
         <a-box position='0 0.5 0' material='opacity: 0.5;'></a-box>
-        <!-- define a camera which will move according to the marker position -->
         <a-marker-camera preset='hiro'></a-marker-camera>
     </a-scene>
-    <div class="select">
-        <label for="videoSource">Select Camera: </label><select id="videoSource"></select>
-    </div>
-    <script>
-        var videoSelect = document.querySelector("select#videoSource");
-        var selectors = [videoSelect];
+    
+</body>
 
-        function gotDevices(deviceInfos) {
-            // Handles being called several times to update labels. Preserve values.
-            var values = selectors.map(function(select) {
-                return select.value;
-            });
-            selectors.forEach(function(select) {
-                while (select.firstChild) {
-                    select.removeChild(select.firstChild);
-                }
-            });
+</html>-->
 
-            for (var i = 0; i !== deviceInfos.length; ++i) {
-                var deviceInfo = deviceInfos[i];
-                var option = document.createElement("option");
-                option.value = deviceInfo.deviceId;
+<html>
+<script src="./js/aframe-v1.0.4.min.js"></script>
+<!-- we import arjs version without NFT but with marker + location based support -->
+<script src="./js/aframe-ar.js"></script>
 
-                if (deviceInfo.kind === "videoinput") {
-                    option.text = deviceInfo.label || "camera " + (videoSelect.length + 1);
-                    videoSelect.appendChild(option);
-                } else {
-                    console.log("Some other kind of source/device: ", deviceInfo);
-                }
+<body style="margin : 0px; overflow: hidden;">
+    <a-scene embedded arjs>
+        <a-marker preset="hiro">
+            <a-assets>
+                <a-asset-item id="tree" src="./components/rst_basic_sample_project.gltf"></a-asset-item>
+            </a-assets>
 
-                selectors.forEach(function(select, selectorIndex) {
-                    if (
-                        Array.prototype.slice.call(select.childNodes).some(function(n) {
-                            return n.value === values[selectorIndex];
-                        })
-                    ) {
-                        select.value = values[selectorIndex];
-                    }
-                });
-            }
-        }
-
-        navigator.mediaDevices
-            .enumerateDevices()
-            .then(gotDevices)
-            .catch(handleError);
-
-        function gotStream(stream) {
-            arToolkitSource.domElement.srcObject = stream; // make stream available to console
-            // video.srcObject = stream;
-            // Refresh button list in case labels have become available
-            return navigator.mediaDevices.enumerateDevices();
-        }
-
-        function start() {
-            if (window.stream) {
-                window.stream.getTracks().forEach(function(track) {
-                    track.stop();
-                });
-            }
-            var videoSource = videoSelect.value;
-            var constraints = {
-                video: {
-                    deviceId: videoSource ? {
-                        exact: videoSource
-                    } : undefined
-                }
-            };
-            navigator.mediaDevices
-                .getUserMedia(constraints)
-                .then(gotStream)
-                .then(gotDevices)
-                .catch(handleError);
-        }
-
-        videoSelect.onchange = start;
-
-        function handleError(error) {
-            console.log("navigator.getUserMedia error: ", error);
-        }
-
-        start();
-    </script>
+            <a-entity gltf-model="#tree" scale="0.2 0.2 0.2" position="-1 0 -5"></a-entity>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
 </body>
 
 </html>

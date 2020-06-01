@@ -1702,7 +1702,7 @@ THREEx.ARClickability = function (sourceElement) {
     this._cameraPicking = new THREE.PerspectiveCamera(42, fullWidth / fullHeight, 0.1, 100);
 
     console.warn('THREEx.ARClickability works only in modelViewMatrix')
-    console.warn('OBSOLETE OBSOLETE! instead use THREEx.HitTestingPlane or THREEx.HitTestingTango')
+    console.warn('OBSOLETE OBSOLETE! instead use THREEx.HitTestingPlane')
 }
 
 THREEx.ARClickability.prototype.onResize = function () {
@@ -2041,12 +2041,6 @@ ARjs.MarkerControls = THREEx.ArMarkerControls = function(context, object3d, para
 
 	if( _this.context.parameters.trackingBackend === 'artoolkit' ){
 		this._initArtoolkit()
-	}else if( _this.context.parameters.trackingBackend === 'aruco' ){
-		// TODO create a ._initAruco
-		// put aruco second
-		this._arucoPosit = new POS.Posit(this.parameters.size, _this.context.arucoContext.canvas.width)
-	}else if( _this.context.parameters.trackingBackend === 'tango' ){
-		this._initTango()
 	}else console.assert(false)
 }
 
@@ -2080,19 +2074,11 @@ ARjs.MarkerControls.prototype.updateWithModelViewMatrix = function(modelViewMatr
 		tmpMatrix.multiply(modelViewMatrix)
 
 		modelViewMatrix.copy(tmpMatrix)
-	}else if( this.context.parameters.trackingBackend === 'aruco' ){
-		// ...
-	}else if( this.context.parameters.trackingBackend === 'tango' ){
-		// ...
 	}else console.assert(false)
 
-
-	if( this.context.parameters.trackingBackend !== 'tango' ){
-
-		// change axis orientation on marker - artoolkit say Z is normal to the marker - ar.js say Y is normal to the marker
-		var markerAxisTransformMatrix = new THREE.Matrix4().makeRotationX(Math.PI/2)
-		modelViewMatrix.multiply(markerAxisTransformMatrix)
-	}
+	// change axis orientation on marker - artoolkit say Z is normal to the marker - ar.js say Y is normal to the marker
+	var markerAxisTransformMatrix = new THREE.Matrix4().makeRotationX(Math.PI/2)
+	modelViewMatrix.multiply(markerAxisTransformMatrix)
 
 	var renderReqd = false;
 
@@ -2241,21 +2227,6 @@ ARjs.MarkerControls.prototype._initArtoolkit = function(){
 		var modelViewMatrix = new THREE.Matrix4().fromArray(event.data.matrix)
 		_this.updateWithModelViewMatrix(modelViewMatrix)
 	}
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//		aruco specific
-//////////////////////////////////////////////////////////////////////////////
-ARjs.MarkerControls.prototype._initAruco = function(){
-	this._arucoPosit = new POS.Posit(this.parameters.size, _this.context.arucoContext.canvas.width)
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//		init for Artoolkit
-//////////////////////////////////////////////////////////////////////////////
-ARjs.MarkerControls.prototype._initTango = function(){
-	var _this = this
-	console.log('init tango ArMarkerControls')
 }
 var THREEx = THREEx || {}
 
@@ -2458,7 +2429,7 @@ ARjs.Context = THREEx.ArToolkitContext = function (parameters) {
 
     // handle default parameters
     this.parameters = {
-        // AR backend - ['artoolkit', 'aruco']
+        // AR backend - ['artoolkit']
         trackingBackend: 'artoolkit',
         // debug - true if one should display artoolkit debug canvas, false otherwise
         debug: false,
@@ -2468,7 +2439,7 @@ ARjs.Context = THREEx.ArToolkitContext = function (parameters) {
         matrixCodeType: '3x3',
 
         // url of the camera parameters
-        cameraParametersUrl: ARjs.Context.baseURL + 'parameters/camera_para.dat',
+        cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
 
         // tune the maximum rate of pose detection in the source image
         maxDetectionRate: 60,
@@ -2479,21 +2450,15 @@ ARjs.Context = THREEx.ArToolkitContext = function (parameters) {
         // the patternRatio inside the artoolkit marker - artoolkit only
         patternRatio: 0.5,
 
-        // Labeling mode for markers - ['black_region', 'white_region']
-        // black_region: Black bordered markers on a white background, white_region: White bordered markers on a black background
-        labelingMode: 'black_region',
-
         // enable image smoothing or not for canvas copy - default to true
         // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled
         imageSmoothingEnabled: false,
     }
     // parameters sanity check
-    console.assert(['artoolkit', 'aruco'].indexOf(this.parameters.trackingBackend) !== -1, 'invalid parameter trackingBackend', this.parameters.trackingBackend)
+    console.assert(['artoolkit'].indexOf(this.parameters.trackingBackend) !== -1, 'invalid parameter trackingBackend', this.parameters.trackingBackend)
     console.assert(['color', 'color_and_matrix', 'mono', 'mono_and_matrix'].indexOf(this.parameters.detectionMode) !== -1, 'invalid parameter detectionMode', this.parameters.detectionMode)
-    console.assert(["black_region", "white_region"].indexOf(this.parameters.labelingMode) !== -1, "invalid parameter labelingMode", this.parameters.labelingMode);
 
     this.arController = null;
-    this.arucoContext = null;
 
     _this.initialized = false
 
@@ -2528,10 +2493,9 @@ ARjs.Context = THREEx.ArToolkitContext = function (parameters) {
 
 Object.assign(ARjs.Context.prototype, THREE.EventDispatcher.prototype);
 
-// ARjs.Context.baseURL = '../'
 // default to github page
-ARjs.Context.baseURL = 'https://jeromeetienne.github.io/AR.js/three.js/'
-ARjs.Context.REVISION = '2.2.2';
+ARjs.Context.baseURL = 'https://ar-js-org.github.io/AR.js/three.js/'
+ARjs.Context.REVISION = '3.1.0';
 
 /**
  * Create a default camera for this trackingBackend
@@ -2543,9 +2507,7 @@ ARjs.Context.createDefaultCamera = function (trackingBackend) {
     // Create a camera
     if (trackingBackend === 'artoolkit') {
         var camera = new THREE.Camera();
-    } else if (trackingBackend === 'aruco') {
-        var camera = new THREE.PerspectiveCamera(42, renderer.domElement.width / renderer.domElement.height, 0.01, 100);
-    } else console.assert(false)
+    } else console.assert(false);
     return camera
 }
 
@@ -2556,10 +2518,8 @@ ARjs.Context.createDefaultCamera = function (trackingBackend) {
 ARjs.Context.prototype.init = function (onCompleted) {
     var _this = this
     if (this.parameters.trackingBackend === 'artoolkit') {
-        this._initArtoolkit(done)
-    } else if (this.parameters.trackingBackend === 'aruco') {
-        this._initAruco(done)
-    } else console.assert(false)
+        this._initArtoolkit(done);
+    } else console.assert(false);
     return
 
     function done() {
@@ -2596,11 +2556,9 @@ ARjs.Context.prototype.update = function (srcElement) {
 
     // process this frame
     if (this.parameters.trackingBackend === 'artoolkit') {
-        this._updateArtoolkit(srcElement)
-    } else if (this.parameters.trackingBackend === 'aruco') {
-        this._updateAruco(srcElement)
+        this._updateArtoolkit(srcElement);
     }  else {
-        console.assert(false)
+        console.assert(false);
     }
 
     // dispatch event
@@ -2689,15 +2647,6 @@ ARjs.Context.prototype._initArtoolkit = function (onCompleted) {
         // set the patternRatio for artoolkit
         arController.setPattRatio(_this.parameters.patternRatio);
 
-        // set the labelingMode for artoolkit
-        var labelingModeTypes = {
-            "black_region": artoolkit.AR_LABELING_BLACK_REGION,
-            "white_region": artoolkit.AR_LABELING_WHITE_REGION
-        }
-        var labelingModeType = labelingModeTypes[_this.parameters.labelingMode];
-        console.assert(labelingModeType !== undefined);
-        arController.setLabelingMode(labelingModeType);
-
         // set thresholding in artoolkit
         // this seems to be the default
         // arController.setThresholdMode(artoolkit.AR_LABELING_THRESH_MODE_MANUAL)
@@ -2735,55 +2684,6 @@ ARjs.Context.prototype.getProjectionMatrix = function (srcElement) {
 
 ARjs.Context.prototype._updateArtoolkit = function (srcElement) {
     this.arController.process(srcElement)
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//		aruco specific
-//////////////////////////////////////////////////////////////////////////////
-ARjs.Context.prototype._initAruco = function (onCompleted) {
-    this.arucoContext = new THREEx.ArucoContext()
-
-    // honor this.parameters.canvasWidth/.canvasHeight
-    this.arucoContext.canvas.width = this.parameters.canvasWidth
-    this.arucoContext.canvas.height = this.parameters.canvasHeight
-
-    // honor this.parameters.imageSmoothingEnabled
-    var context = this.arucoContext.canvas.getContext('2d')
-    // context.mozImageSmoothingEnabled = this.parameters.imageSmoothingEnabled;
-    context.webkitImageSmoothingEnabled = this.parameters.imageSmoothingEnabled;
-    context.msImageSmoothingEnabled = this.parameters.imageSmoothingEnabled;
-    context.imageSmoothingEnabled = this.parameters.imageSmoothingEnabled;
-
-
-    setTimeout(function () {
-        onCompleted()
-    }, 0)
-}
-
-
-ARjs.Context.prototype._updateAruco = function (srcElement) {
-    // console.log('update aruco here')
-    var _this = this
-    var arMarkersControls = this._arMarkersControls
-    var detectedMarkers = this.arucoContext.detect(srcElement)
-
-    detectedMarkers.forEach(function (detectedMarker) {
-        var foundControls = null
-        for (var i = 0; i < arMarkersControls.length; i++) {
-            console.assert(arMarkersControls[i].parameters.type === 'barcode')
-            if (arMarkersControls[i].parameters.barcodeValue === detectedMarker.id) {
-                foundControls = arMarkersControls[i]
-                break;
-            }
-        }
-        if (foundControls === null) return
-
-        var tmpObject3d = new THREE.Object3D
-        _this.arucoContext.updateObject3D(tmpObject3d, foundControls._arucoPosit, foundControls.parameters.size, detectedMarker);
-        tmpObject3d.updateMatrix()
-
-        foundControls.updateWithModelViewMatrix(tmpObject3d.matrix)
-    })
 }
 var ARjs = ARjs || {}
 var THREEx = THREEx || {}
@@ -2833,7 +2733,6 @@ ARjs.Profile.prototype.reset = function () {
     this.contextParameters = {
         cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
         detectionMode: 'mono',
-        labelingMode: "black_region"
     }
     this.defaultMarkerParameters = {
         type: 'pattern',
@@ -2893,12 +2792,6 @@ ARjs.Profile.prototype.defaultMarker = function (trackingBackend) {
         this.contextParameters.detectionMode = 'mono'
         this.defaultMarkerParameters.type = 'pattern'
         this.defaultMarkerParameters.patternUrl = THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro'
-        this.contextParameters.labelingMode = "black_region"
-    } else if (trackingBackend === 'aruco') {
-        this.contextParameters.detectionMode = 'mono'
-        this.defaultMarkerParameters.type = 'barcode'
-        this.defaultMarkerParameters.barcodeValue = 1001
-        this.contextParameters.labelingMode = "black_region"
     } else console.assert(false)
 
     return this
@@ -3145,9 +3038,13 @@ ARjs.Source.prototype._initSourceWebcam = function (onReady, onError) {
                 facingMode: 'environment',
                 width: {
                     ideal: _this.parameters.sourceWidth,
+                    // min: 1024,
+                    // max: 1920
                 },
                 height: {
                     ideal: _this.parameters.sourceHeight,
+                    // min: 776,
+                    // max: 1080
                 }
             }
         };
@@ -3365,11 +3262,6 @@ ARjs.Source.prototype.onResize = function (arToolkitContext, renderer, camera) {
         if (arToolkitContext.arController !== null) {
             this.copyElementSizeTo(arToolkitContext.arController.canvas)
         }
-    } else if (trackingBackend === 'aruco') {
-        this.onResizeElement()
-        this.copyElementSizeTo(renderer.domElement)
-
-        this.copyElementSizeTo(arToolkitContext.arucoContext.canvas)
     } else console.assert(false, 'unhandled trackingBackend ' + trackingBackend)
 
 
@@ -3378,9 +3270,6 @@ ARjs.Source.prototype.onResize = function (arToolkitContext, renderer, camera) {
         if (arToolkitContext.arController !== null) {
             camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
         }
-    } else if (trackingBackend === 'aruco') {
-        camera.aspect = renderer.domElement.width / renderer.domElement.height;
-        camera.updateProjectionMatrix();
     } else console.assert(false, 'unhandled trackingBackend ' + trackingBackend)
 }
 var THREEx = THREEx || {}
@@ -3650,7 +3539,7 @@ ARjs.Anchor = function(arSession, markerParameters){
 		this.controls = markerControls
 	}else{
 		// sanity check - MUST be a trackingBackend with markers
-		console.assert( arContext.parameters.trackingBackend === 'artoolkit' || arContext.parameters.trackingBackend === 'aruco' )
+		console.assert( arContext.parameters.trackingBackend === 'artoolkit' )
 
 		// honor markers-page-resolution for https://webxr.io/augmented-website
 		if( location.hash.substring(1).startsWith('markers-page-resolution=') === true ){
@@ -4157,8 +4046,6 @@ ARjs.Utils.createDefaultCamera = function (trackingMethod) {
     // Create a camera
     if (trackingBackend === 'artoolkit') {
         var camera = new THREE.Camera();
-    } else if (trackingBackend === 'aruco') {
-        var camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.01, 100);
     } else console.assert(false, 'unknown trackingBackend: ' + trackingBackend)
 
     return camera
@@ -4853,7 +4740,7 @@ ARjs.MarkersAreaUtils = THREEx.ArMultiMarkerUtils = {}
 
 /**
  * Navigate to the multi-marker learner page
- * 
+ *
  * @param {String} learnerBaseURL  - the base url for the learner
  * @param {String} trackingBackend - the tracking backend to use
  */
@@ -4872,7 +4759,7 @@ ARjs.MarkersAreaUtils.navigateToLearnerPage = function(learnerBaseURL, trackingB
 
 /**
  * Create and store a default multi-marker file
- * 
+ *
  * @param {String} trackingBackend - the tracking backend to use
  */
 ARjs.MarkersAreaUtils.storeDefaultMultiMarkerFile = function(trackingBackend){
@@ -4891,7 +4778,7 @@ ARjs.MarkersAreaUtils.storeDefaultMultiMarkerFile = function(trackingBackend){
 ARjs.MarkersAreaUtils.createDefaultMultiMarkerFile = function(trackingBackend){
 	console.assert(trackingBackend)
 	if( trackingBackend === undefined )	debugger
-	
+
 	// create absoluteBaseURL
 	var link = document.createElement('a')
 	link.href = ARjs.Context.baseURL
@@ -4905,7 +4792,7 @@ ARjs.MarkersAreaUtils.createDefaultMultiMarkerFile = function(trackingBackend){
 		},
 		trackingBackend : trackingBackend,
 		subMarkersControls : [
-			// empty for now... being filled 
+			// empty for now... being filled
 		]
 	}
 	// add a subMarkersControls
@@ -4916,11 +4803,8 @@ ARjs.MarkersAreaUtils.createDefaultMultiMarkerFile = function(trackingBackend){
 	if( trackingBackend === 'artoolkit' ){
 		file.subMarkersControls[0].parameters.type = 'pattern'
 		file.subMarkersControls[0].parameters.patternUrl = absoluteBaseURL + 'examples/marker-training/examples/pattern-files/pattern-hiro.patt'
-	}else if( trackingBackend === 'aruco' ){
-		file.subMarkersControls[0].parameters.type = 'barcode'
-		file.subMarkersControls[0].parameters.barcodeValue = 1001
 	}else console.assert(false)
-	
+
 	// json.strinfy the value and store it in localStorage
 	return file
 }
@@ -4931,7 +4815,7 @@ ARjs.MarkersAreaUtils.createDefaultMultiMarkerFile = function(trackingBackend){
 
 /**
  * Create a default controls parameters for the multi-marker learner
- * 
+ *
  * @param {String} trackingBackend - the tracking backend to use
  * @return {Object} - json object containing the controls parameters
  */
@@ -4969,33 +4853,6 @@ ARjs.MarkersAreaUtils.createDefaultMarkersControlsParameters = function(tracking
 				type : 'pattern',
 				patternUrl : absoluteBaseURL + 'examples/marker-training/examples/pattern-files/pattern-letterF.patt',
 			},
-		]		
-	}else if( trackingBackend === 'aruco' ){
-		var markersControlsParameters = [
-			{
-				type : 'barcode',
-				barcodeValue: 1001,
-			},
-			{
-				type : 'barcode',
-				barcodeValue: 1002,
-			},
-			{
-				type : 'barcode',
-				barcodeValue: 1003,
-			},
-			{
-				type : 'barcode',
-				barcodeValue: 1004,
-			},
-			{
-				type : 'barcode',
-				barcodeValue: 1005,
-			},
-			{
-				type : 'barcode',
-				barcodeValue: 1006,
-			},
 		]
 	}else console.assert(false)
 	return markersControlsParameters
@@ -5019,7 +4876,7 @@ ARjs.MarkersAreaUtils.storeMarkersAreaFileFromResolution = function (trackingBac
 //////////////////////////////////////////////////////////////////////////////
 //		Code Separator
 //////////////////////////////////////////////////////////////////////////////
-	
+
 ARjs.MarkersAreaUtils.buildMarkersAreaFileFromResolution = function(trackingBackend, resolutionW, resolutionH){
 	// create the base file
 	var file = {
@@ -5032,7 +4889,7 @@ ARjs.MarkersAreaUtils.buildMarkersAreaFileFromResolution = function(trackingBack
 			// empty for now...
 		]
 	}
-	
+
 	var whiteMargin = 0.1
 	if( resolutionW > resolutionH ){
 		var markerImageSize = 0.4 * resolutionH
@@ -5045,7 +4902,7 @@ ARjs.MarkersAreaUtils.buildMarkersAreaFileFromResolution = function(trackingBack
 
 	// console.warn('using new markerImageSize computation')
 	var actualMarkerSize = markerImageSize * (1 - 2*whiteMargin)
-	
+
 	var deltaX = (resolutionW - markerImageSize)/2 / actualMarkerSize
 	var deltaZ = (resolutionH - markerImageSize)/2 / actualMarkerSize
 
@@ -5054,18 +4911,18 @@ ARjs.MarkersAreaUtils.buildMarkersAreaFileFromResolution = function(trackingBack
 
 	var subMarkerControls = buildSubMarkerControls('topleft', -deltaX, -deltaZ)
 	file.subMarkersControls.push(subMarkerControls)
-	
+
 	var subMarkerControls = buildSubMarkerControls('topright', +deltaX, -deltaZ)
 	file.subMarkersControls.push(subMarkerControls)
 
 	var subMarkerControls = buildSubMarkerControls('bottomleft', -deltaX, +deltaZ)
 	file.subMarkersControls.push(subMarkerControls)
-	
+
 	var subMarkerControls = buildSubMarkerControls('bottomright', +deltaX, +deltaZ)
 	file.subMarkersControls.push(subMarkerControls)
 
 	return file
-	
+
 	//////////////////////////////////////////////////////////////////////////////
 	//		Code Separator
 	//////////////////////////////////////////////////////////////////////////////
@@ -5080,8 +4937,6 @@ ARjs.MarkersAreaUtils.buildMarkersAreaFileFromResolution = function(trackingBack
 		// fill the parameters
 		if( trackingBackend === 'artoolkit' ){
 			layout2MarkerParametersArtoolkit(subMarkersControls.parameters, layout)
-		}else if( trackingBackend === 'aruco' ){
-			layout2MarkerParametersAruco(subMarkersControls.parameters, layout)
 		}else console.assert(false)
 		// return subMarkersControls
 		return subMarkersControls
@@ -5092,7 +4947,7 @@ ARjs.MarkersAreaUtils.buildMarkersAreaFileFromResolution = function(trackingBack
 		var link = document.createElement('a')
 		link.href = ARjs.Context.baseURL
 		var absoluteBaseURL = link.href
-			
+
 		var layout2PatternUrl = {
 			'center' : convertRelativeUrlToAbsolute(absoluteBaseURL + 'examples/marker-training/examples/pattern-files/pattern-hiro.patt'),
 			'topleft' : convertRelativeUrlToAbsolute(absoluteBaseURL + 'examples/marker-training/examples/pattern-files/pattern-letterA.patt'),
@@ -5109,19 +4964,6 @@ ARjs.MarkersAreaUtils.buildMarkersAreaFileFromResolution = function(trackingBack
 			tmpLink.href = relativeUrl
 			return tmpLink.href
 		}
-	}
-
-	function layout2MarkerParametersAruco(parameters, layout){
-		var layout2Barcode = {
-			'center' : 1001,
-			'topleft' : 1002,
-			'topright' : 1003,
-			'bottomleft' : 1004,
-			'bottomright' : 1005,
-		}
-		console.assert(layout2Barcode[layout])
-		parameters.type = 'barcode'
-		parameters.barcodeValue = layout2Barcode[layout]
 	}
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -5239,8 +5081,6 @@ AFRAME.registerComponent('arjs-anchor', {
                 markerParameters.type = _this.data.type
                 markerParameters.patternUrl = _this.data.patternUrl;
                 markerParameters.markersAreaEnabled = false
-            } else {
-                // console.assert( this.data.preset === '', 'illegal preset value '+this.data.preset)
             }
 
             markerParameters.smooth = _this.data.smooth;
@@ -5315,8 +5155,6 @@ AFRAME.registerComponent('arjs-anchor', {
         } else if (_this._arAnchor.object3d.visible === false && wasVisible === true) {
             _this.el.emit('markerLost')
         }
-
-
     }
 })
 
@@ -5346,8 +5184,6 @@ AFRAME.registerPrimitive('a-anchor', AFRAME.utils.extendDeep({}, AFRAME.primitiv
         'hit-testing-enabled': 'arjs-hit-testing.enabled',
     }
 }))
-
-
 
 AFRAME.registerPrimitive('a-camera-static', AFRAME.utils.extendDeep({}, AFRAME.primitives.getMeshMixin(), {
     defaultComponents: {
@@ -5472,121 +5308,6 @@ AFRAME.registerComponent('arjs-hit-testing', {
 		hitTesting.update(camera, arAnchor.object3d, arAnchor.parameters.changeMatrixMode)
 	}
 });
-AFRAME.registerComponent('gps-camera-debug', {
-    init: function () {
-        this.current_coords_latitude;
-        this.current_coords_longitude;
-        this.origin_coords_latitude;
-        this.origin_coords_longitude;
-        this.camera_p_x;
-        this.camera_p_z;
-        this.entities = 0;
-
-        // initialize
-        this._buildCameraDebugUI(document.body);
-
-        // retrieve specific UI components
-        this.current_coords_latitude = document.querySelector('#current_coords_latitude');
-        this.current_coords_longitude = document.querySelector('#current_coords_longitude');
-        this.origin_coords_latitude = document.querySelector('#origin_coords_latitude');
-        this.origin_coords_longitude = document.querySelector('#origin_coords_longitude');
-        this.camera_p_x = document.querySelector('#camera_p_x');
-        this.camera_p_z = document.querySelector('#camera_p_z');
-
-        this.placesLoadedEventHandler = function() {
-            this.entities++;
-            var entities = document.querySelectorAll('[gps-entity-place]') && document.querySelectorAll('[gps-entity-place]').length || 0;
-
-            if (entities === this.entities) {
-                // all entities added, we can build debug UI
-                this._buildDistancesDebugUI();
-                window.removeEventListener('gps-entity-place-loaded', this.placesLoadedEventHandler.bind(this));
-                window.dispatchEvent(new CustomEvent('debug-ui-added'));
-            }
-        };
-
-        window.addEventListener('gps-entity-place-loaded', this.placesLoadedEventHandler.bind(this));
-    },
-    tick: function () {
-        var camera = document.querySelector('[gps-camera]');
-        var position = camera.getAttribute('position');
-
-        this.camera_p_x.innerText = position.x.toFixed(6);
-        this.camera_p_z.innerText = position.z.toFixed(6);
-
-        var gpsPosition = camera.components['gps-camera'];
-        if (gpsPosition) {
-            if (gpsPosition.currentCoords) {
-                this.current_coords_longitude.innerText = gpsPosition.currentCoords.longitude.toFixed(6);
-                this.current_coords_latitude.innerText = gpsPosition.currentCoords.latitude.toFixed(6);
-            }
-
-            if (gpsPosition.originCoords) {
-                this.origin_coords_longitude.innerText = gpsPosition.originCoords.longitude.toFixed(6);
-                this.origin_coords_latitude.innerText = gpsPosition.originCoords.latitude.toFixed(6);
-            }
-        }
-    },
-    /**
-     * Build and attach debug UI elements
-     *
-     * @param {HTMLElement} parent parent element where to attach debug UI elements
-     */
-    _buildCameraDebugUI: function(parent) {
-        var container = document.createElement('div');
-        container.classList.add('debug');
-
-        var currentLatLng = document.createElement('div');
-        currentLatLng.innerText = 'current lng/lat coords: ';
-        var spanLng = document.createElement('span');
-        spanLng.id = 'current_coords_longitude';
-        var spanLat = document.createElement('span');
-        spanLat.id = 'current_coords_latitude';
-        currentLatLng.appendChild(spanLng);
-        currentLatLng.appendChild(spanLat);
-
-        container.appendChild(currentLatLng);
-
-        var originLatLng = document.createElement('div');
-        originLatLng.innerText = 'origin lng/lat coords: ';
-        var originSpanLng = document.createElement('span');
-        originSpanLng.id = 'origin_coords_longitude';
-        var originSpanLat = document.createElement('span');
-        originSpanLat.id = 'origin_coords_latitude';
-        originLatLng.appendChild(originSpanLng);
-        originLatLng.appendChild(originSpanLat);
-
-        container.appendChild(originLatLng);
-
-        var cameraDiv = document.createElement('div');
-        cameraDiv.innerText = 'camera 3d position: ';
-        var cameraSpanX = document.createElement('span');
-        cameraSpanX.id = 'camera_p_x';
-        var cameraSpanZ = document.createElement('span');
-        cameraSpanZ.id = 'camera_p_z';
-
-        cameraDiv.appendChild(cameraSpanX);
-        cameraDiv.appendChild(cameraSpanZ);
-        container.appendChild(cameraDiv);
-
-        parent.appendChild(container);
-    },
-    /**
-     * Build distances UI elements
-     * @returns {void}
-     */
-    _buildDistancesDebugUI: function() {
-        var div = document.querySelector('.debug');
-        document.querySelectorAll('[gps-entity-place]').forEach(function(element) {
-            var debugDiv = document.createElement('div');
-            debugDiv.classList.add('debug-distance');
-            debugDiv.innerHTML = element.getAttribute('value');
-            console.log(element.getAttribute('value'));
-            debugDiv.setAttribute('value', element.getAttribute('value'));
-            div.appendChild(debugDiv);
-        });
-    },
-});
 AFRAME.registerComponent('gps-camera', {
     _watchPositionId: null,
     originCoords: null,
@@ -5617,9 +5338,25 @@ AFRAME.registerComponent('gps-camera', {
         minDistance: {
             type: 'int',
             default: 0,
+        },
+        maxDistance: {
+            type: 'int',
+            default: 0,
         }
     },
+    update: function() {
+        if (this.data.simulateLatitude !== 0 && this.data.simulateLongitude !== 0) {
+            localPosition = Object.assign({}, this.currentCoords || {});
+            localPosition.longitude = this.data.simulateLongitude;
+            localPosition.latitude = this.data.simulateLatitude;
+            localPosition.altitude = this.data.simulateAltitude;
+            this.currentCoords = localPosition;
 
+            // re-trigger initialization for new origin
+            this.originCoords = null;
+            this._updatePosition();
+        }
+    },
     init: function () {
         if (!this.el.components['look-controls']) {
             return;
@@ -5633,7 +5370,6 @@ AFRAME.registerComponent('gps-camera', {
             // if places are added after camera initialization is finished
             if (this.originCoords) {
                 window.dispatchEvent(new CustomEvent('gps-camera-origin-coord-set'));
-                console.debug('gps-camera-origin-coord-set');
             }
             if (this.loader && this.loader.parentElement) {
                 document.body.removeChild(this.loader)
@@ -5672,7 +5408,7 @@ AFRAME.registerComponent('gps-camera', {
         window.addEventListener(eventName, this._onDeviceOrientation, false);
 
         this._watchPositionId = this._initWatchGPS(function (position) {
-            if(this.data.simulateLatitude !== 0 && this.data.simulateLongitude !== 0) {
+            if (this.data.simulateLatitude !== 0 && this.data.simulateLongitude !== 0) {
                 localPosition = Object.assign({}, position.coords);
                 localPosition.longitude = this.data.simulateLongitude;
                 localPosition.latitude = this.data.simulateLatitude;
@@ -5682,7 +5418,6 @@ AFRAME.registerComponent('gps-camera', {
             else {
                 this.currentCoords = position.coords;
             }
-
 
             this._updatePosition();
         }.bind(this));
@@ -5789,10 +5524,9 @@ AFRAME.registerComponent('gps-camera', {
 
             var loader = document.querySelector('.arjs-loader');
             if (loader) {
-                document.body.removeChild(loader)
+                loader.remove();
             }
             window.dispatchEvent(new CustomEvent('gps-camera-origin-coord-set'));
-            console.debug('gps-camera-origin-coord-set');
         } else {
             this._setPosition();
         }
@@ -5821,8 +5555,7 @@ AFRAME.registerComponent('gps-camera', {
         // update position
         this.el.setAttribute('position', position);
 
-
-        window.dispatchEvent(new CustomEvent('gps-camera-update-position', { detail: { position: this.currentCoords, origin: this.originCoords }}));
+        window.dispatchEvent(new CustomEvent('gps-camera-update-position', { detail: { position: this.currentCoords, origin: this.originCoords } }));
     },
     /**
      * Returns distance in meters between source and destination inputs.
@@ -5845,8 +5578,14 @@ AFRAME.registerComponent('gps-camera', {
         var distance = angle * 6378160;
 
         // if function has been called for a place, and if it's too near and a min distance has been set,
-        // return max distance possible - to be handled by the  method caller
+        // return max distance possible - to be handled by the caller
         if (isPlace && this.data.minDistance && this.data.minDistance > 0 && distance < this.data.minDistance) {
+            return Number.MAX_SAFE_INTEGER;
+        }
+
+        // if function has been called for a place, and if it's too far and a max distance has been set,
+        // return max distance possible - to be handled by the caller
+        if (isPlace && this.data.maxDistance && this.data.maxDistance > 0 && distance > this.data.maxDistance) {
             return Number.MAX_SAFE_INTEGER;
         }
 
@@ -5945,8 +5684,13 @@ AFRAME.registerComponent('gps-entity-place', {
             default: 0,
         }
     },
-    init: function () {
-        window.addEventListener('gps-camera-origin-coord-set', function () {
+    remove: function() {
+        // cleaning listeners when the entity is removed from the DOM
+        window.removeEventListener('gps-camera-origin-coord-set', this.coordSetListener);
+        window.removeEventListener('gps-camera-update-position', this.updatePositionListener);
+    },
+    init: function() {
+        this.coordSetListener = () => {
             if (!this._cameraGps) {
                 var camera = document.querySelector('[gps-camera]');
                 if (!camera.components['gps-camera']) {
@@ -5955,11 +5699,10 @@ AFRAME.registerComponent('gps-entity-place', {
                 }
                 this._cameraGps = camera.components['gps-camera'];
             }
-
             this._updatePosition();
-        }.bind(this));
+        };
 
-        window.addEventListener('gps-camera-update-position', function (ev) {
+        this.updatePositionListener = (ev) => {
             if (!this.data || !this._cameraGps) {
                 return;
             }
@@ -5970,33 +5713,45 @@ AFRAME.registerComponent('gps-entity-place', {
             };
 
             // it's actually a 'distance place', but we don't call it with last param, because we want to retrieve distance even if it's < minDistance property
-            var distance = this._cameraGps.computeDistanceMeters(ev.detail.position, dstCoords);
+            var distanceForMsg = this._cameraGps.computeDistanceMeters(ev.detail.position, dstCoords);
 
-            this.el.setAttribute('distance', distance);
-            this.el.setAttribute('distanceMsg', formatDistance(distance));
-            this.el.dispatchEvent(new CustomEvent('gps-entity-place-update-positon', { detail: { distance: distance } }));
-        }.bind(this));
+            this.el.setAttribute('distance', distanceForMsg);
+            this.el.setAttribute('distanceMsg', formatDistance(distanceForMsg));
+            this.el.dispatchEvent(new CustomEvent('gps-entity-place-update-positon', { detail: { distance: distanceForMsg } }));
+
+            var actualDistance = this._cameraGps.computeDistanceMeters(ev.detail.position, dstCoords, true);
+
+            if (actualDistance === Number.MAX_SAFE_INTEGER) {
+                this.hideForMinDistance(this.el, true);
+            } else {
+                this.hideForMinDistance(this.el, false);
+            }
+        };
+
+        window.addEventListener('gps-camera-origin-coord-set', this.coordSetListener);
+        window.addEventListener('gps-camera-update-position', this.updatePositionListener);
 
         this._positionXDebug = 0;
 
-        window.dispatchEvent(new CustomEvent('gps-entity-place-added'));
-        console.debug('gps-entity-place-added');
-
-        this.debugUIAddedHandler = function () {
-            this.setDebugData(this.el);
-            window.removeEventListener('debug-ui-added', this.debugUIAddedHandler.bind(this));
-        };
-
-        window.addEventListener('debug-ui-added', this.debugUIAddedHandler.bind(this));
+        window.dispatchEvent(new CustomEvent('gps-entity-place-added', { detail: { component: this.el } }));
     },
-
+    /**
+     * Hide entity according to minDistance property
+     * @returns {void}
+     */
+    hideForMinDistance: function(el, hideEntity) {
+        if (hideEntity) {
+            el.setAttribute('visible', 'false');
+        } else {
+            el.setAttribute('visible', 'true');
+        }
+    },
     /**
      * Update place position
      * @returns {void}
      */
-    _updatePosition: function () {
+    _updatePosition: function() {
         var position = { x: 0, y: this.el.getAttribute('position').y || 0, z: 0 }
-        var hideEntity = false;
 
         // update position.x
         var dstCoords = {
@@ -6004,12 +5759,7 @@ AFRAME.registerComponent('gps-entity-place', {
             latitude: this._cameraGps.originCoords.latitude,
         };
 
-        position.x = this._cameraGps.computeDistanceMeters(this._cameraGps.originCoords, dstCoords, true);
-
-        // place has to be hide
-        if (position.x === Number.MAX_SAFE_INTEGER) {
-            hideEntity = true;
-        }
+        position.x = this._cameraGps.computeDistanceMeters(this._cameraGps.originCoords, dstCoords);
 
         this._positionXDebug = position.x;
 
@@ -6021,41 +5771,572 @@ AFRAME.registerComponent('gps-entity-place', {
             latitude: this.data.latitude,
         };
 
-        position.z = this._cameraGps.computeDistanceMeters(this._cameraGps.originCoords, dstCoords, true);
-
-        // place has to be hide
-        if (position.z === Number.MAX_SAFE_INTEGER) {
-            hideEntity = true;
-        }
+        position.z = this._cameraGps.computeDistanceMeters(this._cameraGps.originCoords, dstCoords);
 
         position.z *= this.data.latitude > this._cameraGps.originCoords.latitude ? -1 : 1;
 
         if (position.y !== 0) {
-            position.y = position.y - this._cameraGps.originCoords.altitude;
-        }
-
-        if (hideEntity) {
-            this.el.setAttribute('visible', false);
-        } else {
-            this.el.setAttribute('visible', true);
+            var altitude = this._cameraGps.originCoords.altitude !== undefined ? this._cameraGps.originCoords.altitude : 0;
+            position.y = position.y - altitude;
         }
 
         // update element's position in 3D world
         this.el.setAttribute('position', position);
     },
+});
+
+/**
+ * Format distances string
+ *
+ * @param {String} distance
+ */
+function formatDistance(distance) {
+    distance = distance.toFixed(0);
+
+    if (distance >= 1000) {
+        return (distance / 1000) + ' kilometers';
+    }
+
+    return distance + ' meters';
+};
+/** gps-projected-camera
+ *
+ * based on the original gps-camera, modified by nickw 02/04/20
+ *
+ * Rather than keeping track of position by calculating the distance of
+ * entities or the current location to the original location, this version
+ * makes use of the "Google" Spherical Mercactor projection, aka epsg:3857.
+ *
+ * The original position (lat/lon) is projected into Spherical Mercator and
+ * stored.
+ *
+ * Then, when we receive a new position (lat/lon), this new position is
+ * projected into Spherical Mercator and then its world position calculated
+ * by comparing against the original position.
+ *
+ * The same is also the case for 'entity-places'; when these are added, their
+ * Spherical Mercator coords are calculated (see gps-projected-entity-place).
+ *
+ * Spherical Mercator units are close to, but not exactly, metres, and are
+ * heavily distorted near the poles. Nonetheless they are a good approximation
+ * for many areas of the world and appear not to cause unacceptable distortions
+ * when used as the units for AR apps.
+ */
+
+AFRAME.registerComponent('gps-projected-camera', {
+    _watchPositionId: null,
+    originCoordsProjected: null, // original coords now in Spherical Mercator
+    currentCoords: null,
+    lookControls: null,
+    heading: null,
+    schema: {
+        simulateLatitude: {
+            type: 'number',
+            default: 0,
+        },
+        simulateLongitude: {
+            type: 'number',
+            default: 0,
+        },
+        simulateAltitude: {
+            type: 'number',
+            default: 0,
+        },
+        positionMinAccuracy: {
+            type: 'int',
+            default: 100,
+        },
+        alert: {
+            type: 'boolean',
+            default: false,
+        },
+        minDistance: {
+            type: 'int',
+            default: 0,
+        }
+    },
+    update: function() {
+        if (this.data.simulateLatitude !== 0 && this.data.simulateLongitude !== 0) {
+            localPosition = Object.assign({}, this.currentCoords || {});
+            localPosition.longitude = this.data.simulateLongitude;
+            localPosition.latitude = this.data.simulateLatitude;
+            localPosition.altitude = this.data.simulateAltitude;
+            this.currentCoords = localPosition;
+
+            // re-trigger initialization for new origin
+            this.originCoordsProjected = null;
+            this._updatePosition();
+        }
+    },
+    init: function () {
+        if (!this.el.components['look-controls']) {
+            return;
+        }
+
+        this.loader = document.createElement('DIV');
+        this.loader.classList.add('arjs-loader');
+        document.body.appendChild(this.loader);
+
+        window.addEventListener('gps-entity-place-added', function () {
+            // if places are added after camera initialization is finished
+            if (this.originCoordsProjected) {
+                window.dispatchEvent(new CustomEvent('gps-camera-origin-coord-set'));
+            }
+            if (this.loader && this.loader.parentElement) {
+                document.body.removeChild(this.loader)
+            }
+        }.bind(this));
+
+        this.lookControls = this.el.components['look-controls'];
+
+        // listen to deviceorientation event
+        var eventName = this._getDeviceOrientationEventName();
+        this._onDeviceOrientation = this._onDeviceOrientation.bind(this);
+
+        // if Safari
+        if (!!navigator.userAgent.match(/Version\/[\d.]+.*Safari/)) {
+            // iOS 13+
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                var handler = function () {
+                    console.log('Requesting device orientation permissions...')
+                    DeviceOrientationEvent.requestPermission();
+                    document.removeEventListener('touchend', handler);
+                };
+
+                document.addEventListener('touchend', function () { handler() }, false);
+
+                alert('After camera permission prompt, please tap the screen to activate geolocation.');
+            } else {
+                var timeout = setTimeout(function () {
+                    alert('Please enable device orientation in Settings > Safari > Motion & Orientation Access.')
+                }, 750);
+                window.addEventListener(eventName, function () {
+                    clearTimeout(timeout);
+                });
+            }
+        }
+
+        window.addEventListener(eventName, this._onDeviceOrientation, false);
+
+        this._watchPositionId = this._initWatchGPS(function (position) {
+            if (this.data.simulateLatitude !== 0 && this.data.simulateLongitude !== 0) {
+                localPosition = Object.assign({}, position.coords);
+                localPosition.longitude = this.data.simulateLongitude;
+                localPosition.latitude = this.data.simulateLatitude;
+                localPosition.altitude = this.data.simulateAltitude;
+                this.currentCoords = localPosition;
+            }
+            else {
+                this.currentCoords = position.coords;
+            }
+
+            this._updatePosition();
+        }.bind(this));
+    },
+
+    tick: function () {
+        if (this.heading === null) {
+            return;
+        }
+        this._updateRotation();
+    },
+
+    remove: function () {
+        if (this._watchPositionId) {
+            navigator.geolocation.clearWatch(this._watchPositionId);
+        }
+        this._watchPositionId = null;
+
+        var eventName = this._getDeviceOrientationEventName();
+        window.removeEventListener(eventName, this._onDeviceOrientation, false);
+    },
 
     /**
-     * Set places distances from user on debug UI
+     * Get device orientation event name, depends on browser implementation.
+     * @returns {string} event name
+     */
+    _getDeviceOrientationEventName: function () {
+        if ('ondeviceorientationabsolute' in window) {
+            var eventName = 'deviceorientationabsolute'
+        } else if ('ondeviceorientation' in window) {
+            var eventName = 'deviceorientation'
+        } else {
+            var eventName = ''
+            console.error('Compass not supported')
+        }
+
+        return eventName
+    },
+
+    /**
+     * Get current user position.
+     *
+     * @param {function} onSuccess
+     * @param {function} onError
+     * @returns {Promise}
+     */
+    _initWatchGPS: function (onSuccess, onError) {
+        if (!onError) {
+            onError = function (err) {
+                console.warn('ERROR(' + err.code + '): ' + err.message)
+
+                if (err.code === 1) {
+                    // User denied GeoLocation, let their know that
+                    alert('Please activate Geolocation and refresh the page. If it is already active, please check permissions for this website.');
+                    return;
+                }
+
+                if (err.code === 3) {
+                    alert('Cannot retrieve GPS position. Signal is absent.');
+                    return;
+                }
+            };
+        }
+
+        if ('geolocation' in navigator === false) {
+            onError({ code: 0, message: 'Geolocation is not supported by your browser' });
+            return Promise.resolve();
+        }
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/watchPosition
+        return navigator.geolocation.watchPosition(onSuccess, onError, {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 27000,
+        });
+    },
+
+    /**
+     * Update user position.
+     *
      * @returns {void}
      */
-    setDebugData: function (element) {
-        var elements = document.querySelectorAll('.debug-distance');
-        elements.forEach(function (el) {
-            var distance = formatDistance(this._positionXDebug);
-            if (element.getAttribute('value') == el.getAttribute('value')) {
-                el.innerHTML = el.getAttribute('value') + ': ' + distance + 'far';
+    _updatePosition: function () {
+        // don't update if accuracy is not good enough
+        if (this.currentCoords.accuracy > this.data.positionMinAccuracy) {
+            if (this.data.alert && !document.getElementById('alert-popup')) {
+                var popup = document.createElement('div');
+                popup.innerHTML = 'GPS signal is very poor. Try move outdoor or to an area with a better signal.'
+                popup.setAttribute('id', 'alert-popup');
+                document.body.appendChild(popup);
             }
-        });
+            return;
+        }
+
+        var alertPopup = document.getElementById('alert-popup');
+        if (this.currentCoords.accuracy <= this.data.positionMinAccuracy && alertPopup) {
+            document.body.removeChild(alertPopup);
+        }
+
+        if (!this.originCoordsProjected) {
+            // first camera initialization
+            // Now store originCoordsProjected as PROJECTED original lat/lon, so that
+            // we can set the world origin to the original position in "metres"
+            this.originCoordsProjected = this._project(this.currentCoords.latitude, this.currentCoords.longitude);
+            this._setPosition();
+
+            var loader = document.querySelector('.arjs-loader');
+            if (loader) {
+                loader.remove();
+            }
+            window.dispatchEvent(new CustomEvent('gps-camera-origin-coord-set'));
+        } else {
+            this._setPosition();
+        }
+    },
+    /**
+     * Set the current position (in world coords, based on Spherical Mercator)
+     *
+     * @returns {void}
+     */
+    _setPosition: function () {
+        var position = this.el.getAttribute('position');
+
+        var worldCoords = this.latLonToWorld(this.currentCoords.latitude, this.currentCoords.longitude);
+
+        position.x = worldCoords[0];
+        position.z = worldCoords[1]; 
+
+        // update position
+        this.el.setAttribute('position', position);
+
+        // add the sphmerc position to the event (for testing only)
+        window.dispatchEvent(new CustomEvent('gps-camera-update-position', { detail: { position: this.currentCoords, origin: this.originCoordsProjected } }));
+    },
+    /**
+     * Returns distance in meters between camera and destination input.
+     *
+     * Assume we are using a metre-based projection. Not all 'metre-based'
+     * projections give exact metres, e.g. Spherical Mercator, but it appears 
+     * close enough to be used for AR at least in middle temperate 
+     * latitudes (40 - 55). It is heavily distorted near the poles, however.
+     *
+     * @param {Position} dest
+     * @param {Boolean} isPlace
+     *
+     * @returns {number} distance | Number.MAX_SAFE_INTEGER
+     */
+    computeDistanceMeters: function (dest, isPlace) {
+        var src = this.el.getAttribute("position");
+        var dx = dest.x - src.x;
+        var dz = dest.z - src.z;
+        var distance = Math.sqrt(dx * dx + dz * dz);
+
+        // if function has been called for a place, and if it's too near and a min distance has been set,
+        // return max distance possible - to be handled by the  method caller
+        if (isPlace && this.data.minDistance && this.data.minDistance > 0 && distance < this.data.minDistance) {
+            return Number.MAX_SAFE_INTEGER;
+        }
+
+        return distance;
+    },
+    /**
+     * Converts latitude/longitude to OpenGL world coordinates. 
+     *
+     * First projects lat/lon to absolute Spherical Mercator and then 
+     * calculates the world coordinates by comparing the Spherical Mercator
+     * coordinates with the Spherical Mercator coordinates of the origin point.
+     *
+     * @param {Number} lat 
+     * @param {Number} lon 
+     *
+     * @returns {array} world coordinates 
+     */
+    latLonToWorld: function(lat, lon) {
+        var projected = this._project (lat, lon);
+        // Sign of z needs to be reversed compared to projected coordinates
+        return [ projected[0] - this.originCoordsProjected[0], -(projected[1] - this.originCoordsProjected[1]) ];
+    },
+    /**
+     * Converts latitude/longitude to Spherical Mercator coordinates. 
+     * Algorithm is used in several OpenStreetMap-related applications.
+     *
+     * @param {Number} lat 
+     * @param {Number} lon 
+     *
+     * @returns {array} Spherical Mercator coordinates 
+     */
+    _project: function (lat, lon) {
+        const HALF_EARTH = 20037508.34;
+
+        // Convert the supplied coords to Spherical Mercator (EPSG:3857), also
+        // known as 'Google Projection', using the algorithm used extensively 
+        // in various OpenStreetMap software.
+        var y = Math.log(Math.tan((90 + lat) * Math.PI / 360.0)) / (Math.PI / 180.0);
+        return [ (lon / 180.0) * HALF_EARTH, y * HALF_EARTH / 180.0 ];
+    },
+    /**
+     * Converts Spherical Mercator coordinates to latitude/longitude.
+     * Algorithm is used in several OpenStreetMap-related applications.
+     *
+     * @param {Number} spherical mercator easting 
+     * @param {Number} spherical mercator northing 
+     *
+     * @returns {object} lon/lat
+     */
+    _unproject: function (e, n) {
+        const HALF_EARTH = 20037508.34;
+        var yp = (n / HALF_EARTH) * 180.0;
+        return { 
+            longitude: (e / HALF_EARTH) * 180.0,
+            latitude: 180.0 / Math.PI * (2 * Math.atan(Math.exp(yp * Math.PI / 180.0)) - Math.PI / 2)
+        };
+    },
+    /**
+     * Compute compass heading.
+     *
+     * @param {number} alpha
+     * @param {number} beta
+     * @param {number} gamma
+     *
+     * @returns {number} compass heading
+     */
+    _computeCompassHeading: function (alpha, beta, gamma) {
+
+        // Convert degrees to radians
+        var alphaRad = alpha * (Math.PI / 180);
+        var betaRad = beta * (Math.PI / 180);
+        var gammaRad = gamma * (Math.PI / 180);
+
+        // Calculate equation components
+        var cA = Math.cos(alphaRad);
+        var sA = Math.sin(alphaRad);
+        var sB = Math.sin(betaRad);
+        var cG = Math.cos(gammaRad);
+        var sG = Math.sin(gammaRad);
+
+        // Calculate A, B, C rotation components
+        var rA = - cA * sG - sA * sB * cG;
+        var rB = - sA * sG + cA * sB * cG;
+
+        // Calculate compass heading
+        var compassHeading = Math.atan(rA / rB);
+
+        // Convert from half unit circle to whole unit circle
+        if (rB < 0) {
+            compassHeading += Math.PI;
+        } else if (rA < 0) {
+            compassHeading += 2 * Math.PI;
+        }
+
+        // Convert radians to degrees
+        compassHeading *= 180 / Math.PI;
+
+        return compassHeading;
+    },
+
+    /**
+     * Handler for device orientation event.
+     *
+     * @param {Event} event
+     * @returns {void}
+     */
+    _onDeviceOrientation: function (event) {
+        if (event.webkitCompassHeading !== undefined) {
+            if (event.webkitCompassAccuracy < 50) {
+                this.heading = event.webkitCompassHeading;
+            } else {
+                console.warn('webkitCompassAccuracy is event.webkitCompassAccuracy');
+            }
+        } else if (event.alpha !== null) {
+            if (event.absolute === true || event.absolute === undefined) {
+                this.heading = this._computeCompassHeading(event.alpha, event.beta, event.gamma);
+            } else {
+                console.warn('event.absolute === false');
+            }
+        } else {
+            console.warn('event.alpha === null');
+        }
+    },
+
+    /**
+     * Update user rotation data.
+     *
+     * @returns {void}
+     */
+    _updateRotation: function () {
+        var heading = 360 - this.heading;
+        var cameraRotation = this.el.getAttribute('rotation').y;
+        var yawRotation = THREE.Math.radToDeg(this.lookControls.yawObject.rotation.y);
+        var offset = (heading - (cameraRotation - yawRotation)) % 360;
+        this.lookControls.yawObject.rotation.y = THREE.Math.degToRad(offset);
+    },
+});
+/** gps-projected-entity-place
+ *
+ * based on the original gps-entity-place, modified by nickw 02/04/20
+ *
+ * Rather than keeping track of position by calculating the distance of
+ * entities or the current location to the original location, this version
+ * makes use of the "Google" Spherical Mercactor projection, aka epsg:3857.
+ *
+ * The original location on startup (lat/lon) is projected into Spherical 
+ * Mercator and stored.
+ *
+ * When 'entity-places' are added, their Spherical Mercator coords are 
+ * calculated and converted into world coordinates, relative to the original
+ * position, using the Spherical Mercator projection calculation in
+ * gps-projected-camera.
+ *
+ * Spherical Mercator units are close to, but not exactly, metres, and are
+ * heavily distorted near the poles. Nonetheless they are a good approximation
+ * for many areas of the world and appear not to cause unacceptable distortions
+ * when used as the units for AR apps.
+ */
+AFRAME.registerComponent('gps-projected-entity-place', {
+    _cameraGps: null,
+    schema: {
+        longitude: {
+            type: 'number',
+            default: 0,
+        },
+        latitude: {
+            type: 'number',
+            default: 0,
+        }
+    },
+    remove: function() {
+        // cleaning listeners when the entity is removed from the DOM
+        window.removeEventListener('gps-camera-update-position', this.updatePositionListener);
+    },
+    init: function() {
+        // Used now to get the GPS camera when it's been setup
+        this.coordSetListener = () => {
+            if (!this._cameraGps) {
+                var camera = document.querySelector('[gps-projected-camera]');
+                if (!camera.components['gps-projected-camera']) {
+                    console.error('gps-projected-camera not initialized')
+                    return;
+                }
+                this._cameraGps = camera.components['gps-projected-camera'];
+                this._updatePosition();
+            }
+        };
+        
+
+
+        // update position needs to worry about distance but nothing else?
+        this.updatePositionListener = (ev) => {
+            if (!this.data || !this._cameraGps) {
+                return;
+            }
+
+            var dstCoords = this.el.getAttribute('position');
+
+            // it's actually a 'distance place', but we don't call it with last param, because we want to retrieve distance even if it's < minDistance property
+            // _computeDistanceMeters is now going to use the projected
+            var distanceForMsg = this._cameraGps.computeDistanceMeters(dstCoords);
+
+            this.el.setAttribute('distance', distanceForMsg);
+            this.el.setAttribute('distanceMsg', formatDistance(distanceForMsg));
+
+            this.el.dispatchEvent(new CustomEvent('gps-entity-place-update-positon', { detail: { distance: distanceForMsg } }));
+
+            var actualDistance = this._cameraGps.computeDistanceMeters(dstCoords, true);
+
+            if (actualDistance === Number.MAX_SAFE_INTEGER) {
+                this.hideForMinDistance(this.el, true);
+            } else {
+                this.hideForMinDistance(this.el, false);
+            }
+        };
+
+        // Retain as this event is fired when the GPS camera is set up
+        window.addEventListener('gps-camera-origin-coord-set', this.coordSetListener);
+        window.addEventListener('gps-camera-update-position', this.updatePositionListener);
+
+        this._positionXDebug = 0;
+
+        window.dispatchEvent(new CustomEvent('gps-entity-place-added', { detail: { component: this.el } }));
+    },
+    /**
+     * Hide entity according to minDistance property
+     * @returns {void}
+     */
+    hideForMinDistance: function(el, hideEntity) {
+        if (hideEntity) {
+            el.setAttribute('visible', 'false');
+        } else {
+            el.setAttribute('visible', 'true');
+        }
+    },
+    /**
+     * Update place position
+     * @returns {void}
+     */
+
+    // set position to world coords using the lat/lon 
+    _updatePosition: function() {
+        var worldPos = this._cameraGps.latLonToWorld(this.data.latitude, this.data.longitude);
+        var position = this.el.getAttribute('position');
+
+        // update element's position in 3D world
+        //this.el.setAttribute('position', position);
+        this.el.setAttribute('position', {
+            x: worldPos[0],
+            y: position.y, 
+            z: worldPos[1]
+        }); 
     },
 });
 
@@ -6081,7 +6362,7 @@ AFRAME.registerSystem('arjs', {
         },
         debugUIEnabled: {
             type: 'boolean',
-            default: true,
+            default: false,
         },
         areaLearningButton: {
             type: 'boolean',
@@ -6090,6 +6371,10 @@ AFRAME.registerSystem('arjs', {
         performanceProfile: {
             type: 'string',
             default: 'default',
+        },
+        labelingMode: {
+            type: 'string',
+            default: '',
         },
         // old parameters
         debug: {
@@ -6107,10 +6392,6 @@ AFRAME.registerSystem('arjs', {
         patternRatio: {
             type: 'number',
             default: -1,
-        },
-        labelingMode: {
-            type: 'string',
-            default: '',
         },
         cameraParametersUrl: {
             type: 'string',
@@ -6162,10 +6443,8 @@ AFRAME.registerSystem('arjs', {
     //		Code Separator
     //////////////////////////////////////////////////////////////////////////////
 
-
     init: function () {
         var _this = this
-
 
         //////////////////////////////////////////////////////////////////////////////
         //		setup arProfile
@@ -6175,8 +6454,6 @@ AFRAME.registerSystem('arjs', {
             .trackingMethod(this.data.trackingMethod)
             .performance(this.data.performanceProfile)
             .defaultMarker()
-
-
 
         //////////////////////////////////////////////////////////////////////////////
         //		honor this.data and setup arProfile with it
@@ -6255,7 +6532,6 @@ AFRAME.registerSystem('arjs', {
                 }
             }
 
-
             //////////////////////////////////////////////////////////////////////////////
             //		honor .debugUIEnabled
             //////////////////////////////////////////////////////////////////////////////
@@ -6292,13 +6568,9 @@ AFRAME.registerSystem('arjs', {
         }, 1000 / 30)
     },
 
-    tick: function (now, delta) {
-        var _this = this
-
+    tick: function () {
         // skip it if not yet isInitialised
         if (this.isReady === false) return
-
-        var arSession = this._arSession
 
         // update arSession
         this._arSession.update()
