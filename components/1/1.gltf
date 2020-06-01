@@ -1,0 +1,500 @@
+{
+    "asset": {
+        "generator": "FBX2glTF v0.9.7",
+        "version": "2.0"
+    },
+    "scene": 0,
+    "buffers": [
+        {
+            "byteLength": 957060,
+            "uri": "buffer.bin"
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteLength": 65652,
+            "byteOffset": 0,
+            "target": 34963
+        },
+        {
+            "buffer": 0,
+            "byteLength": 101676,
+            "byteOffset": 65652,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 101676,
+            "byteOffset": 167328,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 67784,
+            "byteOffset": 269004,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 65592,
+            "byteOffset": 336788,
+            "target": 34963
+        },
+        {
+            "buffer": 0,
+            "byteLength": 123552,
+            "byteOffset": 402380,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 123552,
+            "byteOffset": 525932,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 82368,
+            "byteOffset": 649484,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 18372,
+            "byteOffset": 731852,
+            "target": 34963
+        },
+        {
+            "buffer": 0,
+            "byteLength": 26808,
+            "byteOffset": 750224,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 26808,
+            "byteOffset": 777032,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 17872,
+            "byteOffset": 803840,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 19506,
+            "byteOffset": 821712,
+            "target": 34963
+        },
+        {
+            "buffer": 0,
+            "byteLength": 43440,
+            "byteOffset": 841220,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 43440,
+            "byteOffset": 884660,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteLength": 28960,
+            "byteOffset": 928100,
+            "target": 34962
+        }
+    ],
+    "scenes": [
+        {
+            "name": "Root Scene",
+            "nodes": [
+                0
+            ]
+        }
+    ],
+    "accessors": [
+        {
+            "componentType": 5123,
+            "type": "SCALAR",
+            "count": 32826,
+            "bufferView": 0,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 8473,
+            "bufferView": 1,
+            "byteOffset": 0,
+            "min": [
+                -0.157623991370201,
+                -0.073299951851368,
+                -4.44089199923895e-18
+            ],
+            "max": [
+                0.170409008860588,
+                0.0907420292496681,
+                0.0656167939305305
+            ]
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 8473,
+            "bufferView": 2,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC2",
+            "count": 8473,
+            "bufferView": 3,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5123,
+            "type": "SCALAR",
+            "count": 32796,
+            "bufferView": 4,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 10296,
+            "bufferView": 5,
+            "byteOffset": 0,
+            "min": [
+                0.0171866286545992,
+                0.0223046876490116,
+                0.0393700785934925
+            ],
+            "max": [
+                0.154677495360374,
+                0.0812391936779022,
+                0.1017060354352
+            ]
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 10296,
+            "bufferView": 6,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC2",
+            "count": 10296,
+            "bufferView": 7,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5123,
+            "type": "SCALAR",
+            "count": 9186,
+            "bufferView": 8,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 2234,
+            "bufferView": 9,
+            "byteOffset": 0,
+            "min": [
+                0.0422522537410259,
+                -0.0590061843395233,
+                -0.0383718051016331
+            ],
+            "max": [
+                0.13817535340786,
+                0.0353657901287079,
+                0.0360892377793789
+            ]
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 2234,
+            "bufferView": 10,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC2",
+            "count": 2234,
+            "bufferView": 11,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5123,
+            "type": "SCALAR",
+            "count": 9753,
+            "bufferView": 12,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 3620,
+            "bufferView": 13,
+            "byteOffset": 0,
+            "min": [
+                0.100929476320744,
+                0.00157746486365795,
+                0.0393123514950275
+            ],
+            "max": [
+                0.115216627717018,
+                0.0158646181225777,
+                0.0918635129928589
+            ]
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC3",
+            "count": 3620,
+            "bufferView": 14,
+            "byteOffset": 0
+        },
+        {
+            "componentType": 5126,
+            "type": "VEC2",
+            "count": 3620,
+            "bufferView": 15,
+            "byteOffset": 0
+        }
+    ],
+    "samplers": [
+        {}
+    ],
+    "materials": [
+        {
+            "name": "Default material",
+            "alphaMode": "OPAQUE",
+            "extras": {
+                "fromFBX": {
+                    "shadingModel": "Phong",
+                    "isTruePBR": false
+                }
+            },
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.752941191196442,
+                    0.752941191196442,
+                    0.752941191196442,
+                    1.0
+                ],
+                "metallicFactor": 0.400000005960464,
+                "roughnessFactor": 0.877058029174805
+            }
+        }
+    ],
+    "meshes": [
+        {
+            "name": "平台",
+            "primitives": [
+                {
+                    "material": 0,
+                    "mode": 4,
+                    "attributes": {
+                        "NORMAL": 2,
+                        "POSITION": 1,
+                        "TEXCOORD_0": 3
+                    },
+                    "indices": 0
+                }
+            ]
+        },
+        {
+            "name": "风光发电装置",
+            "primitives": [
+                {
+                    "material": 0,
+                    "mode": 4,
+                    "attributes": {
+                        "NORMAL": 6,
+                        "POSITION": 5,
+                        "TEXCOORD_0": 7
+                    },
+                    "indices": 4
+                }
+            ]
+        },
+        {
+            "name": "波浪能",
+            "primitives": [
+                {
+                    "material": 0,
+                    "mode": 4,
+                    "attributes": {
+                        "NORMAL": 10,
+                        "POSITION": 9,
+                        "TEXCOORD_0": 11
+                    },
+                    "indices": 8
+                }
+            ]
+        },
+        {
+            "name": "通讯塔",
+            "primitives": [
+                {
+                    "material": 0,
+                    "mode": 4,
+                    "attributes": {
+                        "NORMAL": 14,
+                        "POSITION": 13,
+                        "TEXCOORD_0": 15
+                    },
+                    "indices": 12
+                }
+            ]
+        }
+    ],
+    "cameras": [
+        {
+            "name": "",
+            "type": "perspective",
+            "perspective": {
+                "znear": 304.799987792969,
+                "zfar": 121920.0,
+                "aspectRatio": 1.33333337306976,
+                "yfov": 0.438339442014694
+            }
+        }
+    ],
+    "nodes": [
+        {
+            "name": "RootNode",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "children": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "name": "{三维}",
+            "translation": [
+                -1.14186334609985,
+                4.3435001373291,
+                3.51734590530396
+            ],
+            "rotation": [
+                -0.187018215656281,
+                0.411896109580994,
+                0.0867869257926941,
+                0.887600064277649
+            ],
+            "scale": [
+                30.4799995422363,
+                30.4799995422363,
+                30.4799995422363
+            ],
+            "camera": 0
+        },
+        {
+            "name": "平台",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                -0.70710676908493,
+                -0.0,
+                0.0,
+                0.70710676908493
+            ],
+            "scale": [
+                30.4799995422363,
+                30.4799995422363,
+                30.4799995422363
+            ],
+            "mesh": 0
+        },
+        {
+            "name": "风光发电装置",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                -0.70710676908493,
+                -0.0,
+                0.0,
+                0.70710676908493
+            ],
+            "scale": [
+                30.4799995422363,
+                30.4799995422363,
+                30.4799995422363
+            ],
+            "mesh": 1
+        },
+        {
+            "name": "波浪能",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                -0.70710676908493,
+                -0.0,
+                0.0,
+                0.70710676908493
+            ],
+            "scale": [
+                30.4799995422363,
+                30.4799995422363,
+                30.4799995422363
+            ],
+            "mesh": 2
+        },
+        {
+            "name": "通讯塔",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                -0.70710676908493,
+                -0.0,
+                0.0,
+                0.70710676908493
+            ],
+            "scale": [
+                30.4799995422363,
+                30.4799995422363,
+                30.4799995422363
+            ],
+            "mesh": 3
+        }
+    ]
+}
