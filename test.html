@@ -14,7 +14,7 @@
         var r = 1;
         var theta = 0;
         setInterval(function() {
-            document.getElementById('rig').setAttribute('position', (3 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (3 * r * Math.cos(theta) - 4));
+            document.getElementById('rig').setAttribute('position', (3 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (3 * r * Math.cos(theta) - 3));
             theta += 0.03;
             if (theta > 2 * Math.PI) theta -= 2 * Math.PI;
             //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
