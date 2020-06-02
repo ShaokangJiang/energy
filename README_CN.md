@@ -1,5 +1,37 @@
 # 能量
 
+## 运行
+
+基本上，这个页面是一个Github页面，您可以访问[energy.shaokang.ga](energy.shaokang.ga).
+
+这是一个纯静态的JavaScript页面。所以任何人都可以自己轻松地主持。如果你不需要看一些3d效果，只需下载并点击每个文件就可以了。3D效果需要一些跨服务器的交互。
+
+要运行它并查看3d效果，我使用的方法是安装[Node.js](https://nodejs.org/en/download/)一开始。然后使用`npm install --global http-server`”安装http服务器。然后在任何目录中执行以下操作：
+
+```bash
+git clone https://github.com/ShaokangJiang/energy.git
+cd energy
+http-server
+
+```
+
+然后转到浏览器并转到`127.0.0.1:8080`即可。
+
+## 要求
+
+因为我使用类技术来构建LinkedList以用于生成图表，所以不支持IE。对于大多数浏览器也有一些要求，请参见[NPM官方网站]上的兼容性数据(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Browser_compatibility). 除了LinkedList之外，大多数功能都应该在IE11中工作。
+
+## 使用的JS库 
+
+- [echarts](https://echarts.apache.org/en/index.html)
+- [Materialcss](https://materializecss.com/)
+- [A-frame](https://aframe.io/)
+- [AR.js](https://ar-js-org.github.io/AR.js-Docs/)
+- [PapaParse](https://www.papaparse.com/)
+- [Jquery](https://jquery.com/)
+- [aframe-orbit-controls-component](https://github.com/tizzle/aframe-orbit-controls-component)
+- [jsLPSolver](https://github.com/JWally/jsLPSolver)
+
 ## 生成虚假仿真和优化数据
 
 #### 伪造的模拟数据

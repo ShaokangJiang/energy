@@ -2,6 +2,37 @@
 
 [中文](https://github.com/ShaokangJiang/energy/blob/master/README_CN.md).
 
+## Running
+
+Basically, this page is served as a Github page, you could visit at [energy.shaokang.ga](energy.shaokang.ga).
+
+This is a pure static page with JavaScript. So anybody is able to host it easily on your own. If you don't need to see some 3d effects, just download and click on each file would work. 3D effects require some cross-server interaction. 
+
+To run it and see the 3d effects, the way I use is to install [Node.js](https://nodejs.org/en/download/) at first. Then install the http-server using `npm install --global http-server`. Then do the following in any directory:
+
+```bash
+git clone https://github.com/ShaokangJiang/energy.git
+cd energy
+http-server
+```
+
+Then go to browser and go to `127.0.0.1:8080` should work.
+
+## Requirement
+
+Because I used the class technique to build LinkedList to use in generating charts, IE is not supported. And there are some requirements for the majority browser as well, see compatibility data at [NPM official site](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Browser_compatibility). Other than the LinkedList, most of features should work in IE 11.
+
+## JS libraries used
+
+- [echarts](https://echarts.apache.org/en/index.html)
+- [Materialcss](https://materializecss.com/)
+- [A-frame](https://aframe.io/)
+- [AR.js](https://ar-js-org.github.io/AR.js-Docs/)
+- [PapaParse](https://www.papaparse.com/)
+- [Jquery](https://jquery.com/)
+- [aframe-orbit-controls-component](https://github.com/tizzle/aframe-orbit-controls-component)
+- [jsLPSolver](https://github.com/JWally/jsLPSolver)
+
 ## Generate Fake Simulation and optimization data 
 
 #### Fake simulation data
