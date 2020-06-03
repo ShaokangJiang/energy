@@ -38,24 +38,16 @@ class LinkedList {
 
         // if list is Empty add the 
         // element and make it head 
-        if (this.head == null)
+        if (this.head == null) {
             this.head = node;
-        else {
+            this.tail = node;
+        } else {
             if (this.size >= this.limitation) this.removeFrom(0);
-            current = this.head;
 
-            // iterate to the end of the 
-            // list 
-            while (current.next) {
-                current = current.next;
-            }
-
-            // add node 
-            current.next = node;
-
+            this.tail.next = node;
+            this.tail = node;
         }
         this.size++;
-        this.tail = node;
 
     }
 
