@@ -20,8 +20,66 @@
     <script src="./js/aframe-v1.0.4.min.js"></script>
 
     <script>
-        document.write("<style>.parallax-container {height: " + parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.97 + "px;}</style>");
+        document.write("<style>.parallax-container {height: " + parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) + "px;}</style>");
     </script>
+
+    <style>
+        .scrolldown {
+            position: absolute;
+            bottom: 0px;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            transform: translateY(-80px) translateX(-50%) rotate(45deg);
+        }
+        
+        .scrolldown span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-bottom: 2px solid #fff;
+            border-right: 2px solid #fff;
+            animation: animate1 1.5s linear infinite;
+            opacity: 0;
+        }
+        
+        .scrolldown span:nth-child(1) {
+            transform: translate(-15px, -15px);
+            animation-delay: -0.4s;
+        }
+        
+        .scrolldown span:nth-child(2) {
+            transform: translate(0px, 0px);
+            animation-delay: -0.2s;
+        }
+        
+        .scrolldown span:nth-child(3) {
+            transform: translate(15px, 15px);
+            animation-delay: 0s;
+        }
+        
+        @keyframes animate1 {
+            0% {
+                top: -5px;
+                left: -5px;
+                opacity: 0;
+            }
+            25% {
+                top: 0px;
+                left: 0px;
+                opacity: 1;
+            }
+            50%,
+            100% {
+                top: 5px;
+                left: 5px;
+                opacity: 0;
+            }
+        }
+    </style>
 
     <body>
         <script>
@@ -141,26 +199,32 @@
                     <a-entity id="rig" position="0 0 0" rotation="0 0 0">
                         <a-camera id="camera"></a-camera>
                     </a-entity>
-                    		  <a-assets>
-    <a-asset-item id="main-obj" src="./components/main.obj"></a-asset-item>
-    <a-asset-item id="main-mtl" src="./components/main.mtl"></a-asset-item>
-  </a-assets>
+                    <a-assets>
+                        <a-asset-item id="main-obj" src="./components/main.obj"></a-asset-item>
+                        <a-asset-item id="main-mtl" src="./components/main.mtl"></a-asset-item>
+                    </a-assets>
 
-  <!-- Using the asset management system. -->
-  <a-obj-model src="#main-obj" mtl="#main-mtl"></a-obj-model>
-  
-<a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="0.58 1.17 -1.9" animation__wind1="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+                    <!-- Using the asset management system. -->
+                    <a-obj-model src="#main-obj" mtl="#main-mtl"></a-obj-model>
 
-<a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="2.62 1.17 -1.7" animation__wind2="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+                    <a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="0.58 1.17 -1.9" animation__wind1="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
 
-<a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="4.3 1.17 -0.72" animation__wind3="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+                    <a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="2.62 1.17 -1.7" animation__wind2="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
 
-<a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="1.68247 -0.76946 0.79956" animation__current1="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+                    <a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="4.3 1.17 -0.72" animation__wind3="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
 
-<a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="3.40132 -0.76996 -0.3325" animation__current2="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
-		
+                    <a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="1.68247 -0.76946 0.79956" animation__current1="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+
+                    <a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="3.40132 -0.76996 -0.3325" animation__current2="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+
                 </a-scene>
             </div>
+        </div>
+
+        <div class="scrolldown">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
         <div class="section white">
@@ -400,7 +464,7 @@
         <script src="./js/materialize.min.js"></script>
         <script>
             //  document.getElementById("parall").style.color = "blue";
-            document.getElementById("mainWindow").style = "position:relative;top:" + (-parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;margin-bottom: " + (20 - parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;";
+            //document.getElementById("mainWindow").style = "position:relative;top:" + (-parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;margin-bottom: " + (20 - parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;";
             M.AutoInit();
             var Model_Status = -1; //1:running 0:pause 2:terminate
             var file;
@@ -576,8 +640,8 @@
             if (request.QueryString("wind") == null || request.QueryString("light") == null || request.QueryString("wave") == null || request.QueryString("current") == null ||
                 request.QueryString("battery") == null) {
                 //UNCOMMENT THIS FIELD BEFORE FORMAL PUBLISH
-                alert("Invalid visit.");
-                window.location.href = "index.html";
+                //alert("Invalid visit.");
+                //window.location.href = "index.html";
             }
             var wind_limit = parseFloat(request.QueryString("wind"));
 
@@ -995,7 +1059,7 @@
                     var pre_battery_current = battery_current;
                     var inflowing = (wind_produced + light_produced + wave_produced + current_produced) * (freq / 1000) / 3600;
                     battery_current += inflowing - userConsumption;
-					//console.log((time - prevTime));
+                    //console.log((time - prevTime));
                     var batteryStatus = 0;
                     if (battery_current > battery_capacity) battery_current = battery_capacity;
                     document.getElementById("battery_inflow").innerText = inflowing.toFixed(2);
