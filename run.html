@@ -125,11 +125,11 @@
                 var r = 1;
                 var theta = 0;
                 setInterval(function() {
-                    document.getElementById('rig').setAttribute('position', (3 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (3 * r * Math.cos(theta) - 3));
-                    theta += 0.03;
+                    document.getElementById('rig').setAttribute('position', (6 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (6 * r * Math.cos(theta) - 0));
+                    theta += 0.02;
                     if (theta > 2 * Math.PI) theta -= 2 * Math.PI;
                     //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
-                    document.getElementById('rig').setAttribute('rotation', '-30 ' + (theta * 180 / Math.PI) + ' 0');
+                    document.getElementById('rig').setAttribute('rotation', '0 ' + (theta * 180 / Math.PI) + ' 0');
                     //console.log();
                 }, 200);
                 //x = rsin(theta) y = rcos(theta)
@@ -137,15 +137,28 @@
             <div class="parallax">
                 <img src="1.jpg">
 
-                <a-scene background="color: #808080" embedded>
-                    <a-entity id="rig" position="0 0 0" rotation="-30 0 0">
+                <a-scene background="color: #808080" vr-mode-ui="enabled: false" embedded>
+                    <a-entity id="rig" position="0 0 0" rotation="0 0 0">
                         <a-camera id="camera"></a-camera>
                     </a-entity>
-                    <a-assets>
-                        <a-asset-item id="tree" src="./components/rst_basic_sample_project.gltf"></a-asset-item>
-                    </a-assets>
+                    		  <a-assets>
+    <a-asset-item id="main-obj" src="./components/main.obj"></a-asset-item>
+    <a-asset-item id="main-mtl" src="./components/main.mtl"></a-asset-item>
+  </a-assets>
 
-                    <a-entity gltf-model="#tree" scale="0.1 0.1 0.1" position="-1 0 -4"></a-entity>
+  <!-- Using the asset management system. -->
+  <a-obj-model src="#main-obj" mtl="#main-mtl"></a-obj-model>
+  
+<a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="0.58 1.17 -1.9" animation__wind1="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+
+<a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="2.62 1.17 -1.7" animation__wind2="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+
+<a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="4.3 1.17 -0.72" animation__wind3="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+
+<a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="1.68247 -0.76946 0.79956" animation__current1="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+
+<a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="3.40132 -0.76996 -0.3325" animation__current2="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+		
                 </a-scene>
             </div>
         </div>
@@ -563,8 +576,8 @@
             if (request.QueryString("wind") == null || request.QueryString("light") == null || request.QueryString("wave") == null || request.QueryString("current") == null ||
                 request.QueryString("battery") == null) {
                 //UNCOMMENT THIS FIELD BEFORE FORMAL PUBLISH
-                alert("Invalid visit.");
-                window.location.href = "index.html";
+                //alert("Invalid visit.");
+                //window.location.href = "index.html";
             }
             var wind_limit = parseFloat(request.QueryString("wind"));
 
