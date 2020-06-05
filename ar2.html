@@ -40,8 +40,8 @@
     <!-- a-nft is the anchor that defines an Image Tracking entity -->
     <!-- on 'url' use the path to the Image Descriptors created before. -->
     <!-- the path should end with the name without the extension e.g. if file is 'pinball.fset' the path should end with 'pinball' -->
-    <a-nft type="nft" url="./components/1" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
-       
+    <a-nft type="nft" url="./components/2" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
+       <a-entity scale="30 30 30">
              <a-obj-model src="#main-obj" mtl="#main-mtl"></a-obj-model>
   
 <a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="0.58 1.17 -1.9" animation__wind1="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
@@ -52,7 +52,7 @@
 
 <a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="1.68247 -0.76946 0.79956" animation__current1="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
 
-<a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="3.40132 -0.76996 -0.3325" animation__current2="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+<a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="3.40132 -0.76996 -0.3325" animation__current2="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity></a-entity>
         </a-nft>
 
         <a-entity camera></a-entity>
