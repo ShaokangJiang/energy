@@ -123,8 +123,8 @@
                     <div class="row center">
 
                         <p class="col s2">
-                            <span class="right white-text">Wind Switcher
-                     <!--{cn}风力切换器-->   </span> </p>
+                            <span class="right" style="color: #ee6e73;"><b>Wind Switcher <!--{cn}风力切换器--> </b>
+                       </span> </p>
                         <p class="switch col s2">
                             <label>
                       Off<!--{cn}关-->
@@ -135,8 +135,8 @@
                         </p>
                         <p class="col s4"></p>
                         <p class="col s2">
-                            <span class="right white-text">Light Switcher
-                   <!--{cn}灯光切换器--> </span> </p>
+                            <span class="right" style="color: #ee6e73;"><b>Light Switcher<!--{cn}灯光切换器--></b>
+                    </span> </p>
                         <p class="switch col s2">
                             <label>
                   Off<!--{cn}关-->
@@ -147,8 +147,8 @@
                         </p>
 
                         <p class="col s2">
-                            <span class="right white-text">Wave Switcher
-                <!--{cn}波形切换器--></span> </p>
+                            <span class="right" style="color: #ee6e73;"><b>Wave Switcher<!--{cn}波形切换器--></b>
+                </span> </p>
                         <p class="switch col s2">
                             <label>
               Off<!--{cn}关-->
@@ -159,7 +159,7 @@
                         </p>
                         <p class="col s4"></p>
                         <p class="col s2">
-                            <span class="right white-text">Current Switcher<!--{cn}海流切换器-->
+                            <span class="right" style="color: #ee6e73;"><b>Current Switcher<!--{cn}海流切换器--></b>
                 </span> </p>
                         <p class="switch col s2">
                             <label>
@@ -189,7 +189,7 @@
                     //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
                     document.getElementById('rig').setAttribute('rotation', '0 ' + (theta * 180 / Math.PI) + ' 0');
                     //console.log();
-                }, 200);
+                }, 300);
                 //x = rsin(theta) y = rcos(theta)
             </script>
             <div class="parallax">
@@ -216,6 +216,45 @@
                     <a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="1.68247 -0.76946 0.79956" animation__current1="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
 
                     <a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="3.40132 -0.76996 -0.3325" animation__current2="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+
+                    <!--Text components-->
+                    <a-entity position="3.57521 3.4539 -1.7">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Wind">
+                        </a-entity>
+                        <a-entity id="wind_3d_status" position="0.6 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity position="0.2 2.7 -1.7">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Light">
+                        </a-entity>
+                        <a-entity id="light_3d_status" position="0.6 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity position="4.25908 -0.5 2.12424">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Current">
+                        </a-entity>
+                        <a-entity id="current_3d_status" position="0.95 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity position="5.6 1.7 0.75476">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Wave">
+                        </a-entity>
+                        <a-entity id="wave_3d_status" position="0.6 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity id="battery_3d_remain" position="2.01197 1.6944 0.45" text="wrapPixels: 400; width: 4; color: black; value: 70%">
+                    </a-entity>
+
+                    <a-entity position="-2.562 1.9 0">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Inflow\nUsage">
+                        </a-entity>
+                        <a-entity id="battery_3d_status" position="1.2 0 0" text="wrapPixels: 400; width: 4; side: double; color: #3CB371; value: NAN\nNAN">
+                        </a-entity>
+                    </a-entity>
 
                 </a-scene>
             </div>
@@ -574,12 +613,12 @@
                         if (tran.getLang() == 'cn') {
                             document.getElementById("wave_status").innerHTML = '<font color="red"><b>关</b></font>';
                             M.toast({
-                                html: '波浪&nbsp;<font color="red"><b>Off</b></font>'
+                                html: '波浪&nbsp;<font color="red"><b>关</font>'
                             });
                         } else {
                             document.getElementById("wave_status").innerHTML = '<font color="red"><b>Off</b></font>';
                             M.toast({
-                                html: 'Wave&nbsp;<font color="red"><b>关</b></font>'
+                                html: 'Wave&nbsp;<font color="red"><b>Offffff</b></font>'
                             });
                         }
                     }
@@ -668,6 +707,31 @@
                     document.getElementById("run_data").disabled = false;
                     document.getElementById("battery_data").disabled = false;
                 }
+            }
+
+            function updateFrame(wind1, light1, current1, wave1, battery_remain1, battery_usage1, battery_inflow1) {
+
+                if (wind1)
+                    document.getElementById('wind_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('wind_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+
+                if (light1)
+                    document.getElementById('light_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('light_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+                if (current1)
+                    document.getElementById('current_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('current_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+                if (wave1)
+                    document.getElementById('wave_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('wave_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+
+                document.getElementById('battery_3d_remain').setAttribute('text', 'wrapPixels: 400; width: 4; color: black; value: ' + battery_remain1 + '%');
+                document.getElementById('battery_3d_status').setAttribute('text', 'wrapPixels: 400; width: 4; side: double; color: #3CB371; value: ' + battery_inflow1 + '\n' + battery_usage1);
+
             }
 
             function OpenDetial(id, width, height) {
@@ -987,6 +1051,9 @@
                     if (exported)
                         batteryData.push(time + "," + userConsumption + "," + (battery_current - pre_battery_current) + "," +
                             batteryStatus + "," + battery_current + "\n");
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
 
                 } else {
 
@@ -1080,6 +1147,9 @@
                     if (exported)
                         batteryData.push(time + "," + userConsumption + "," + (battery_current - pre_battery_current) + "," +
                             batteryStatus + "," + battery_current + "\n");
+
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
+                    //function updateFrame(wind1, light1, current1, wave1, battery_remain1, battery_usage1, battery_inflow1) {
                 }
                 //batteryStatus: 0: normal 1:discharging 2:Discharging, extra electricity required
                 //refresh locals
@@ -1419,6 +1489,10 @@
         </script>
 
     </body>
+
+</html>
+
+</html>
 
 </html>
 
