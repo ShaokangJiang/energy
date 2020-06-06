@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Energy -- running
+        <!--{cn}能量 -- 运行-->
+    </title>
+
+    <!-- CSS  -->
+    <link href="css/icon.css" rel="stylesheet">
+    <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <script src="./js/solver.js"></script>
+    <script src="./js/papaparse.min.js"></script>
+    <script src="./js/LinkedList.js"></script>
+    <script src="./js/echarts.min.js"></script>
+    <script src="./js/translater.min.js"></script>
+    <script src="./js/aframe-v1.0.4.min.js"></script>
+
+    <script>
+        document.write("<style>.parallax-container {height: " + parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) + "px;}</style>");
+    </script>
+
+    <style>
+        .scrolldown {
+            position: absolute;
+            bottom: 0px;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            transform: translateY(-80px) translateX(-50%) rotate(45deg);
+        }
+        
+        .scrolldown span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-bottom: 2px solid #fff;
+            border-right: 2px solid #fff;
+            animation: animate1 1.5s linear infinite;
+            opacity: 0;
+        }
+        
+        .scrolldown span:nth-child(1) {
+            transform: translate(-15px, -15px);
+            animation-delay: -0.4s;
+        }
+        
+        .scrolldown span:nth-child(2) {
+            transform: translate(0px, 0px);
+            animation-delay: -0.2s;
+        }
+        
+        .scrolldown span:nth-child(3) {
+            transform: translate(15px, 15px);
+            animation-delay: 0s;
+        }
+        
+        @keyframes animate1 {
+            0% {
+                top: -5px;
+                left: -5px;
+                opacity: 0;
+            }
+            25% {
+                top: 0px;
+                left: 0px;
+                opacity: 1;
+            }
+            50%,
+            100% {
+                top: 5px;
+                left: 5px;
+                opacity: 0;
+            }
+        }
+    </style>
+
+    <body>
+        <script>
+            //   console.log(parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) + "px");
+
+            //true:on false:off Mannual variable
+            var wind = true;
+            var light = true;
+            var wave = true;
+            var current = true;
+        </script>
+        <div class="parallax-container">
+
+            <nav class="transparent" role="navigation">
+                <div class="nav-wrapper container">
+
+                    <a href="#" class="brand-logo center teal-text text-lighten-2">Control Panel<!--{cn}控制面板--></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li id="nav-cn"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                        <li id="nav-en" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
+                    </ul>
+
+                    <ul id="nav-mobile" class="sidenav">
+                        <li id="nav-cn-m"><a href="javascript:;" onclick="tran.setLang('cn');document.getElementById('nav-en').className = '';document.getElementById('nav-en-m').className = '';document.getElementById('nav-cn-m').className = 'active';document.getElementById('nav-cn').className = 'active';">中文</a></li>
+                        <li id="nav-en-m" class="active"><a href="javascript:;" onclick="tran.setLang('default');document.getElementById('nav-en').className = 'active';document.getElementById('nav-en-m').className = 'active';document.getElementById('nav-cn').className = '';document.getElementById('nav-cn-m').className = '';">EN</a></li>
+                    </ul>
+                    <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">translate</i></a>
+
+                </div>
+
+            </nav>
+            <div class="section no-pad-bot">
+                <div class="container">
+                    <div class="row center">
+
+                        <p class="col s2">
+                            <span class="right" style="color: #ee6e73;"><b>Wind Switcher <!--{cn}风力切换器--> </b>
+                       </span> </p>
+                        <p class="switch col s2">
+                            <label>
+                      Off<!--{cn}关-->
+                      <input type="checkbox" id="wind" checked onchange="onWindChange(this);">
+                      <span class="lever"></span>
+                      On<!--{cn}开-->
+                    </label>
+                        </p>
+                        <p class="col s4"></p>
+                        <p class="col s2">
+                            <span class="right" style="color: #ee6e73;"><b>Light Switcher<!--{cn}灯光切换器--></b>
+                    </span> </p>
+                        <p class="switch col s2">
+                            <label>
+                  Off<!--{cn}关-->
+                  <input type="checkbox" id="light" checked onchange="onLightChange(this);">
+                  <span class="lever"></span>
+                  On<!--{cn}开-->
+                </label>
+                        </p>
+
+                        <p class="col s2">
+                            <span class="right" style="color: #ee6e73;"><b>Wave Switcher<!--{cn}波形切换器--></b>
+                </span> </p>
+                        <p class="switch col s2">
+                            <label>
+              Off<!--{cn}关-->
+              <input type="checkbox" id="wave" checked onchange="onWaveChange(this);">
+              <span class="lever"></span>
+              On<!--{cn}开-->
+            </label>
+                        </p>
+                        <p class="col s4"></p>
+                        <p class="col s2">
+                            <span class="right" style="color: #ee6e73;"><b>Current Switcher<!--{cn}海流切换器--></b>
+                </span> </p>
+                        <p class="switch col s2">
+                            <label>
+              Off<!--{cn}关-->
+              <input type="checkbox" id="current" checked onchange="onCurrentChange(this);">
+              <span class="lever"></span>
+              On<!--{cn}开-->
+            </label>
+                        </p>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+            <script>
+                //x = rsin(theta) y = rcos(theta)
+                var r = 1;
+                var theta = 0;
+                setInterval(function() {
+                    document.getElementById('rig').setAttribute('position', (6 * r * Math.sin(theta)) + ' ' + (0 + (document.documentElement.scrollTop + document.body.scrollTop) * 0.003) + ' ' + (6 * r * Math.cos(theta) - 0));
+                    theta += 0.02;
+                    if (theta > 2 * Math.PI) theta -= 2 * Math.PI;
+                    //console.log("aa" + document.documentElement.scrollTop + document.body.scrollTop);
+                    document.getElementById('rig').setAttribute('rotation', '0 ' + (theta * 180 / Math.PI) + ' 0');
+                    //console.log();
+                }, 300);
+                //x = rsin(theta) y = rcos(theta)
+            </script>
+            <div class="parallax">
+                <img src="1.jpg">
+
+                <a-scene background="color: #808080" vr-mode-ui="enabled: false" embedded>
+                    <a-entity id="rig" position="0 0 0" rotation="0 0 0">
+                        <a-camera id="camera"></a-camera>
+                    </a-entity>
+                    <a-assets>
+                        <a-asset-item id="main-obj" src="./components/main.obj"></a-asset-item>
+                        <a-asset-item id="main-mtl" src="./components/main.mtl"></a-asset-item>
+                    </a-assets>
+
+                    <!-- Using the asset management system. -->
+                    <a-obj-model src="#main-obj" mtl="#main-mtl"></a-obj-model>
+
+                    <a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="0.58 1.17 -1.9" animation__wind1="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+
+                    <a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="2.62 1.17 -1.7" animation__wind2="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+
+                    <a-entity obj-model="mtl: ./components/wind.mtl; obj: ./components/wind.obj" position="4.3 1.17 -0.72" animation__wind3="property: rotation; to: 0 720 0; loop: true; easing: linear; dur: 2000"></a-entity>
+
+                    <a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="1.68247 -0.76946 0.79956" animation__current1="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+
+                    <a-entity obj-model="mtl: ./components/current.mtl; obj: ./components/current.obj" position="3.40132 -0.76996 -0.3325" animation__current2="property: rotation; to: 0 0 720; loop: true; easing: linear; dur: 2000"></a-entity>
+
+                    <!--Text components-->
+                    <a-entity position="3.57521 3.4539 -1.7">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Wind">
+                        </a-entity>
+                        <a-entity id="wind_3d_status" position="0.6 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity position="0.2 2.7 -1.7">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Light">
+                        </a-entity>
+                        <a-entity id="light_3d_status" position="0.6 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity position="4.25908 -0.5 2.12424">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Current">
+                        </a-entity>
+                        <a-entity id="current_3d_status" position="0.95 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity position="5.6 1.7 0.75476">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Wave">
+                        </a-entity>
+                        <a-entity id="wave_3d_status" position="0.6 0 0" text="wrapPixels: 400; width: 3; side: double; color: #3CB371; value: NAN">
+                        </a-entity>
+                    </a-entity>
+
+                    <a-entity id="battery_3d_remain" position="2.01197 1.6944 0.45" text="wrapPixels: 400; width: 4; color: black; value: 70%">
+                    </a-entity>
+
+                    <a-entity position="-2.562 1.9 0">
+                        <a-entity position="" text="wrapPixels: 400; width: 4; side: double; color: white; value: Inflow\nUsage">
+                        </a-entity>
+                        <a-entity id="battery_3d_status" position="1.2 0 0" text="wrapPixels: 400; width: 4; side: double; color: #3CB371; value: NAN\nNAN">
+                        </a-entity>
+                    </a-entity>
+
+                </a-scene>
+            </div>
+        </div>
+
+        <div class="scrolldown">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="section white">
+            <div id="mainWindow" class="row">
+                <div class="col s0 m0 l2">
+                </div>
+
+
+                <div class="col s12 m12 l8">
+
+                    <div class="row">
+                        <script>
+                            var wind_history = new LinkedList(10);
+                            var light_history = new LinkedList(10);
+                            var wave_history = new LinkedList(10);
+                            var current_history = new LinkedList(10);
+                            var battery_history = new LinkedList(10);
+                        </script>
+                        <div class="col s12">
+
+                            <div class="card white z-depth-3">
+                                <div class="card-content black-text">
+                                    <span class="card-title">Components<!--{cn}组件--></span>
+                                    <div class="row">
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wind_history, '风能数据'); else showInform(event, wind_history, 'wind data');" onMouseOut="hiddenInform(event);">Wind<!--{cn}风--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="wind_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="wind_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current Wind:
+                                                    <!--{cn}当前风速：--><span id="wind_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, light_history, '光能数据'); else showInform(event, light_history, 'light data');" onMouseOut="hiddenInform(event);">Light<!--{cn}光--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="Light_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="Light_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current Light:
+                                                    <!--{cn}当前光强：--><span id="Light_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, wave_history, '波浪能数据'); else showInform(event, wave_history, 'Wave data');" onMouseOut="hiddenInform(event);">Wave<!--{cn}波浪--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="wave_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="wave_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current wave:
+                                                    <!--{cn}当前波浪：--><span id="wave_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6 onMouseOver="if (tran.getLang() == 'cn') showInform(event, current_history, '海流能数据'); else showInform(event, current_history, 'Current data');" onMouseOut="hiddenInform(event);">Current<!--{cn}海流--></h6>
+                                            <p>Status: <!--{cn}现况:--><span id="current_status"></span>
+                                                </p>
+                                                <p>
+                                                    Production:
+                                                    <!--{cn}产出：--><span id="current_production"></span> KW
+                                                    <!--{cn}千瓦-->
+                                                </p>
+                                                <p>
+                                                    Current current:
+                                                    <!--{cn}当前流速：--><span id="current_Speed"></span>
+                                                </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12">
+                                            <div class="card-panel blue">
+                                                <span class="white-text">
+                                            <h6  onMouseOver="if (tran.getLang() == 'cn') showInform(event, battery_history, '电池数据'); else showInform(event, battery_history, 'Battery data');" onMouseOut="hiddenInform(event);">Battery<!--{cn}电池--></h6>
+<div class="row">
+                                            <p class="col s6">Status: <!--{cn}现况:--><span id="battery_status"></span>
+                                                </p>
+                                                <p class="col s6">
+                                                    Remain:
+                                                    <!--{cn}剩余：--><span id="battery_remain"></span>%
+                                                </p>
+                                                <p class="col s6">
+                                                    Current flow:
+                                                    <!--{cn}能量流动：--><span id="battery_flow"></span> KWH
+                                                    <!--{cn}千瓦时-->
+                                                </p>
+                                                <p class="col s6">
+                                                    Current inflow:
+                                                    <!--{cn}电能输入：--><span id="battery_inflow"></span>
+                                                </p>
+                                                <p class="col s6">
+                                                    Current Usage:
+                                                    <!--{cn}电能输出：--><span id="battery_usage"></span>
+                                                </p>
+                                            </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col s12">
+
+                        <div class="card white z-depth-3">
+                            <div class="card-content black-text">
+                                <span class="card-title">Export<!--{cn}导出--></span>
+                                <p>Export result to csv at here:
+                                    <!--{cn}导出结果到 csv -->
+                                </p>
+                                <div class="card-action row">
+                                    <span class="col s4">Indexing: Time, type, status, speed, production<!--{cn}索引: Time, type, status, speed, production--></span>
+                                    <span class="col s1">|</span>
+                                    <span class="col s6">Indexing: Time, battery_usage, battery_flow, battery_status, battery_current<!--{cn}索引: Time, battery_usage, battery_flow, battery_status, battery_current--></span>
+                                    <p class="col s12"><br></p>
+                                    <button class="waves-effect waves-light btn col s4" id="run_data">Download running data<!--{cn}下载运行数据--></button>
+                                    <span class="col s4"></span>
+                                    <button class="waves-effect waves-light btn col s4" id="battery_data"> Download battery data<!--{cn}下载电池数据--></button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="col s0 m0 l2">
+            </div>
+
+
+        </div>
+        </div>
+        <!-- near footer-->
+        <br><br>
+        </div>
+
+        <div id="inform" onMouseOut="hiddenInform(event)" style="display: none;">
+            <div class="row">
+                <div class="col s12">
+                    <div class="card white darken-1">
+                        <div class="card-content white-text">
+                            <div id="main" style="width: 430px;height: 300px;"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fixed-action-btn">
+            <a id="menu" class="btn-floating btn-large red">
+                <i class="large material-icons">menu</i>
+            </a>
+            <ul>
+                <li><a class="btn-floating yellow darken-1" onclick="change_status()" id="Global_switch"><i class="material-icons">play_arrow</i></a></li>
+
+                <!--change to pause-->
+                <li><a id="file_upload" class="btn-floating blue" onclick="add()"><i class="material-icons">file_upload</i></a></li>
+            </ul>
+        </div>
+
+
+        <!-- Tap Target Structure -->
+        <div class="tap-target" data-target="menu">
+            <div class="tap-target-content">
+                <h5>Basic Setup
+                    <!--{cn}基本设置-->
+                </h5>
+                <p>File button to choose simulation file(Stream from sensor in real case). Start or pause to do related work globally.
+                    <!--{cn}文件按钮选择模拟文件(流传感器在真实情况下)。开始或暂停做相关的工作全球。-->
+                </p>
+            </div>
+        </div>
+        <div id="UserEdit"></div>
+
+
+        <footer class="page-footer orange">
+            <div class="container">
+                <div class="row">
+                    <h5 class="white-text">Info
+                        <!--{cn}信息-->
+                    </h5>
+                    <p class="grey-text text-lighten-4">efe</p>
+
+
+
+                </div>
+                <div class="footer-copyright">
+                    <div class="container">
+                        Made by
+                        <!--{cn}由--><a class="orange-text text-lighten-3" href="https://shaokang.ga">Shaokang Jiang</a> using
+                        <!--{cn}使用--><a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize<!--{cn}Materialize 主题制作--></a>
+                    </div>
+                </div>
+        </footer>
+
+
+        <!--  Scripts-->
+        <script src="./js/jquery-2.1.1.min.js"></script>
+        <script src="./js/materialize.min.js"></script>
+        <script>
+            //  document.getElementById("parall").style.color = "blue";
+            //document.getElementById("mainWindow").style = "position:relative;top:" + (-parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;margin-bottom: " + (20 - parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.1) + "px;";
+            M.AutoInit();
+            var Model_Status = -1; //1:running 0:pause 2:terminate
+            var file;
+            var runData = [];
+            var batteryData = [];
+            var exported = true;
+
+            class Pair {
+                constructor(key, value) {
+                    this.key = key;
+                    this.value = value;
+                }
+
+                getKey() {
+                    return this.key;
+                }
+
+                getValue() {
+                    return this.value;
+                }
+            }
+
+            function onWindChange(use) {
+                if (Model_Status == 1) {
+                    wind = use.checked;
+                    if (wind) {
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wind_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '风力&nbsp; <font color="green"><b> 开</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("wind_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Wind&nbsp; <font color="green"><b> On</b> </font>'
+                            });
+                        }
+                    } else {
+
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wind_status").innerHTML = '<font color="red"><b>关</b> </font>';
+                            M.toast({
+                                html: '风力&nbsp; <font color="red"><b> 关</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("wind_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Wind&nbsp; <font color="red"><b> Off</b></font>'
+                            });
+                        }
+                    }
+                } else {
+                    use.checked = !use.checked;
+                }
+            }
+
+            function onLightChange(use) {
+                if (Model_Status == 1) {
+                    light = use.checked;
+                    if (light) {
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("Light_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '光&nbsp;<font color="green"><b>开</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("Light_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Light&nbsp;<font color="green"><b>On</b> </font>'
+                            });
+                        }
+                    } else {
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("Light_status").innerHTML = '<font color="red"><b>关</b></font>';
+                            M.toast({
+                                html: '光&nbsp;<font color="red"><b>关</b></font>'
+                            });
+                        } else {
+                            document.getElementById("Light_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Light&nbsp;<font color="red"><b>Off</b></font>'
+                            });
+                        }
+                    }
+                } else {
+                    use.checked = !use.checked;
+                }
+            }
+
+            function onWaveChange(use) {
+                if (Model_Status == 1) {
+                    wave = use.checked;
+                    if (wave) {
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wave_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '波浪&nbsp;<font color="green"><b>开</b> </font>'
+                            });
+                        } else {
+
+                            document.getElementById("wave_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Wave&nbsp;<font color="green"><b>On</b> </font>'
+                            });
+                        }
+                    } else {
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wave_status").innerHTML = '<font color="red"><b>关</b></font>';
+                            M.toast({
+                                html: '波浪&nbsp;<font color="red"><b>关</font>'
+                            });
+                        } else {
+                            document.getElementById("wave_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Wave&nbsp;<font color="red"><b>Offffff</b></font>'
+                            });
+                        }
+                    }
+                } else {
+                    use.checked = !use.checked;
+                }
+            }
+
+            function onCurrentChange(use) {
+                if (Model_Status == 1) {
+                    current = use.checked;
+                    if (current) {
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("current_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                            M.toast({
+                                html: '海流&nbsp;<font color="green"><b>开</b> </font>'
+                            });
+                        } else {
+                            document.getElementById("current_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                            M.toast({
+                                html: 'Current&nbsp;<font color="green"><b>On</b> </font>'
+                            });
+                        }
+                    } else {
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("current_status").innerHTML = '<font color="red"><b>关</b></font>';
+                            M.toast({
+                                html: '海流&nbsp;<font color="red"><b>关</b></font>'
+                            });
+                        } else {
+                            document.getElementById("current_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                            M.toast({
+                                html: 'Current&nbsp;<font color="red"><b>Off</b></font>'
+                            });
+                        }
+                    }
+                } else {
+                    use.checked = !use.checked;
+                }
+            }
+
+            $(document).ready(function() {
+                $('.fixed-action-btn').floatingActionButton();
+                $('.tap-target').tapTarget('open');
+            });
+
+            // document.getElementById("Speed_text").innerText = window.localStorage.getItem("wind");
+            var request = {
+                    QueryString: function(val) {
+                        var uri = window.location.search;
+                        var re = new RegExp("" + val + "=([^&?]*)", "ig");
+                        return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+                    }
+                }
+                // so, You can using request.QueryString(para), like this
+                // file:///C:/Users/Shaokang%20Jiang/Desktop/Energy/energy/run.html?group1=1&wind=74&light=74&wave=74&current=74&battary=74&freq=741&User=44174&action=
+
+            if (request.QueryString("wind") == null || request.QueryString("light") == null || request.QueryString("wave") == null || request.QueryString("current") == null ||
+                request.QueryString("battery") == null) {
+                //UNCOMMENT THIS FIELD BEFORE FORMAL PUBLISH
+                //alert("Invalid visit.");
+                //window.location.href = "index.html";
+            }
+            var wind_limit = parseFloat(request.QueryString("wind"));
+
+            var light_limit = parseFloat(request.QueryString("light"));
+
+            var wave_limit = parseFloat(request.QueryString("wave"));
+
+            var current_limit = parseFloat(request.QueryString("current"));
+
+            var battery_capacity = parseFloat(request.QueryString("battery"));
+
+            var freq = parseFloat(request.QueryString("freq")) || 200;
+            var future = (request.QueryString("future") == 'on') ? true : false;
+            var User_Consumption = parseFloat(request.QueryString("User")) || 2000;
+            var battery_current = 0.7 * battery_capacity;
+
+            function switchExport(use) {
+                if (use.checked) {
+                    exported = false;
+                    document.getElementById("run_data").disabled = true;
+                    document.getElementById("battery_data").disabled = true;
+                } else {
+                    exported = true;
+                    document.getElementById("run_data").disabled = false;
+                    document.getElementById("battery_data").disabled = false;
+                }
+            }
+
+            function updateFrame(wind1, light1, current1, wave1, battery_remain1, battery_usage1, battery_inflow1) {
+
+                if (wind1)
+                    document.getElementById('wind_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('wind_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+
+                if (light1)
+                    document.getElementById('light_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('light_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+                if (current1)
+                    document.getElementById('current_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('current_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+                if (wave1)
+                    document.getElementById('wave_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #3CB371; value: ON');
+                else
+                    document.getElementById('wave_3d_status').setAttribute('text', 'wrapPixels: 400; width: 3; side: double; color: #FF0033; value: OFF');
+
+                document.getElementById('battery_3d_remain').setAttribute('text', 'wrapPixels: 400; width: 4; color: black; value: ' + battery_remain1 + '%');
+                document.getElementById('battery_3d_status').setAttribute('text', 'wrapPixels: 400; width: 4; side: double; color: #3CB371; value: ' + battery_inflow1 + '\n' + battery_usage1);
+
+            }
+
+            function OpenDetial(id, width, height) {
+                var _srcWidth = parseInt(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+                var _srcHeight = parseInt(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+                _width = parseInt(width) || _srcWidth;
+                _height = parseInt(height) || _srcHeight;
+
+                var cssWidth = width == undefined ? "100%" : _width;
+                var cssHeight = height == undefined ? "100%" : _height;
+
+                var left = (_srcWidth - _width) == 0 ? 0 : ((_srcWidth - _width) / 2);
+                var top = (_srcHeight - _height) == 0 ? 0 : ((_srcHeight - _height) / 2);
+
+
+
+                var _id = "#" + id;
+                var detial;
+                if (tran.getLang() == 'cn')
+                    detial =
+                    '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
+                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)" accept=".csv"></div><div class="file-path-wrapper"><input placeholder="输入流" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>我不需要导出使用数据(源文件较大时选择)。</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">使用这个</button>' +
+                    '</div></div></div></div>';
+                else
+                    detial =
+                    '<div id="panel"> <div class="card white z-depth-3"><div class="card-content black-text">  <div class="row">' +
+                    '<div class="file-field input-field col s12"> <div class="btn"><span>File</span><input id="history_data" name="history_data" type="file" onchange="loadFile(this)" accept=".csv"></div><div class="file-path-wrapper"><input placeholder="Input Stream" id="Input_Stream" class="file-path validate" type="text"></div></div><p class="col s12"><label><input type="checkbox" onchange="switchExport(this);" /><span>I don\'t need to export usage data(Choose when source is intended to be large).</span></label></p><p class="col s8" id="notice"><p><button  id="usethis" class="waves-effect waves-light btn col s3" disabled onclick="Start()">Use This</button>' +
+                    '</div></div></div></div>';
+
+                $(_id).html(detial);
+                $(_id).css({
+                    "display": "none",
+                    "position": "fixed",
+                    "bottom": "0px",
+                    "width": "100%",
+                    "top": "0px",
+                    "height": "100%",
+                    "background-color": "rgba(223, 236, 236, 0.36)"
+                });
+                $("#panel").css({
+                    "width": cssWidth,
+                    "height": cssHeight,
+                    "left": left,
+                    "top": top,
+                    "position": "fixed"
+                });
+                $(_id).slideDown();
+            }
+
+            var prevTime = 0;
+
+            var model;
+            if (future) {
+                model = {};
+                model["optimize"] = "count";
+                model["opType"] = "min";
+                model["constraints"] = {};
+                model["variables"] = {};
+                model["ints"] = {};
+                model.constraints["value"] = {
+                    "min": battery_capacity
+                };
+            }
+            var modelCount = 0;
+            var data_input = {};
+
+            var preWind;
+            var preLight;
+            var preCurrent;
+            var preWave;
+
+            function toast_Undo() {
+                wind_limit = preWind;
+                light_limit = preLight;
+                current_limit = preCurrent;
+                wave_limit = preWave;
+                if (tran.getLang() == 'cn')
+                    M.toast({
+                        html: "<p>限制已经恢复到 <br>风速: " + wind_limit + "<br>光: " + light_limit + "<br>波浪: " + wave_limit + "<br>海流: " + current_limit + "</p>",
+                        displayLength: 8000
+                    });
+                else
+                    M.toast({
+                        html: "<p>Limitation has been recovered to <br>wind: " + wind_limit + "<br>light: " + light_limit + "<br>wave: " + wave_limit + "<br>current: " + current_limit + "</p>",
+                        displayLength: 8000
+                    });
+            }
+
+            function runStep(data) {
+
+                var userConsumption = data["User_Usage"] || User_Consumption;
+                var time = (prevTime + freq) / 1000;
+                var wind_produced = 0,
+                    light_produced = 0,
+                    wave_produced = 0,
+                    current_produced = 0;
+
+                if (future) {
+                    //append to model
+                    wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
+                    light_produced = 0.09 * data["Light_H"];
+                    wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+                    current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
+                    var variable_wind = "v" + modelCount + "0";
+                    var variable_light = "v" + modelCount + "1";
+                    var variable_wave = "v" + modelCount + "2";
+                    var variable_current = "v" + modelCount + "3";
+                    data_input[variable_wind] = data["Wind_Speed"];
+                    data_input[variable_light] = data["Light_H"];
+                    data_input[variable_wave] = data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+                    data_input[variable_current] = data["Current_Speed"];
+
+
+                    model.ints[variable_wind] = 1;
+                    model.variables[variable_wind] = {
+                        "value": wind_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_wind][variable_wind] = 1;
+                    model.constraints[variable_wind] = {
+                        "min": 0,
+                        "max": 1
+                    };
+                    model.ints[variable_light] = 1;
+                    model.variables[variable_light] = {
+                        "value": light_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_light][variable_light] = 1;
+                    model.constraints[variable_light] = {
+                        "min": 0,
+                        "max": 1
+                    };
+                    model.ints[variable_wave] = 1;
+                    model.variables[variable_wave] = {
+                        "value": wave_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_wave][variable_wave] = 1;
+                    model.constraints[variable_wave] = {
+                        "min": 0,
+                        "max": 1
+                    };
+                    model.ints[variable_current] = 1;
+                    model.variables[variable_current] = {
+                        "value": current_produced * (freq / 3600000),
+                        "count": 1
+                    };
+                    model.variables[variable_current][variable_current] = 1;
+                    model.constraints[variable_current] = {
+                        "min": 0,
+                        "max": 1
+                    };
+
+                    model.constraints.value["min"] += userConsumption;
+
+                    modelCount++;
+                    //clearning step
+                    wind_produced = 0;
+                    light_produced = 0;
+                    wave_produced = 0;
+                    current_produced = 0;
+
+                    if (modelCount > 30) {
+                        future = false;
+                        console.log(model);
+                        result = solver.Solve(model);
+                        console.log(result);
+                        var wind_limit1 = -1;
+                        var light_limit1 = -1;
+                        var wave_limit1 = -1;
+                        var current_limit1 = -1;
+
+                        for (var key in result) {
+                            if (data_input.hasOwnProperty(key)) {
+                                console.log(key + " -> " + data_input[key]);
+                                switch (parseInt(key.slice(-1))) {
+                                    case 0:
+                                        if (wind_limit1 == -1) wind_limit1 = data_input[key];
+                                        if (data_input[key] <= wind_limit1) wind_limit1 = data_input[key];
+                                        break;
+                                    case 1: //light
+                                        if (light_limit1 == -1) light_limit1 = data_input[key];
+                                        if (data_input[key] <= light_limit1) light_limit1 = data_input[key];
+                                        // code block
+                                        break;
+                                    case 2: //wave
+                                        if (wave_limit1 == -1) wave_limit1 = data_input[key];
+                                        if (data_input[key] <= wave_limit1) wave_limit1 = data_input[key];
+                                        // code block
+                                        break;
+                                    case 3: //current
+                                        if (current_limit1 == -1) current_limit1 = data_input[key];
+                                        if (data_input[key] <= current_limit1) current_limit1 = data_input[key];
+                                        // code block
+                                        break;
+
+                                    default:
+                                        // code block
+                                }
+                            }
+                        }
+
+                        preWind = wind_limit;
+                        preLight = light_limit;
+                        preCurrent = current_limit;
+                        preWave = wave_limit;
+
+                        wind_limit = (wind_limit1 == -1) ? wind_limit : wind_limit1.toFixed(2); //pre defined min value : actual optimal 
+                        light_limit = (light_limit1 == -1) ? light_limit : light_limit1.toFixed(2);
+                        wave_limit = (wave_limit1 == -1) ? wave_limit : wave_limit1.toFixed(2);
+                        current_limit = (current_limit1 == -1) ? current_limit : current_limit1.toFixed(2);
+                        console.log("wind:" + wind_limit + "light" + light_limit + "wave:" + wave_limit + "current" + current_limit);
+
+                        if (tran.getLang() == 'cn')
+                            M.toast({
+                                html: "<p>限制已经修改到  <br>风: " + wind_limit + "<br>光: " + light_limit + "<br>波浪: " + wave_limit + "<br>海流: " + current_limit + "<br>基于优化结果。</p><button class='btn-flat toast-action' onclick='toast_Undo()'>撤销</button>",
+                                displayLength: 8000
+                            });
+                        else
+                            M.toast({
+                                html: "<p>Limitation has been changed to <br>wind: " + wind_limit + "<br>light: " + light_limit + "<br>wave: " + wave_limit + "<br>current: " + current_limit + "<br>based on optimization result.</p><button class='btn-flat toast-action' onclick='toast_Undo()'>Undo</button>",
+                                displayLength: 8000
+                            });
+                    }
+                }
+
+                if (tran.getLang() == 'cn') {
+
+                    if (data["Wind_Speed"] > wind_limit && wind == 1) {
+                        document.getElementById("wind").checked = true;
+                        document.getElementById("wind_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                        document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
+                        wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
+                        document.getElementById("wind_production").innerText = wind_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",wind,on," + data["Wind_Speed"] + "," + wind_produced + "\n");
+                    } else if (wind == 1) {
+                        document.getElementById("wind").checked = false;
+                        document.getElementById("wind_status").innerHTML = '<font color="green"><b>关</b></font>';
+                        if (exported)
+                            runData.push(time + ",wind,off," + data["Wind_Speed"] + ",0" + "\n");
+                    }
+                    wind_history.add(new Pair(time.toFixed(2), wind_produced.toFixed(2)));
+
+                    if (data["Light_H"] > light_limit && light == 1) {
+                        document.getElementById("light").checked = true;
+                        document.getElementById("Light_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                        document.getElementById("Light_Speed").innerText = data["Light_H"];
+                        light_produced = 0.09 * data["Light_H"];
+                        document.getElementById("Light_production").innerText = light_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",light,on," + data["Light_H"] + "," + light_produced + "\n");
+                    } else if (light == 1) {
+                        document.getElementById("light").checked = false;
+                        document.getElementById("Light_status").innerHTML = '<font color="red"><b>关</b></font>';
+                        if (exported)
+                            runData.push(time + ",light,off," + data["Light_H"] + ",0\n");
+                    }
+                    light_history.add(new Pair(time.toFixed(2), light_produced.toFixed(2)));
+
+                    if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit && wave == 1) {
+                        document.getElementById("wave").checked = true;
+                        document.getElementById("wave_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                        document.getElementById("wave_Speed").innerText = "高度: " + data["Wave_Hight"] + "周期: " + data["Wave_Period"];
+                        wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+                        document.getElementById("wave_production").innerText = wave_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",wave,on," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + "," + wave_produced + "\n");
+                    } else if (wave == 1) {
+                        document.getElementById("wave").checked = false;
+                        document.getElementById("wave_status").innerHTML = '<font color="red"><b>关</b></font>';
+                        if (exported)
+                            runData.push(time + ",wave,off," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + ",0\n");
+                    }
+                    wave_history.add(new Pair(time.toFixed(2), wave_produced.toFixed(2)));
+
+                    if (data["Current_Speed"] > current_limit && current == 1) {
+                        document.getElementById("current").checked = true;
+                        document.getElementById("current_status").innerHTML = '<font color="green"><b>开</b> </font>';
+                        document.getElementById("current_Speed").innerText = data["Current_Speed"];
+                        current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
+                        document.getElementById("current_production").innerText = current_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",current,on," + data["Current_Speed"] + "," + current_produced + "\n");
+                    } else if (current == 1) {
+                        document.getElementById("current").checked = false;
+                        document.getElementById("current_status").innerHTML = '<font color="red"><b>关</b> </font>';
+                        if (exported)
+                            runData.push(time + ",current,off," + data["Current_Speed"] + ",0\n");
+                    }
+                    current_history.add(new Pair(time.toFixed(2), current_produced.toFixed(2)));
+
+                    //Time,type,status,speed,production
+                    document.getElementById("battery_usage").innerText = userConsumption;
+                    var pre_battery_current = battery_current;
+                    var inflowing = (wind_produced + light_produced + wave_produced + current_produced) * (freq / 1000) / 3600;
+                    battery_current += inflowing - userConsumption;
+                    //console.log((time - prevTime));
+                    var batteryStatus = 0;
+                    if (battery_current > battery_capacity) battery_current = battery_capacity;
+                    document.getElementById("battery_inflow").innerText = inflowing.toFixed(2);
+                    document.getElementById("battery_flow").innerText = (battery_current - pre_battery_current).toFixed(2);
+                    document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+                    if (battery_current - pre_battery_current > 0) document.getElementById("battery_status").innerText = '充电中...';
+                    else if (battery_current < 0) {
+                        battery_current = 0;
+                        document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+                        document.getElementById("battery_status").innerText = '放电，需要额外的电力。';
+                        batteryStatus = 2;
+                    } else {
+                        document.getElementById("battery_status").innerText = '放电中...';
+                        batteryStatus = 1;
+                    }
+                    battery_history.add(new Pair(time.toFixed(2), (battery_current * 100 / battery_capacity).toFixed(2)));
+                    //Time,battery_usage,battery_flow,battery_status,battery_current
+                    if (exported)
+                        batteryData.push(time + "," + userConsumption + "," + (battery_current - pre_battery_current) + "," +
+                            batteryStatus + "," + battery_current + "\n");
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
+
+                } else {
+
+                    if (data["Wind_Speed"] > wind_limit && wind == 1) {
+                        document.getElementById("wind").checked = true;
+                        document.getElementById("wind_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        document.getElementById("wind_Speed").innerText = data["Wind_Speed"];
+                        wind_produced = 2866 * data["Wind_Speed"] * data["Wind_Speed"] * data["Wind_Speed"];
+                        document.getElementById("wind_production").innerText = wind_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",wind,on," + data["Wind_Speed"] + "," + wind_produced + "\n");
+                    } else if (wind == 1) {
+                        document.getElementById("wind").checked = false;
+                        document.getElementById("wind_status").innerHTML = '<font color="green"><b>Off</b></font>';
+                        if (exported)
+                            runData.push(time + ",wind,off," + data["Wind_Speed"] + ",0" + "\n");
+                    }
+                    wind_history.add(new Pair(time.toFixed(2), wind_produced.toFixed(2)));
+
+                    if (data["Light_H"] > light_limit && light == 1) {
+                        document.getElementById("light").checked = true;
+                        document.getElementById("Light_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        document.getElementById("Light_Speed").innerText = data["Light_H"];
+                        light_produced = 0.09 * data["Light_H"];
+                        document.getElementById("Light_production").innerText = light_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",light,on," + data["Light_H"] + "," + light_produced + "\n");
+                    } else if (light == 1) {
+                        document.getElementById("light").checked = false;
+                        document.getElementById("Light_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                        if (exported)
+                            runData.push(time + ",light,off," + data["Light_H"] + ",0\n");
+                    }
+                    light_history.add(new Pair(time.toFixed(2), light_produced.toFixed(2)));
+
+                    if (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"] > wave_limit && wave == 1) {
+                        document.getElementById("wave").checked = true;
+                        document.getElementById("wave_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        document.getElementById("wave_Speed").innerText = "Height: " + data["Wave_Hight"] + "Period: " + data["Wave_Period"];
+                        wave_produced = 6.6 * data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"];
+                        document.getElementById("wave_production").innerText = wave_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",wave,on," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + "," + wave_produced + "\n");
+                    } else if (wave == 1) {
+                        document.getElementById("wave").checked = false;
+                        document.getElementById("wave_status").innerHTML = '<font color="red"><b>Off</b></font>';
+                        if (exported)
+                            runData.push(time + ",wave,off," + (data["Wave_Hight"] * data["Wave_Hight"] * data["Wave_Period"]) + ",0\n");
+                    }
+                    wave_history.add(new Pair(time.toFixed(2), wave_produced.toFixed(2)));
+
+                    if (data["Current_Speed"] > current_limit && current == 1) {
+                        document.getElementById("current").checked = true;
+                        document.getElementById("current_status").innerHTML = '<font color="green"><b>On</b> </font>';
+                        document.getElementById("current_Speed").innerText = data["Current_Speed"];
+                        current_produced = 1254 * data["Current_Speed"] * data["Current_Speed"] * data["Current_Speed"];
+                        document.getElementById("current_production").innerText = current_produced.toFixed(2);
+                        if (exported)
+                            runData.push(time + ",current,on," + data["Current_Speed"] + "," + current_produced + "\n");
+                    } else if (current == 1) {
+                        document.getElementById("current").checked = false;
+                        document.getElementById("current_status").innerHTML = '<font color="red"><b>Off</b> </font>';
+                        if (exported)
+                            runData.push(time + ",current,off," + data["Current_Speed"] + ",0\n");
+                    }
+                    current_history.add(new Pair(time.toFixed(2), current_produced.toFixed(2)));
+
+                    //Time,type,status,speed,production
+                    document.getElementById("battery_usage").innerText = userConsumption;
+                    var pre_battery_current = battery_current;
+                    var inflowing = (wind_produced + light_produced + wave_produced + current_produced) * (freq / 1000) / 3600;
+                    battery_current += inflowing - userConsumption;
+                    //console.log((time - prevTime));
+                    var batteryStatus = 0;
+                    if (battery_current > battery_capacity) battery_current = battery_capacity;
+                    document.getElementById("battery_inflow").innerText = inflowing.toFixed(2);
+                    document.getElementById("battery_flow").innerText = (battery_current - pre_battery_current).toFixed(2);
+                    document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+                    if (battery_current - pre_battery_current > 0) document.getElementById("battery_status").innerText = 'Charging';
+                    else if (battery_current < 0) {
+                        battery_current = 0;
+                        document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+                        document.getElementById("battery_status").innerText = 'Discharging, extra electricity required.';
+                        batteryStatus = 2;
+                    } else {
+                        document.getElementById("battery_status").innerText = 'Discharging';
+                        batteryStatus = 1;
+                    }
+                    battery_history.add(new Pair(time.toFixed(2), (battery_current * 100 / battery_capacity).toFixed(2)));
+                    //Time,battery_usage,battery_flow,battery_status,battery_current
+                    if (exported)
+                        batteryData.push(time + "," + userConsumption + "," + (battery_current - pre_battery_current) + "," +
+                            batteryStatus + "," + battery_current + "\n");
+
+                    updateFrame(document.getElementById("wind").checked, document.getElementById("light").checked, document.getElementById("current").checked, document.getElementById("wave").checked, (battery_current * 100 / battery_capacity).toFixed(0), userConsumption.toFixed(2), inflowing.toFixed(2));
+                    //function updateFrame(wind1, light1, current1, wave1, battery_remain1, battery_usage1, battery_inflow1) {
+                }
+                //batteryStatus: 0: normal 1:discharging 2:Discharging, extra electricity required
+                //refresh locals
+                //console.log(batteryData);
+                prevTime += freq;
+            }
+
+
+
+            /**
+             * If user consumption data is empty, then it will use the
+             * Data from the first line will be ignored. (No duration is impossible to calculate)
+             * Simple model, assume related daata could be provided 
+             **/
+            function Start() {
+
+                $("#UserEdit").slideUp();
+                document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
+                Model_Status = 1;
+                document.getElementById("wind_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
+                document.getElementById("Light_status").innerHTML = '<font color="green"><b>Initialize</b></font>';
+                document.getElementById("wave_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
+                document.getElementById("current_status").innerHTML = '<font color="green"><b>Initialize</b> </font>';
+                wind = true;
+                light = true;
+                wave = true;
+                current = true;
+
+                document.getElementById("wind").checked = true;
+                document.getElementById("light").checked = true;
+                document.getElementById("wave").checked = true;
+                document.getElementById("current").checked = true;
+
+                document.getElementById("battery_remain").innerText = (battery_current * 100 / battery_capacity).toFixed(2);
+
+                prevTime = 0;
+
+
+                Papa.parse(file, {
+                    header: true,
+                    skipEmptyLines: true,
+                    dynamicTyping: true,
+                    step: function(results, parser) {
+                        //console.log("Row data:", results.data["Time"]);
+                        //analyze data at here
+                        parser.pause();
+                        runStep(results.data);
+                        setTimeout(function() {
+                            var delay = function() {
+                                if (Model_Status == 1) {
+                                    //do some things at here
+                                    parser.resume();
+                                } else {
+                                    setTimeout(function() {
+                                        delay();
+                                    }, 200)
+                                }
+                            }
+                            delay();
+                        }, freq);
+                    },
+                    complete: function(results, parser) {
+                        console.log("done");
+                        Model_Status = 2;
+                        change_status();
+                        if (tran.getLang() == 'cn') {
+                            document.getElementById("wind_status").innerHTML = '<font color="green">完成 </font>';
+                            document.getElementById("Light_status").innerHTML = '<font color="green">完成 </font>';
+                            document.getElementById("wave_status").innerHTML = '<font color="green">完成</font>';
+                            document.getElementById("current_status").innerHTML = '<font color="green">完成 </font>';
+                        } else {
+                            document.getElementById("wind_status").innerHTML = '<font color="green">Done </font>';
+                            document.getElementById("Light_status").innerHTML = '<font color="green">Done </font>';
+                            document.getElementById("wave_status").innerHTML = '<font color="green">Done </font>';
+                            document.getElementById("current_status").innerHTML = '<font color="green">Done </font>';
+                        }
+                        wind = false;
+                        light = false;
+                        wave = false;
+                        current = false;
+
+                        document.getElementById("wind").checked = false;
+                        document.getElementById("light").checked = false;
+                        document.getElementById("wave").checked = false;
+                        document.getElementById("current").checked = false;
+                    }
+                });
+            }
+
+
+            function loadFile(file1) {
+                file = file1.files[0];
+                if (file != null && file.name.indexOf(".csv") != -1) {
+                    var successfully = false;
+                    Papa.parse(file, {
+                        header: true,
+                        skipEmptyLines: true,
+                        dynamicTyping: true,
+                        preview: 1,
+                        step: function(results, parser) {
+                            if (results.data.hasOwnProperty("Current_Speed") && results.data.hasOwnProperty("Light_H") && results.data.hasOwnProperty("Wave_Hight") && results.data.hasOwnProperty("Wave_Period") && results.data.hasOwnProperty("Wind_Speed")) {
+                                successfully |= true;
+                            }
+                        },
+                        complete: function(results, parser) {
+                            if (successfully == 1) {
+                                if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "成功载入";
+                                else document.getElementById("notice").innerText = "Successfully loaded";
+                                document.getElementById("usethis").disabled = false;
+                            } else {
+                                if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "无效的文件内容。";
+                                else document.getElementById("notice").innerText = "Invalid file content.";
+                                document.getElementById("usethis").disabled = true;
+                            }
+                        }
+                    });
+                } else {
+                    if (tran.getLang() == 'cn') document.getElementById("notice").innerText = "请选择一个有效csv文件";
+                    else document.getElementById("notice").innerText = "Please select a valid csv file";
+                    document.getElementById("usethis").disabled = true;
+                }
+            }
+
+            function add() {
+                if (!(Model_Status == 0 || Model_Status == 1))
+                    OpenDetial("UserEdit", 400, 200); //调用方法        
+            }
+
+            function change_status() {
+                if (Model_Status == 0) {
+                    document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > pause </i>';
+                    Model_Status = 1;
+                } else if (Model_Status == 1) {
+                    document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > play_arrow </i>';
+                    Model_Status = 0;
+                } else {
+                    document.getElementById("Global_switch").innerHTML = '<i class = "material-icons" > stop </i>';
+                }
+            }
+
+            var funDownload = function(content, filename) {
+                var eleLink = document.createElement('a');
+                eleLink.download = filename;
+                eleLink.style.display = 'none';
+                var blob = new Blob([content]);
+                eleLink.href = URL.createObjectURL(blob);
+                document.body.appendChild(eleLink);
+                eleLink.click();
+                document.body.removeChild(eleLink);
+            };
+
+            if ('download' in document.createElement('a')) {
+                document.getElementById('run_data').addEventListener('click', function() {
+                    var passValue = "Time,type,status,speed,production\n";
+                    for (i = 0; i < runData.length; i++) {
+                        passValue += runData[i];
+                    }
+                    funDownload(passValue, 'run.csv');
+                });
+                document.getElementById('battery_data').addEventListener('click', function() {
+                    var passValue = "Time,battery_usage,battery_flow,battery_status,battery_current\n";
+                    for (i = 0; i < batteryData.length; i++) {
+                        passValue += batteryData[i];
+                    }
+                    funDownload(passValue, 'battery.csv');
+                });
+            } else {
+                document.getElementById('run_data').onclick = function() {
+                    if (tran.getLang() == 'cn') alert('浏览器不支持');
+                    else alert('Browser doesn\'t support!');
+                };
+                document.getElementById('battery_data').onclick = function() {
+                    if (tran.getLang() == 'cn') alert('浏览器不支持');
+                    else alert('Browser doesn\'t support!');
+                };
+            }
+
+
+            var hoverId;
+
+            function hiddenInform(event) {
+                var informDiv = document.getElementById('inform');
+                var x = 0,
+                    y = 0;
+                var event = event || window.event;
+                if (event.pageX || event.pageY) {
+                    x = event.pageX;
+                    y = event.pageY;
+                } else if (event.clientX || event.clientY) {
+                    x = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+                    y = event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
+                }
+                var divx1 = informDiv.offsetLeft;
+                var divy1 = informDiv.offsetTop;
+                var divx2 = informDiv.offsetLeft + informDiv.offsetWidth;
+                var divy2 = informDiv.offsetTop + informDiv.offsetHeight;
+                //console.log(x + "," + y);
+                if (!(in1(x, y, divx1, divy1, divx2, divy2))) {
+                    document.getElementById('inform').style.display = 'none';
+                    clearInterval(hoverId);
+                    data = null;
+                }
+
+            }
+
+            function in1(x, y, a1, b1, a2, b2) {
+                return x >= a1 && x <= a2 && y >= b1 && y <= b2;
+            }
+
+            function showInform(event, history, title_word) {
+
+                if (Model_Status == -1) return;
+                var myChart;
+
+                var data;
+
+                myChart = echarts.init(document.getElementById('main'));
+                data = [];
+                var posX = 0,
+                    posY = 0;
+                var event = event || window.event;
+                if (event.pageX || event.pageY) {
+                    posX = event.pageX;
+                    posY = event.pageY;
+                } else if (event.clientX || event.clientY) {
+                    posX = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+                    posY = event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
+                }
+
+                //console.log(posX);
+                //console.log(posY);
+                $("#inform").css({
+                    "width": 500,
+                    "height": 300,
+                    "left": posX,
+                    "top": posY,
+                    "position": "absolute"
+                });
+
+
+                var toInter = history.toArray();
+                for (var i = 0; i < toInter.length; i++) {
+                    data.push({
+                        name: toInter[i].getKey(),
+                        value: [
+                            toInter[i].getKey(),
+                            toInter[i].getValue()
+                        ]
+                    });
+                }
+
+                option = {
+                    title: {
+                        text: title_word
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: function(params) {
+                            params = params[0];
+                            return params.name + ' : ' + params.value[1];
+                        },
+                        axisPointer: {
+                            animation: false
+                        }
+                    },
+                    xAxis: {
+                        type: 'value',
+                        scale: true,
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        scale: true,
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    series: [{
+                        name: title_word,
+                        type: 'line',
+                        showSymbol: false,
+                        hoverAnimation: false,
+                        data: data
+                    }]
+                };
+                myChart.setOption(option);
+                document.getElementById("inform").style.display = 'block';
+                // document.getElementById("inform").css("display","block");
+
+                if (Model_Status == 1) {
+                    hoverId = setInterval(function() {
+
+                        //data.shift(); //getLast()
+                        data.push({
+                            name: history.getLast().getKey(),
+                            value: [
+                                history.getLast().getKey(),
+                                history.getLast().getValue()
+                            ]
+                        });
+
+                        myChart.setOption({
+                            series: [{
+                                data: data
+                            }]
+                        });
+                    }, freq);
+                }
+
+                // 使用刚指定的配置项和数据显示图表。
+            }
+
+
+
+            var tran;
+
+            var lang = navigator.language || navigator.browserLanguage;
+            if (/^zh/.test(lang)) {
+                //alert('中文');
+
+                document.getElementById('nav-en').className = '';
+                document.getElementById('nav-cn').className = 'active';
+
+                document.getElementById('nav-en-m').className = '';
+                document.getElementById('nav-cn-m').className = 'active';
+                tran = new Translater({
+                    lang: "cn"
+                });
+            } else {
+                //alert('不是中文');
+                tran = new Translater({
+                    lang: "en"
+                });
+            }
+        </script>
+
+    </body>
+
+</html>
+
+</html>
+
+</html>
+
+</html>
+
+</html>
+
+</html>
+
+</html>
+
+</html>
+
+</html>
+
+</html>
