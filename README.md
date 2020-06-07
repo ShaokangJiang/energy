@@ -33,6 +33,38 @@ Because I used the class technique to build LinkedList to use in generating char
 - [aframe-orbit-controls-component](https://github.com/tizzle/aframe-orbit-controls-component)
 - [jsLPSolver](https://github.com/JWally/jsLPSolver)
 
+## Data format:
+
+#### Simulation data
+
+Header should be the same, `User_Usage` is not required but recommend. Each field represent the value sensor received. 
+
+```csv
+Time,Wind_Speed,Light_H,Wave_Hight,Wave_Period,Current_Speed,User_Usage
+0,5.405,1213.072,3.591,9.104,1.846,501.5935
+0.2,8.157,1191.057,3.022,10.431,1.908,497.0755
+0.4,6.012,1197.794,1.709,8.784,1.936,503.0145
+0.6,6.477,1205.489,2.1,9.857,1.858,499.4511
+```
+
+Download a sample from [here]().
+
+#### Optimization data
+
+Header should be the same, `idx` is not required. Each category has a value component recoding the amount of power produced in unit time. Each count means the possibility of happening. Because we need to use a KWH = b KW * s/3600 to calculate energy produced. The count field has to be integer. We could use the possibility * a factor to make it become integer. And the sum of each count should be the same. 
+
+```csv
+idx,wind_value,wind_count,light_value,light_count,wave_value,wave_count,current_value,current_count
+0,4962654.905,189,100.8496541,45,485.3900022,222,71501.61128,105
+1,424133.8855,45,105.8598321,124,328.6975665,43,49752.79798,187
+2,3414695.961,18,113.1989172,130,438.1380705,33,35910.75581,12
+3,7346795.761,90,116.4237558,11,483.7242291,24,48819.12566,25
+4,4033868.032,20,105.5786618,25,226.1068017,14,1611.378029,35
+5, , ,106.0583865,19,364.8009734,10,19265.12771,1
+```
+
+Download a sample from [here]().
+
 ## Generate Fake Simulation and optimization data 
 
 #### Fake simulation data
@@ -124,7 +156,7 @@ Use java code below to generate fake optimization data(to be used in start page)
 
 ## ChangeLog
 
-1. 5/25/2020 Core running function finished & Time field in input simulation file is not required
+1. 5/25/2020 Core running function finished & Time field in input simulation file is not required	
 
 2. 5/26/2020 Multi-language added
 

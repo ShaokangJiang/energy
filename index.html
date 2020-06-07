@@ -65,11 +65,15 @@
                         <!--{cn}用法-->
                     </h5>
                     <p><span>Each field means the threshold of each component except wave. In the case of wave, the threshold needs to be pre-calculated using
-                        <!--{cn}每个场都是除波以外的每个分量的阈值。在使用wave的情况下，需要使用--></span>$H^2T$. <span>User usage is in kwh per day or unit time, the unit time refers to the refresh frequency, which will be used to calculate energy produced in the frame of time.
+                        <!--{cn}每个场都是除波以外的每个分量的阈值。在使用波浪的情况下，需要使用--></span>$H^2T$. <span>User usage is in kwh per day or unit time, the unit time refers to the refresh frequency, which will be used to calculate energy produced in the frame of time.
                         <!--{cn} 预先计算阈值。用户使用单位时间或每天kwh，单位时间指刷新频率，用于计算该时间段内的发电量。--></span></p>
 
-                    <p> The way to calculate energy produced per unit time: a KWH = b KW*s/3600, a is the result, b is the current power, a is the calculated energy. s is the refresh frequency. Refresh frequency in this form is in ms(millionseconds).
-                        <!--{cn}单位时间内产生的能量计算方法:a KWH = b KW*s/3600, a为结果，b为当前功率，a为计算能量。s是刷新频率。这种形式的刷新频率以ms(百万秒)为单位。-->
+                    <p> The way to calculate energy produced per unit time: a KWH = b KW*s/3600, a is the result, b is the current power, a is the calculated energy. s is the refresh frequency. Refresh frequency in this form is in ms(milliseconds).
+                        <!--{cn}单位时间内产生的能量计算方法:a KWH = b KW*s/3600, a为结果，b为当前功率，a为计算能量。s是刷新频率。这种形式的刷新频率以ms(毫秒)为单位。-->
+                    </p>
+                    <p>In the manual setting, you are able to choose to provide user usage data in the future, usually this means to have a column of data recording user consumption per unit time, it will be used as a source of consumming power. If that
+                        file doesn't have user usage, you could set it at here. In the auto generate mode, you have to provide one to let us find the optimal solution(guess a possible one would be fine).
+                        <!--{cn}在手动设置中，你可以选择在将来提供用户使用数据，通常这意味着有一列数据记录每单位时间的用户消耗，它将被用作消耗能源。 如果该文件没有用户用法，可以在这里设置它。 在自动生成模式，你必须提供一个让我们找到最佳的解决方案(猜一个大概就好)。-->
                     </p>
                     <h5>Calculation Equation
                         <!--{cn}计算方法-->
