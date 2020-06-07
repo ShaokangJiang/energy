@@ -122,3 +122,23 @@ Use java code below to generate fake optimization data(to be used in start page)
   
 ```
 
+## ChangeLog
+
+1. 5/25/2020 Core running function finished & Time field in input simulation file is not required
+
+2. 5/26/2020 Multi-language added
+
+3. 5/27/2020 Optimize font and icon loading
+
+4. 5/29/2020 Optimization to find best history result function added & multi-file reading is not allowed in run page now
+
+5. 5/30/2020 User can now use the first 30 seconds of data to run and optimize threshold.
+
+6. 5/31/2020 More verification, notification added. Framework for displaying VR and AR is ready. Supported via [static webpage](https://energy.shaokang.ga/test.html), [qrCode](https://energy.shaokang.ga/qr.png), and also in running page.
+
+   For AR in static page, your device needs meet WebXR requirement:
+
+   > AR is also a standard and you can experiment today on **Android ARCore compatible** devices and **Chrome 79** or newer.
+   > Enable the experimental WebXR AR module in **chrome://flags**
+
+7. 6/6/2020 All parts of 3d model is done.

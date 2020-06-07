@@ -16,6 +16,11 @@
     <script src="./js/jquery-2.1.1.min.js"></script>
     <script src="./js/translater.min.js"></script>
     <script src="./js/papaparse.min.js"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
 </head>
 
 <body>
@@ -59,65 +64,43 @@
                     <h5>Usage
                         <!--{cn}用法-->
                     </h5>
+                    <p><span>Each field means the threshold of each component except wave. In the case of wave, the threshold needs to be pre-calculated using
+                        <!--{cn}每个场都是除波以外的每个分量的阈值。在使用wave的情况下，需要使用--></span>$H^2T$. <span>User usage is in kwh per day or unit time, the unit time refers to the refresh frequency, which will be used to calculate energy produced in the frame of time.
+                        <!--{cn} 预先计算阈值。用户使用单位时间或每天kwh，单位时间指刷新频率，用于计算该时间段内的发电量。--></span></p>
 
-                    <h5>Method
-                        <!--{cn}方法-->
+                    <p> The way to calculate energy produced per unit time: a KWH = b KW*s/3600, a is the result, b is the current power, a is the calculated energy. s is the refresh frequency. Refresh frequency in this form is in ms(millionseconds).
+                        <!--{cn}单位时间内产生的能量计算方法:a KWH = b KW*s/3600, a为结果，b为当前功率，a为计算能量。s是刷新频率。这种形式的刷新频率以ms(百万秒)为单位。-->
+                    </p>
+                    <h5>Calculation Equation
+                        <!--{cn}计算方法-->
                     </h5>
+
+                    <p><b>Wave<!--{cn}波浪能--></b>: $P_{total}=0.6*11*H^2T=6.6H^2T$ <span>H - height of wave T - period<!--{cn}H - 波高 T - 周期--></span></p>
+
+                    <p><b>Ocean Current<!--{cn}海流能--></b>: $P=\frac{\rho v^3 S C_p}{2}=\frac{1050 v^3 \pi1.3^2* 0.45}{2}=1254v^3$ <span>P is the energy captured by the unit, ρ is the fluid density, V is the fluid velocity, and S is the swept area of the impeller<!--{cn}P为机组捕获的能源,ρ为流体密度 , v 为流体 速度, S 为叶轮的扫及面积--></span>$C_p$<span> is the energy utilization coefficient<!--{cn} 为能量利用系数--></span></p>
+
+                    <p><b>Light<!--{cn}光--></b>: $P=\frac{798*H_A}{365*24}=0.09*H_A, H_A$ <span>Total solar radiation per unit area<!--{cn}单位面积太阳能辐照总量--></span></p>
+
+                    <p><b>Wind<!--{cn}风--></b>: $P=\frac{\rho v^3 S C_p}{2}=\frac{1.293 v^3 9852* 0.45}{2}=2866v^3$ <span>P is the energy captured by the unit, ρ is the fluid density, V is the fluid velocity, and S is the swept area of the impeller<!--{cn}P为机组捕获的能源,ρ为流体密度 , v 为流体 速度, S 为叶轮的扫及面积--></span>$C_p$<span> is the energy utilization coefficient<!--{cn} 为能量利用系数--></span></p>
+
                     <h5>Intro
                         <!--{cn}介绍-->
                     </h5>
                     <p>Check README on
-                        <!--{cn}查看--><a href="https://github.com/ShaokangJiang/energy">Github</a> about fake data file generation and other detailed perspective.
-                        <!--{cn}上的自述文件，了解假数据文件生成和其他详细的细节。-->
+                        <!--{cn}查看--><a href="https://github.com/ShaokangJiang/energy">Github</a> about data file format, fake data file generation and other detailed perspective.
+                        <!--{cn}上的自述文件，了解数据文件格式，假数据文件生成和其他详细的细节。-->
                     </p>
-					<p>Check 
+                    <p>Check
                         <!--{cn}通过--><a href="https://shaokang.ga/2020/Optimal-Energy-Production/">this post<!--{cn}本文(英文)--></a> to know motivation of designing optimization model and the comparison of different model, and also the final choice.
                         <!--{cn}了解设计优化模型的动机和不同模型的比较，以及最终的选择。-->
                     </p>
-					
-					<p>Check 
+
+                    <p>Check
                         <!--{cn}查看--><a href="https://github.com/ShaokangJiang/energy-javafx">this repository<!--{cn}此存储库--></a> for the java implementation of this project(still in development).
                         <!--{cn}以了解此项目的 java 实现(仍在开发中)。-->
                     </p>
-					
-                    <h5>ChangeLog
-                        <!--{cn}变更日志-->
-                    </h5>
-                    <ol>
-                        <li>5/25/2020 Core running function finished & Time field in input simulation file is not required
-                            <!--{cn}2020.5.25 核心运行功能完成，输入模拟文件中不需要时间字段-->
-                        </li>
-                        <li>5/26/2020 Multi-language added
-                            <!--{cn}2020.5.26 新增多语言-->
-                        </li>
-                        <li>5/27/2020 Optimize font and icon loading
-                            <!--{cn}2020.5.27 优化字体和图标加载-->
-                        </li>
-                        <li>5/29/2020 Optimization to find best history result function added & multi-file reading is not allowed in run page now
-                            <!--{cn}2020.5.29 添加最佳历史结果函数的优化-->
-                        </li>
-                        <li>5/30/2020 User can now use the first 30 seconds of data to run and optimize threshold.
-                            <!--{cn}2020.5.30 用户现在可以使用前30秒的数据来运行和优化阈值-->
-                        </li>
-                        <li>5/31/2020 More verification, notification added. Framework for displaying VR and AR is ready. Supported via
-                            <!--{cn}2020.5.31 进一步核实，通知补充。显示虚拟现实和增强现实的框架已经准备好。支持通过-->
-                            <a href="./test.html">static webpage<!--{cn}静态网页--></a>, <a href="./qr.png">qrCode<!--{cn}扫码--></a>, and also in running page.
-                            <!--{cn}以及运行页面。-->For AR in static page, your device needs meet WebXR requirement:
-                            <!--{cn}对于静态页面中的AR，您的设备需要满足WebXR要求：-->
-                            <blockquote>
-                                AR is also a standard and you can experiment today on
-                                <!--{cn}AR也是一个标准，你今天可以在--><b>Android ARCore compatible<!--{cn}Android ARCore兼容--></b> devices and
-                                <!--{cn}设备和-->
-                                <b>Chrome 79</b> or newer.
-                                <!--{cn}或更新版本上进行实验。--><br> Enable the experimental WebXR AR module in
-                                <!--{cn}在中启用实验性WebXR AR模块--><b>chrome://flags</b>
-                            </blockquote>
 
-                        </li>
-						<li>6/6/2020 All parts of 3d model is done.
-                            <!--{cn}2020.6.6 所有3d部分均已完成-->
-                        </li>
-                    </ol>
+
                 </div>
             </div>
         </div>
@@ -240,7 +223,9 @@
                 <h5 class="white-text">Info
                     <!--{cn}信息-->
                 </h5>
-                <p class="grey-text text-lighten-4">Nothing here.<!--{cn}什么都没有--></p>
+                <p class="grey-text text-lighten-4">Nothing here.
+                    <!--{cn}什么都没有-->
+                </p>
 
 
 
