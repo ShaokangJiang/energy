@@ -46,7 +46,7 @@ Time,Wind_Speed,Light_H,Wave_Hight,Wave_Period,Current_Speed,User_Usage
 0.6,6.477,1205.489,2.1,9.857,1.858,499.4511
 ```
 
-从[此处]()下载示例。
+从[此处](https://github.com/ShaokangJiang/energy/blob/master/sample/simulation data.csv)下载示例。
 
 #### 优化数据
 
@@ -62,7 +62,7 @@ idx,wind_value,wind_count,light_value,light_count,wave_value,wave_count,current_
 5, , ,106.0583865,19,364.8009734,10,19265.12771,1
 ```
 
-从[此处]()下载示例。
+从[此处](https://github.com/ShaokangJiang/energy/blob/master/sample/OptimizationData.csv)下载示例。
 
 ## 生成虚假仿真和优化数据
 

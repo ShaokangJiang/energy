@@ -47,7 +47,7 @@ Time,Wind_Speed,Light_H,Wave_Hight,Wave_Period,Current_Speed,User_Usage
 0.6,6.477,1205.489,2.1,9.857,1.858,499.4511
 ```
 
-Download a sample from [here]().
+Download a sample from [here](https://github.com/ShaokangJiang/energy/blob/master/sample/simulation data.csv).
 
 #### Optimization data
 
@@ -63,7 +63,7 @@ idx,wind_value,wind_count,light_value,light_count,wave_value,wave_count,current_
 5, , ,106.0583865,19,364.8009734,10,19265.12771,1
 ```
 
-Download a sample from [here]().
+Download a sample from [here](https://github.com/ShaokangJiang/energy/blob/master/sample/OptimizationData.csv).
 
 ## Generate Fake Simulation and optimization data 
 
