@@ -19,7 +19,7 @@ http-server
 
 ## 要求
 
-因为我使用类技术来构建LinkedList以用于生成图表，所以不支持IE。对于大多数浏览器也有一些要求，请参见[NPM官方网站]上的兼容性数据(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Browser_compatibility). 除了LinkedList之外，大多数功能都应该在IE11中工作。
+因为我使用类技术来构建LinkedList以用于生成图表，所以不支持IE。对于大多数浏览器也有一些要求，请参见[NPM官方网站](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Browser_compatibility)上的兼容性数据. 除了LinkedList之外，大多数功能都应该在IE11中工作。
 
 ## 使用的JS库 
 
