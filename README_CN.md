@@ -46,7 +46,7 @@ Time,Wind_Speed,Light_H,Wave_Hight,Wave_Period,Current_Speed,User_Usage
 0.6,6.477,1205.489,2.1,9.857,1.858,499.4511
 ```
 
-从[此处](https://github.com/ShaokangJiang/energy/blob/master/sample/simulation data.csv)下载示例。
+从[此处](https://github.com/ShaokangJiang/energy/blob/master/sample/simulation%20data.csv)下载示例。
 
 #### 优化数据
 
