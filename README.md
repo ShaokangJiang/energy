@@ -4,7 +4,7 @@
 
 ## Running
 
-Basically, this page is served as a Github page, you could visit at [energy.shaokang.ga](energy.shaokang.ga).
+Basically, this page is served as a Github page, you could visit at [shaokangjiang.github.io/energy/](shaokangjiang.github.io/energy/).
 
 This is a pure static page with JavaScript. So anybody is able to host it easily on your own. If you don't need to see some 3d effects, just download and click on each file would work. 3D effects require some cross-server interaction. 
 
@@ -166,7 +166,7 @@ Use java code below to generate fake optimization data(to be used in start page)
 
 5. 5/30/2020 User can now use the first 30 seconds of data to run and optimize threshold.
 
-6. 5/31/2020 More verification, notification added. Framework for displaying VR and AR is ready. Supported via [static webpage](https://energy.shaokang.ga/test.html), [qrCode](https://energy.shaokang.ga/qr.png), and also in running page.
+6. 5/31/2020 More verification, notification added. Framework for displaying VR and AR is ready. Supported via [static webpage](https://shaokangjiang.github.io/energy/test.html), [qrCode](https://shaokangjiang.github.io/energy/qr.png), and also in running page.
 
    For AR in static page, your device needs meet WebXR requirement:
 
