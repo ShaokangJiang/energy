@@ -2,7 +2,7 @@
 
 ## 运行
 
-基本上，这个页面是一个Github页面，您可以访问[energy.shaokang.ga](energy.shaokang.ga).
+基本上，这个页面是一个Github页面，您可以访问[shaokangjiang.github.io/energy/](shaokangjiang.github.io/energy/).
 
 这是一个纯静态的JavaScript页面。所以任何人都可以自己轻松地主持。如果你不需要看一些3d效果，只需下载并点击每个文件就可以了。3D效果需要一些跨服务器的交互。
 
@@ -165,7 +165,7 @@ idx,wind_value,wind_count,light_value,light_count,wave_value,wave_count,current_
 
 5. 2020.5.30 用户现在可以使用前30秒的数据来运行和优化阈值
 
-6. 2020.5.31 进一步核实，通知补充。显示虚拟现实和增强现实的框架已经准备好。支持通过[静态网页](https://energy.shaokang.ga/test.html),[扫码](https://energy.shaokang.ga/qr.png)对于静态页面中的AR，您的设备需要满足WebXR要求：
+6. 2020.5.31 进一步核实，通知补充。显示虚拟现实和增强现实的框架已经准备好。支持通过[静态网页](https://shaokangjiang.github.io/energy/test.html),[扫码](https://shaokangjiang.github.io/energy/qr.png)对于静态页面中的AR，您的设备需要满足WebXR要求：
 
    对于静态页面中的AR，您的设备需要满足WebXR要求：
 
